@@ -4,7 +4,7 @@ export interface Props {
 	description?: string;
 }
 
-const { title, description = "Rito 的个人网站" } = Astro.props;
+const { title, description = "Rito-492 的个人网站" } = Astro.props;
 ---
 
 <!doctype html>
@@ -20,7 +20,7 @@ const { title, description = "Rito 的个人网站" } = Astro.props;
 	<body>
 		<header>
 			<nav>
-				<a href="/" class="logo">Rito</a>
+				<a href="/" class="logo">Rito-492</a>
 				<ul>
 					<li><a href="/">首页</a></li>
 					<li><a href="/blog">博客</a></li>
@@ -33,7 +33,7 @@ const { title, description = "Rito 的个人网站" } = Astro.props;
 			<slot />
 		</main>
 		<footer>
-			<p>&copy; {new Date().getFullYear()} Rito. All rights reserved.</p>
+			<p>&copy; {new Date().getFullYear()} Rito-492. All rights reserved.</p>
 		</footer>
 	</body>
 </html>
