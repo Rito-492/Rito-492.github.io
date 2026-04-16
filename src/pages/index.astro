@@ -1,0 +1,169 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Rito - 个人主页">
+	<section class="hero">
+		<div class="hero-content">
+			<h1>你好，我是 <span class="highlight">Rito</span></h1>
+			<p class="tagline">开发者 / 学习者 / 创造者</p>
+			<p class="bio">
+				热爱编程，专注于不断学习和探索新技术。
+				在这里分享我的学习笔记、项目作品和技术思考。
+			</p>
+			<div class="cta-buttons">
+				<a href="/projects" class="btn primary">查看我的项目</a>
+				<a href="/blog" class="btn secondary">阅读博客</a>
+			</div>
+		</div>
+	</section>
+
+	<section class="skills">
+		<h2>技术栈</h2>
+		<div class="skills-grid">
+			<div class="skill-card">
+				<h3>前端开发</h3>
+				<ul>
+					<li>React / Vue</li>
+					<li>TypeScript</li>
+					<li>Tailwind CSS</li>
+					<li>Astro / Next.js</li>
+				</ul>
+			</div>
+			<div class="skill-card">
+				<h3>后端开发</h3>
+				<ul>
+					<li>Node.js</li>
+					<li>Python</li>
+					<li>Go</li>
+					<li>PostgreSQL / MySQL</li>
+				</ul>
+			</div>
+			<div class="skill-card">
+				<h3>工具 & 其他</h3>
+				<ul>
+					<li>Git & GitHub</li>
+					<li>Docker</li>
+					<li>Linux</li>
+					<li>CI/CD</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.hero {
+		text-align: center;
+		padding: 4rem 0;
+	}
+
+	.hero-content {
+		max-width: 600px;
+		margin: 0 auto;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.highlight {
+		color: var(--color-primary);
+	}
+
+	.tagline {
+		font-size: 1.25rem;
+		color: var(--color-text-muted);
+		margin-bottom: 1.5rem;
+	}
+
+	.bio {
+		font-size: 1.1rem;
+		line-height: 1.8;
+		color: var(--color-text-muted);
+		margin-bottom: 2rem;
+	}
+
+	.cta-buttons {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	.btn {
+		padding: 0.75rem 1.5rem;
+		border-radius: 8px;
+		text-decoration: none;
+		font-weight: 500;
+		transition: all 0.2s;
+	}
+
+	.btn.primary {
+		background: var(--color-primary);
+		color: #0f172a;
+	}
+
+	.btn.primary:hover {
+		background: var(--color-primary-hover);
+	}
+
+	.btn.secondary {
+		background: var(--color-card);
+		color: var(--color-text);
+		border: 1px solid var(--color-border);
+	}
+
+	.btn.secondary:hover {
+		border-color: var(--color-primary);
+	}
+
+	.skills {
+		padding: 3rem 0;
+	}
+
+	.skills h2 {
+		text-align: center;
+		margin-bottom: 2rem;
+	}
+
+	.skills-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.skill-card {
+		background: var(--color-card);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: 1.5rem;
+	}
+
+	.skill-card h3 {
+		color: var(--color-primary);
+		margin-bottom: 1rem;
+	}
+
+	.skill-card ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.skill-card li {
+		padding: 0.5rem 0;
+		color: var(--color-text-muted);
+	}
+
+	@media (max-width: 768px) {
+		h1 {
+			font-size: 2rem;
+		}
+
+		.hero {
+			padding: 2rem 0;
+		}
+	}
+</style>

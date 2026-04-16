@@ -1,0 +1,94 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '../layouts/PostLayout.astro';
+
+const posts = await getCollection('blog');
+
+export function getStaticPaths() {
+	return posts.map((post) => ({
+		params: { id: post.id },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<PostLayout title={post.data.title}>
+	<article class="post">
+		<header class="post-header">
+			<h1>{post.data.title}</h1>
+			<div class="post-meta">
+				<time datetime={post.data.pubDate.toISOString()}>
+					{post.data.pubDate.toLocaleDateString('zh-CN', {
+						year: 'numeric',
+						month: 'long',
+						day: 'numeric'
+					})}
+				</time>
+				{post.data.tags && (
+					<div class="tags">
+						{post.data.tags.map((tag) => (
+							<span class="tag">#{tag}</span>
+						))}
+					</div>
+				)}
+			</div>
+		</header>
+		<div class="post-content">
+			<Content />
+		</div>
+	</article>
+	<a href="/blog" class="back-link">← 返回博客列表</a>
+</PostLayout>
+
+<style>
+	.post {
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 2rem 0;
+	}
+
+	.post-header {
+		margin-bottom: 2rem;
+		padding-bottom: 2rem;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.post-header h1 {
+		margin-bottom: 0.75rem;
+	}
+
+	.post-meta {
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+	}
+
+	.tags {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.tag {
+		color: var(--color-primary);
+	}
+
+	.post-content {
+		line-height: 1.8;
+	}
+
+	.back-link {
+		display: inline-block;
+		margin-top: 3rem;
+		color: var(--color-primary);
+		text-decoration: none;
+	}
+
+	.back-link:hover {
+		text-decoration: underline;
+	}
+</style>

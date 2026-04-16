@@ -1,0 +1,138 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="关于我 - Rito">
+	<section class="about-section">
+		<h1>关于我</h1>
+
+		<div class="about-content">
+			<div class="intro">
+				<h2>简介</h2>
+				<p>
+					你好！我是 Rito，一名热爱编程的开发者。我喜欢探索新技术，
+					解决有趣的问题，并通过代码创造价值。
+				</p>
+				<p>
+					这个网站是我学习和分享的地方。在这里，你会找到我的项目作品、
+					技术文章以及一些学习笔记。
+				</p>
+			</div>
+
+			<div class="skills-section">
+				<h2>技术技能</h2>
+				<div class="skill-list">
+					<div class="skill-item">
+						<strong>语言</strong>
+						<span>JavaScript / TypeScript, Python, Go</span>
+					</div>
+					<div class="skill-item">
+						<strong>前端</strong>
+						<span>React, Vue, Astro, Tailwind CSS</span>
+					</div>
+					<div class="skill-item">
+						<strong>后端</strong>
+						<span>Node.js, Express, FastAPI</span>
+					</div>
+					<div class="skill-item">
+						<strong>数据库</strong>
+						<span>PostgreSQL, MySQL, MongoDB</span>
+					</div>
+					<div class="skill-item">
+						<strong>工具</strong>
+						<span>Git, Docker, Linux, CI/CD</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="contact-section">
+				<h2>联系方式</h2>
+				<p>
+					如果你有任何问题或想法，欢迎通过以下方式联系我：
+				</p>
+				<ul class="contact-links">
+					<li><a href="https://github.com/Rito-492" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+					<li><a href="mailto:your-email@example.com">Email</a></li>
+				</ul>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.about-section {
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 2rem 0;
+	}
+
+	.about-section h1 {
+		text-align: center;
+		margin-bottom: 2rem;
+	}
+
+	.about-content {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.intro, .skills-section, .contact-section {
+		background: var(--color-card);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: 1.5rem;
+	}
+
+	h2 {
+		color: var(--color-primary);
+		margin-bottom: 1rem;
+	}
+
+	p {
+		color: var(--color-text-muted);
+		line-height: 1.8;
+	}
+
+	.skill-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.skill-item {
+		display: flex;
+		justify-content: space-between;
+		padding: 0.75rem 0;
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.skill-item:last-child {
+		border-bottom: none;
+	}
+
+	.skill-item strong {
+		color: var(--color-text);
+		min-width: 100px;
+	}
+
+	.skill-item span {
+		color: var(--color-text-muted);
+	}
+
+	.contact-links {
+		list-style: none;
+		padding: 0;
+		display: flex;
+		gap: 1.5rem;
+	}
+
+	.contact-links a {
+		color: var(--color-primary);
+		text-decoration: none;
+	}
+
+	.contact-links a:hover {
+		text-decoration: underline;
+	}
+</style>
