@@ -1,29 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 
-const projects = [
-	{
-		title: '项目名称 1',
-		description: '这是一个示例项目描述。简要说明项目的功能和技术栈。',
-		tech: ['React', 'TypeScript', 'Node.js'],
-		link: '#',
-		github: '#',
-	},
-	{
-		title: '项目名称 2',
-		description: '另一个有趣的项目。描述它解决了什么问题，有什么特点。',
-		tech: ['Vue', 'Python', 'PostgreSQL'],
-		link: '#',
-		github: '#',
-	},
-	{
-		title: '项目名称 3',
-		description: '这是一个技术实验项目。探索了某些新技术或解决方案。',
-		tech: ['Go', 'Docker', 'Redis'],
-		link: '#',
-		github: '#',
-	},
-];
+const projects = await getCollection('projects', ({ data }) => {
+	return !data.draft;
+});
+
+const sortedProjects = projects.sort((a, b) => {
+	return a.id.localeCompare(b.id);
+});
 ---
 
 <Layout title="项目作品 - Rito">
@@ -33,23 +18,23 @@ const projects = [
 	</section>
 
 	<section class="projects-grid">
-		{projects.map((project) => (
+		{sortedProjects.map((project) => (
 			<article class="project-card">
-				<h3>{project.title}</h3>
-				<p>{project.description}</p>
+				<h3>{project.data.title}</h3>
+				<p>{project.data.description}</p>
 				<div class="tech-stack">
-					{project.tech.map((tech) => (
+					{project.data.tech.map((tech) => (
 						<span class="tech-tag">{tech}</span>
 					))}
 				</div>
 				<div class="project-links">
-					{project.link !== '#' && (
-						<a href={project.link} class="link" target="_blank" rel="noopener noreferrer">
+					{project.data.link && (
+						<a href={project.data.link} class="link" target="_blank" rel="noopener noreferrer">
 							在线演示 →
 						</a>
 					)}
-					{project.github !== '#' && (
-						<a href={project.github} class="link" target="_blank" rel="noopener noreferrer">
+					{project.data.github && (
+						<a href={project.data.github} class="link" target="_blank" rel="noopener noreferrer">
 							GitHub
 						</a>
 					)}
@@ -84,11 +69,14 @@ const projects = [
 		border: 1px solid var(--color-border);
 		border-radius: 12px;
 		padding: 1.5rem;
-		transition: border-color 0.2s;
+		transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+		box-shadow: 0 2px 8px var(--color-shadow);
 	}
 
 	.project-card:hover {
 		border-color: var(--color-primary);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
 	}
 
 	.project-card h3 {
@@ -110,11 +98,12 @@ const projects = [
 	}
 
 	.tech-tag {
-		background: rgba(56, 189, 248, 0.1);
+		background: rgba(37, 99, 235, 0.1);
 		color: var(--color-primary);
 		padding: 0.25rem 0.75rem;
 		border-radius: 9999px;
 		font-size: 0.875rem;
+		font-weight: 500;
 	}
 
 	.project-links {
@@ -126,9 +115,15 @@ const projects = [
 		color: var(--color-primary);
 		text-decoration: none;
 		font-size: 0.9rem;
+		padding: 0.5rem 1rem;
+		border-radius: 6px;
+		border: 1px solid var(--color-primary);
+		transition: all 0.2s;
 	}
 
 	.project-links a:hover {
-		text-decoration: underline;
+		background: var(--color-primary);
+		color: #ffffff;
+		text-decoration: none;
 	}
 </style>

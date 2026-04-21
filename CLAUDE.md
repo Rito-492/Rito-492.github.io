@@ -18,38 +18,60 @@ Personal GitHub Pages site built with [Astro](https://astro.build) - a modern st
 
 - **Framework**: Astro 6.x (TypeScript)
 - **Output**: Static site deployed to GitHub Pages
-- **Content**: Blog posts use Astro Content Collections (Markdown/MDX)
+- **Content**: Astro Content Collections (Markdown/MDX)
 
 ## Project Structure
 
 ```
 src/
-├── content/
-│   └── blog/          # Blog posts (Markdown)
+├── content/                    # Content Collections
+│   ├── blog/                   # Blog posts
+│   │   ├── _template.md        # Blog template
+│   │   └── *.md                # Blog post files
+│   ├── projects/               # Project showcase
+│   │   ├── _template.md        # Project template
+│   │   └── *.md                # Project files
+│   └── README.md               # Content guidelines
 ├── layouts/
-│   ├── Layout.astro   # Main layout with navigation
-│   └── PostLayout.astro # Blog post layout
+│   ├── Layout.astro            # Main layout + navigation
+│   └── PostLayout.astro        # Blog post layout
 ├── pages/
-│   ├── index.astro    # Home page
-│   ├── about.astro    # About page
-│   ├── projects.astro # Projects showcase
+│   ├── index.astro             # Home page
+│   ├── about.astro             # About page
+│   ├── projects.astro          # Projects showcase
 │   └── blog/
-│       ├── index.astro # Blog list
-│       └── [id].astro  # Individual post
-└── content.config.ts  # Content collections config
+│       ├── index.astro         # Blog list
+│       └── [id].astro          # Individual post
+└── content.config.ts           # Content Collections config
 ```
 
-## Adding Blog Posts
+## Adding Content
 
-Create new Markdown files in `src/content/blog/` with frontmatter:
+### Blog Posts
+
+Create Markdown files in `src/content/blog/` with frontmatter:
 
 ```markdown
 ---
 title: "Post Title"
 description: "Post description"
-pubDate: 2026-04-16
+pubDate: 2026-04-21
 draft: false
 tags: ["tag1", "tag2"]
+---
+```
+
+### Projects
+
+Create Markdown files in `src/content/projects/` with frontmatter:
+
+```markdown
+---
+title: "Project Name"
+description: "Project description"
+tech: ["React", "TypeScript"]
+github: "https://github.com/Rito-492/repo"
+draft: false
 ---
 ```
 
@@ -57,3 +79,9 @@ tags: ["tag1", "tag2"]
 
 - Automated via GitHub Actions on push to `main` branch
 - Workflow: `.github/workflows/deploy.yml`
+
+## Theme
+
+- Light theme with blue accent color (`#2563eb`)
+- Cards with subtle shadows and hover animations
+- Responsive design for mobile
