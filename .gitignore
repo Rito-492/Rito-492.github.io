@@ -26,3 +26,7 @@ dist-ssr
 
 # Astro
 .astro
+
+.claude/
+
+CLAUDE.md
