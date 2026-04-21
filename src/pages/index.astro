@@ -10,92 +10,82 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 ---
 
 <Layout title="Rito-492 - 个人主页">
-	<section class="hero">
-		<div class="hero-content">
-			<div class="avatar-container">
-				<div class="avatar-glow"></div>
-				<div class="avatar">
-					<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-						<circle cx="12" cy="8" r="5"/>
-						<path d="M20 21a8 8 0 1 0-16 0"/>
-					</svg>
-				</div>
-			</div>
-			<h1 class="fade-in">你好，我是 <span class="highlight">Rito-492</span></h1>
-			<p class="tagline fade-in delay-1">开发者 / 学习者 / 创造者</p>
-			<p class="bio fade-in delay-2">
-				热爱编程，专注于不断学习和探索新技术。
-				在这里分享我的学习笔记、项目作品和技术思考。
+	<!-- 自我介绍 -->
+	<section class="intro-section">
+		<div class="intro-content">
+			<h1>Rito-492</h1>
+			<p class="lead">
+				你好！我是 Rito-492，一名热爱编程的开发者。
 			</p>
-			<div class="cta-buttons fade-in delay-3">
-				<a href="/projects" class="btn primary">
-					<span class="btn-icon">🚀</span>
-					<span>查看我的项目</span>
-				</a>
-				<a href="/blog" class="btn secondary">
-					<span class="btn-icon">📝</span>
-					<span>阅读博客</span>
-				</a>
-			</div>
-		</div>
-	</section>
-
-	<!-- 访客计数器 -->
-	<section class="visitor-counter-section">
-		<div class="counter-box">
-			<span class="counter-icon">👁️</span>
-			<span class="counter-label">本页已被访问</span>
-			<span class="counter-number" id="visitCount">加载中...</span>
-			<span class="counter-label">次</span>
-		</div>
-	</section>
-
-	<!-- 个人简介 -->
-	<section class="about-section">
-		<h2 class="section-title">关于我</h2>
-		<div class="about-content">
-			<div class="about-card">
-				<h3><span class="icon">👋</span> 简介</h3>
+			<div class="intro-text">
 				<p>
-					你好！我是 Rito-492，一名热爱编程的开发者。我喜欢探索新技术，
-					解决有趣的问题，并通过代码创造价值。
-				</p>
-				<p>
-					目前专注于人体运动预测、概率建模和深度学习研究，
+					我热衷于探索新技术，解决有趣的问题，并通过代码创造价值。
+					目前专注于<b>人体运动预测</b>、<b>概率建模</b>和<b>深度学习</b>研究，
 					同时也热衷于全栈开发和开源贡献。
 				</p>
+				<p>
+					这个网站是我学习和分享的地方，在这里你可以找到我的项目作品、技术文章和学习笔记。
+				</p>
 			</div>
-			<div class="about-card">
-				<h3><span class="icon">💻</span> 技术栈</h3>
+			<div class="contact-links">
+				<a href="https://github.com/Rito-492" target="_blank" rel="noopener noreferrer" class="contact-btn">
+					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+						<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+					</svg>
+					GitHub
+				</a>
+				<a href="mailto:your-email@example.com" class="contact-btn">
+					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<rect width="20" height="16" x="2" y="4" rx="2"/>
+						<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+					</svg>
+					Email
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- 技术栈 -->
+	<section class="skills-section">
+		<h2>技术栈</h2>
+		<div class="skills-list">
+			<div class="skill-group">
+				<span class="skill-group-label">编程语言</span>
 				<div class="skill-tags">
 					<span class="skill-tag">JavaScript/TypeScript</span>
 					<span class="skill-tag">Python</span>
 					<span class="skill-tag">Go</span>
-					<span class="skill-tag">React</span>
-					<span class="skill-tag">Vue</span>
-					<span class="skill-tag">Node.js</span>
-					<span class="skill-tag">PyTorch</span>
-					<span class="skill-tag">PostgreSQL</span>
-					<span class="skill-tag">Git</span>
-					<span class="skill-tag">Docker</span>
+					<span class="skill-tag">C++</span>
 				</div>
 			</div>
-			<div class="about-card">
-				<h3><span class="icon">📬</span> 联系方式</h3>
-				<div class="social-links">
-					<a href="https://github.com/Rito-492" target="_blank" rel="noopener noreferrer" class="social-btn">
-						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-							<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-						</svg>
-						<span>GitHub</span>
-					</a>
-					<a href="mailto:your-email@example.com" class="social-btn">
-						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<rect width="20" height="16" x="2" y="4" rx="2"/>
-							<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-						</svg>
-						<span>Email</span>
-					</a>
+			<div class="skill-group">
+				<span class="skill-group-label">前端</span>
+				<div class="skill-tags">
+					<span class="skill-tag">React</span>
+					<span class="skill-tag">Vue</span>
+					<span class="skill-tag">Astro</span>
+					<span class="skill-tag">Tailwind CSS</span>
+					<span class="skill-tag">Next.js</span>
+				</div>
+			</div>
+			<div class="skill-group">
+				<span class="skill-group-label">后端</span>
+				<div class="skill-tags">
+					<span class="skill-tag">Node.js</span>
+					<span class="skill-tag">Express</span>
+					<span class="skill-tag">FastAPI</span>
+					<span class="skill-tag">PostgreSQL</span>
+					<span class="skill-tag">MySQL</span>
+				</div>
+			</div>
+			<div class="skill-group">
+				<span class="skill-group-label">工具</span>
+				<div class="skill-tags">
+					<span class="skill-tag">Git</span>
+					<span class="skill-tag">Docker</span>
+					<span class="skill-tag">Linux</span>
+					<span class="skill-tag">PyTorch</span>
+					<span class="skill-tag">CI/CD</span>
 				</div>
 			</div>
 		</div>
@@ -103,60 +93,43 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 
 	<!-- 精选项目 -->
 	<section class="featured-section">
-		<h2 class="section-title">精选项目</h2>
+		<div class="section-header">
+			<h2>精选项目</h2>
+			<a href="/projects" class="view-more">查看全部 →</a>
+		</div>
 		<div class="projects-grid">
 			{featuredProjects.map((project) => (
 				<article class="project-card">
-					<div class="card-icon">
-						<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M12 19V5"/>
-							<path d="m5 12 7 7 7-7"/>
-						</svg>
-					</div>
 					<h3>{project.data.title}</h3>
 					<p>{project.data.description}</p>
 					<div class="tech-stack">
-						{project.data.tech.slice(0, 4).map((tech) => (
+						{project.data.tech.map((tech) => (
 							<span class="tech-tag">{tech}</span>
 						))}
 					</div>
 					<div class="project-links">
 						{project.data.github && (
 							<a href={project.data.github} target="_blank" rel="noopener noreferrer" class="link">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-									<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-								</svg>
-								<span>代码</span>
+								GitHub
 							</a>
 						)}
 						{project.data.link && (
 							<a href={project.data.link} target="_blank" rel="noopener noreferrer" class="link">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-									<polyline points="15 3 21 3 21 9"/>
-									<line x1="10" x2="21" y1="14" y2="3"/>
-								</svg>
-								<span>演示</span>
+								演示
 							</a>
 						)}
 					</div>
 				</article>
 			))}
 		</div>
-		<div class="section-footer">
-			<a href="/projects" class="view-more">
-				<span>查看所有项目</span>
-				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M5 12h14"/>
-					<path d="m12 5 7 7-7 7"/>
-				</svg>
-			</a>
-		</div>
 	</section>
 
 	<!-- 最新博客 -->
 	<section class="blog-section">
-		<h2 class="section-title">最新文章</h2>
+		<div class="section-header">
+			<h2>最新文章</h2>
+			<a href="/blog" class="view-more">查看全部 →</a>
+		</div>
 		<div class="posts-list">
 			{latestPosts.length === 0 ? (
 				<p class="no-posts">暂无文章，敬请期待！</p>
@@ -165,81 +138,30 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 					<article class="post-card">
 						<div class="post-meta">
 							<time datetime={post.data.pubDate.toISOString()}>
-								{post.data.pubDate.toLocaleDateString('zh-CN', {
-									year: 'numeric',
-									month: 'long',
-									day: 'numeric'
-								})}
+								{post.data.pubDate.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', year: 'numeric' })}
 							</time>
 						</div>
 						<h3>
 							<a href={`/blog/${post.id}`}>{post.data.title}</a>
 						</h3>
 						<p class="excerpt">{post.data.description}</p>
-						{post.data.tags && (
-							<div class="tags">
-								{post.data.tags.slice(0, 3).map((tag) => (
-									<span class="tag">#{tag}</span>
-								))}
-							</div>
-						)}
 					</article>
 				))
 			)}
 		</div>
-		<div class="section-footer">
-			<a href="/blog" class="view-more">
-				<span>查看所有文章</span>
-				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M5 12h14"/>
-					<path d="m12 5 7 7-7 7"/>
-				</svg>
-			</a>
-		</div>
 	</section>
 
-	<!-- 保留原来的技术栈部分 -->
-	<section class="skills">
-		<h2>技术栈</h2>
-		<div class="skills-grid">
-			<div class="skill-card">
-				<h3>前端开发</h3>
-				<ul>
-					<li>React / Vue</li>
-					<li>TypeScript</li>
-					<li>Tailwind CSS</li>
-					<li>Astro / Next.js</li>
-				</ul>
-			</div>
-			<div class="skill-card">
-				<h3>后端开发</h3>
-				<ul>
-					<li>Node.js</li>
-					<li>Python</li>
-					<li>Go</li>
-					<li>PostgreSQL / MySQL</li>
-				</ul>
-			</div>
-			<div class="skill-card">
-				<h3>工具 & 其他</h3>
-				<ul>
-					<li>Git & GitHub</li>
-					<li>Docker</li>
-					<li>Linux</li>
-					<li>CI/CD</li>
-				</ul>
-			</div>
-		</div>
+	<!-- 访客计数器 -->
+	<section class="visitor-counter-section">
+		<span class="counter-label">访客计数：</span>
+		<span class="counter-number" id="visitCount">加载中...</span>
 	</section>
 
 	<script>
 		// 访客计数器 - 使用 CountAPI
 		const visitCountEl = document.getElementById('visitCount');
+		const pageKey = 'rito-492-github-io-home';
 
-		// 生成唯一页面标识（基于路径）
-		const pageKey = 'rito-492-github-io-' + window.location.pathname.replace(/\//g, '-');
-
-		// 调用 CountAPI
 		fetch('https://api.countapi.xyz/hit/' + pageKey + '/visits')
 			.then(res => res.json())
 			.then(data => {
@@ -248,7 +170,6 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 				}
 			})
 			.catch(err => {
-				console.error('Counter error:', err);
 				if (visitCountEl) {
 					visitCountEl.textContent = 'N/A';
 				}
@@ -257,366 +178,99 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 </Layout>
 
 <style>
-	/* Animations */
-	@keyframes fadeIn {
-		from { opacity: 0; transform: translateY(20px); }
-		to { opacity: 1; transform: translateY(0); }
+	/* 自我介绍区域 */
+	.intro-section {
+		padding: 4rem 0 3rem;
 	}
 
-	@keyframes float {
-		0%, 100% { transform: translateY(0); }
-		50% { transform: translateY(-10px); }
+	.intro-content {
+		max-width: 720px;
 	}
 
-	@keyframes glow {
-		0%, 100% { opacity: 0.5; transform: scale(1); }
-		50% { opacity: 0.8; transform: scale(1.1); }
+	.intro-content h1 {
+		font-size: 3rem;
+		font-weight: 700;
+		color: var(--color-text);
+		margin-bottom: 1rem;
+		letter-spacing: -0.02em;
 	}
 
-	@keyframes shimmer {
-		0% { background-position: -200% center; }
-		100% { background-position: 200% center; }
-	}
-
-	.fade-in {
-		animation: fadeIn 0.6s ease-out forwards;
-		opacity: 0;
-	}
-
-	.delay-1 { animation-delay: 0.1s; }
-	.delay-2 { animation-delay: 0.2s; }
-	.delay-3 { animation-delay: 0.3s; }
-
-	.hero {
-		text-align: center;
-		padding: 4rem 0;
-	}
-
-	.hero-content {
-		max-width: 600px;
-		margin: 0 auto;
-	}
-
-	.avatar-container {
-		position: relative;
-		display: inline-block;
-		margin-bottom: 2rem;
-	}
-
-	.avatar-glow {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		width: 140px;
-		height: 140px;
-		border-radius: 50%;
-		background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, transparent 70%);
-		animation: glow 3s ease-in-out infinite;
-	}
-
-	.avatar {
-		position: relative;
-		width: 120px;
-		height: 120px;
-		border-radius: 50%;
-		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: white;
-		box-shadow: 0 8px 32px rgba(37, 99, 235, 0.3);
-		z-index: 1;
-	}
-
-	h1 {
-		font-size: 2.5rem;
-		margin-bottom: 0.5rem;
-	}
-
-	.highlight {
-		color: var(--color-primary);
-		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	.tagline {
+	.intro-content .lead {
 		font-size: 1.25rem;
 		color: var(--color-text-muted);
 		margin-bottom: 1.5rem;
 	}
 
-	.bio {
-		font-size: 1.1rem;
-		line-height: 1.8;
+	.intro-text p {
 		color: var(--color-text-muted);
-		margin-bottom: 2rem;
+		line-height: 1.8;
+		margin-bottom: 1rem;
+		font-size: 1.05rem;
 	}
 
-	.cta-buttons {
+	.intro-text b {
+		color: var(--color-primary);
+		font-weight: 600;
+	}
+
+	.contact-links {
 		display: flex;
 		gap: 1rem;
-		justify-content: center;
+		margin-top: 1.5rem;
+	}
+
+	.contact-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.6rem 1.2rem;
+		background: transparent;
+		border: 1px solid var(--color-border);
+		border-radius: 8px;
+		color: var(--color-text);
+		text-decoration: none;
+		font-size: 0.9rem;
+		transition: all 0.2s;
+	}
+
+	.contact-btn:hover {
+		border-color: var(--color-primary);
+		color: var(--color-primary);
+		transform: translateY(-1px);
+	}
+
+	/* 技术栈区域 */
+	.skills-section {
+		padding: 2rem 0;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.skills-section h2 {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--color-text-muted);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		margin-bottom: 1.5rem;
+	}
+
+	.skills-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.skill-group {
+		display: flex;
+		align-items: baseline;
+		gap: 1rem;
 		flex-wrap: wrap;
 	}
 
-	.btn {
-		padding: 0.875rem 1.75rem;
-		border-radius: 12px;
-		text-decoration: none;
+	.skill-group-label {
+		min-width: 80px;
 		font-weight: 600;
-		transition: all 0.3s;
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.btn::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: -100%;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-		transition: left 0.5s;
-	}
-
-	.btn:hover::before {
-		left: 100%;
-	}
-
-	.btn-icon {
-		font-size: 1.2rem;
-	}
-
-	.btn.primary {
-		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-		color: #ffffff;
-		box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-	}
-
-	.btn.primary:hover {
-		transform: translateY(-3px);
-		box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-	}
-
-	.btn.secondary {
-		background: var(--color-card);
 		color: var(--color-text);
-		border: 1px solid var(--color-border);
-		box-shadow: 0 2px 8px var(--color-shadow);
-	}
-
-	.btn.secondary:hover {
-		border-color: var(--color-primary);
-		transform: translateY(-3px);
-		box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
-	}
-
-	.skills {
-		padding: 3rem 0;
-	}
-
-	.skills h2 {
-		text-align: center;
-		margin-bottom: 2rem;
-		position: relative;
-		display: inline-block;
-		left: 50%;
-		transform: translateX(-50%);
-	}
-
-	.skills h2::after {
-		content: '';
-		position: absolute;
-		bottom: -8px;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 60px;
-		height: 3px;
-		background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
-		border-radius: 2px;
-	}
-
-	.skills-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-		gap: 1.5rem;
-	}
-
-	.skill-card {
-		background: var(--color-card);
-		border: 1px solid var(--color-border);
-		border-radius: 12px;
-		padding: 1.5rem;
-		box-shadow: 0 2px 8px var(--color-shadow);
-		transition: transform 0.3s, box-shadow 0.3s;
-		position: relative;
-		overflow: hidden;
-	}
-
-	.skill-card::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 3px;
-		background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
-		transform: scaleX(0);
-		transform-origin: left;
-		transition: transform 0.3s;
-	}
-
-	.skill-card:hover::before {
-		transform: scaleX(1);
-	}
-
-	.skill-card:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
-	}
-
-	.skill-card h3 {
-		color: var(--color-primary);
-		margin-bottom: 1rem;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-
-	.skill-card ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-
-	.skill-card li {
-		padding: 0.5rem 0;
-		color: var(--color-text-muted);
-		position: relative;
-		padding-left: 1.25rem;
-	}
-
-	.skill-card li::before {
-		content: '▹';
-		position: absolute;
-		left: 0;
-		color: var(--color-primary);
-	}
-
-	@media (max-width: 768px) {
-		h1 {
-			font-size: 2rem;
-		}
-
-		.hero {
-			padding: 2rem 0;
-		}
-	}
-
-	/* 访客计数器 */
-	.visitor-counter-section {
-		display: flex;
-		justify-content: center;
-		padding: 2rem 0;
-	}
-
-	.counter-box {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.75rem;
-		background: var(--color-card);
-		border: 1px solid var(--color-border);
-		border-radius: 12px;
-		padding: 1rem 1.5rem;
-		box-shadow: 0 2px 8px var(--color-shadow);
-	}
-
-	.counter-icon {
-		font-size: 1.5rem;
-	}
-
-	.counter-label {
-		color: var(--color-text-muted);
-		font-size: 0.9rem;
-	}
-
-	.counter-number {
-		font-size: 1.5rem;
-		font-weight: 700;
-		color: var(--color-primary);
-		font-family: 'SF Mono', 'Fira Code', monospace;
-	}
-
-	/* 关于部分 */
-	.about-section {
-		padding: 3rem 0;
-	}
-
-	.section-title {
-		text-align: center;
-		font-size: 2rem;
-		margin-bottom: 2rem;
-		position: relative;
-	}
-
-	.section-title::after {
-		content: '';
-		position: absolute;
-		bottom: -8px;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 60px;
-		height: 3px;
-		background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
-		border-radius: 2px;
-	}
-
-	.about-content {
-		max-width: 900px;
-		margin: 0 auto;
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: 1.5rem;
-	}
-
-	.about-card {
-		background: var(--color-card);
-		border: 1px solid var(--color-border);
-		border-radius: 12px;
-		padding: 1.5rem;
-		box-shadow: 0 2px 8px var(--color-shadow);
-		transition: transform 0.2s, box-shadow 0.2s;
-	}
-
-	.about-card:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15);
-	}
-
-	.about-card h3 {
-		color: var(--color-primary);
-		margin-bottom: 1rem;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		font-size: 1.1rem;
-	}
-
-	.about-card h3 .icon {
-		font-size: 1.3rem;
-	}
-
-	.about-card p {
-		color: var(--color-text-muted);
-		line-height: 1.8;
-		margin-bottom: 1rem;
 	}
 
 	.skill-tags {
@@ -626,9 +280,9 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 	}
 
 	.skill-tag {
-		background: rgba(37, 99, 235, 0.1);
+		background: rgba(37, 99, 235, 0.08);
 		color: var(--color-primary);
-		padding: 0.4rem 0.9rem;
+		padding: 0.35rem 0.85rem;
 		border-radius: 9999px;
 		font-size: 0.85rem;
 		font-weight: 500;
@@ -636,193 +290,119 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 	}
 
 	.skill-tag:hover {
-		background: rgba(37, 99, 235, 0.2);
+		background: rgba(37, 99, 235, 0.15);
 		transform: translateY(-1px);
 	}
 
-	.social-links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75rem;
+	/* 精选项目区域 */
+	.featured-section {
+		padding: 3rem 0;
+		border-top: 1px solid var(--color-border);
 	}
 
-	.social-btn {
-		display: inline-flex;
+	.section-header {
+		display: flex;
+		justify-content: space-between;
 		align-items: center;
-		gap: 0.5rem;
-		padding: 0.6rem 1rem;
-		background: var(--color-card);
-		border: 1px solid var(--color-border);
-		border-radius: 8px;
+		margin-bottom: 2rem;
+	}
+
+	.section-header h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
 		color: var(--color-text);
+	}
+
+	.view-more {
+		color: var(--color-primary);
 		text-decoration: none;
 		font-weight: 500;
 		font-size: 0.9rem;
-		transition: all 0.2s;
+		transition: opacity 0.2s;
 	}
 
-	.social-btn:hover {
-		border-color: var(--color-primary);
-		color: var(--color-primary);
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
-	}
-
-	/* 精选项目部分 */
-	.featured-section {
-		padding: 3rem 0;
+	.view-more:hover {
+		opacity: 0.8;
 	}
 
 	.projects-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 		gap: 1.5rem;
-		max-width: 1000px;
-		margin: 0 auto;
 	}
 
 	.project-card {
 		background: var(--color-card);
 		border: 1px solid var(--color-border);
-		border-radius: 16px;
+		border-radius: 12px;
 		padding: 1.5rem;
-		transition: all 0.3s;
-		box-shadow: 0 2px 8px var(--color-shadow);
-		position: relative;
-		overflow: hidden;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.project-card::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 4px;
-		background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
-		transform: scaleX(0);
-		transform-origin: left;
-		transition: transform 0.3s;
-	}
-
-	.project-card:hover::before {
-		transform: scaleX(1);
+		transition: all 0.2s;
 	}
 
 	.project-card:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 8px 32px rgba(37, 99, 235, 0.15);
 		border-color: var(--color-primary);
-	}
-
-	.card-icon {
-		width: 48px;
-		height: 48px;
-		border-radius: 12px;
-		background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(29, 78, 216, 0.15));
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: var(--color-primary);
-		margin-bottom: 1rem;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
 	}
 
 	.project-card h3 {
-		margin-bottom: 0.75rem;
+		font-size: 1.1rem;
+		font-weight: 600;
 		color: var(--color-text);
-		font-size: 1.2rem;
+		margin-bottom: 0.75rem;
 	}
 
 	.project-card p {
 		color: var(--color-text-muted);
 		line-height: 1.6;
+		font-size: 0.9rem;
 		margin-bottom: 1rem;
-		flex: 1;
 	}
 
 	.tech-stack {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.5rem;
-		margin-bottom: 1.25rem;
+		margin-bottom: 1rem;
 	}
 
 	.tech-tag {
-		background: rgba(37, 99, 235, 0.1);
+		background: rgba(37, 99, 235, 0.08);
 		color: var(--color-primary);
-		padding: 0.35rem 0.85rem;
+		padding: 0.25rem 0.7rem;
 		border-radius: 9999px;
-		font-size: 0.8rem;
+		font-size: 0.75rem;
 		font-weight: 500;
-		transition: all 0.2s;
-	}
-
-	.tech-tag:hover {
-		background: rgba(37, 99, 235, 0.2);
-		transform: translateY(-1px);
 	}
 
 	.project-links {
 		display: flex;
 		gap: 0.75rem;
-		margin-top: auto;
 	}
 
 	.project-links .link {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
 		color: var(--color-primary);
 		text-decoration: none;
 		font-size: 0.85rem;
 		font-weight: 500;
-		padding: 0.5rem 0.9rem;
-		border-radius: 8px;
-		border: 1px solid var(--color-border);
-		background: var(--color-card);
+		padding: 0.4rem 0.8rem;
+		border: 1px solid transparent;
+		border-radius: 6px;
 		transition: all 0.2s;
 	}
 
 	.project-links .link:hover {
 		border-color: var(--color-primary);
 		background: rgba(37, 99, 235, 0.05);
-		transform: translateY(-2px);
 	}
 
-	.section-footer {
-		text-align: center;
-		margin-top: 2rem;
-	}
-
-	.view-more {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		color: var(--color-primary);
-		text-decoration: none;
-		font-weight: 600;
-		padding: 0.75rem 1.5rem;
-		border: 2px solid var(--color-primary);
-		border-radius: 12px;
-		transition: all 0.2s;
-	}
-
-	.view-more:hover {
-		background: var(--color-primary);
-		color: white;
-		transform: translateY(-2px);
-	}
-
-	/* 博客部分 */
+	/* 博客区域 */
 	.blog-section {
 		padding: 3rem 0;
+		border-top: 1px solid var(--color-border);
 	}
 
 	.posts-list {
-		max-width: 800px;
-		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
 		gap: 1.5rem;
@@ -839,60 +419,81 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 		border: 1px solid var(--color-border);
 		border-radius: 12px;
 		padding: 1.5rem;
-		transition: all 0.3s;
-		box-shadow: 0 2px 8px var(--color-shadow);
+		transition: all 0.2s;
 	}
 
 	.post-card:hover {
 		border-color: var(--color-primary);
 		transform: translateX(4px);
-		box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
 	}
 
 	.post-meta {
-		font-size: 0.875rem;
+		font-size: 0.85rem;
 		color: var(--color-text-muted);
-		margin-bottom: 0.75rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.post-card h3 {
-		margin: 0 0 0.75rem;
-		font-size: 1.3rem;
-		line-height: 1.4;
+		font-size: 1.15rem;
+		font-weight: 600;
+		color: var(--color-text);
+		margin-bottom: 0.5rem;
 	}
 
 	.post-card h3 a {
-		color: var(--color-text);
+		color: inherit;
 		text-decoration: none;
-		transition: color 0.2s;
 	}
 
 	.post-card h3 a:hover {
 		color: var(--color-primary);
 	}
 
-	.excerpt {
+	.post-card .excerpt {
 		color: var(--color-text-muted);
-		line-height: 1.7;
-		margin-bottom: 1rem;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+		line-height: 1.6;
+		font-size: 0.9rem;
+		margin-bottom: 0;
 	}
 
-	.tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
+	/* 访客计数器 */
+	.visitor-counter-section {
+		padding: 2rem 0;
+		border-top: 1px solid var(--color-border);
+		text-align: center;
 	}
 
-	.tag {
-		background: rgba(37, 99, 235, 0.1);
+	.counter-label {
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		margin-right: 0.5rem;
+	}
+
+	.counter-number {
+		font-family: 'SF Mono', 'Fira Code', monospace;
+		font-size: 1.25rem;
+		font-weight: 700;
 		color: var(--color-primary);
-		padding: 0.25rem 0.75rem;
-		border-radius: 9999px;
-		font-size: 0.85rem;
-		font-weight: 500;
+	}
+
+	/* 响应式 */
+	@media (max-width: 768px) {
+		.intro-content h1 {
+			font-size: 2rem;
+		}
+
+		.intro-content .lead {
+			font-size: 1.1rem;
+		}
+
+		.section-header {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.5rem;
+		}
+
+		.projects-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>
