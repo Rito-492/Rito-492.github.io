@@ -40,13 +40,14 @@ const { title, description = "Rito-492 的个人网站" } = Astro.props;
 
 <style>
 	:root {
-		--color-bg: #0f172a;
-		--color-text: #e2e8f0;
-		--color-text-muted: #94a3b8;
-		--color-primary: #38bdf8;
-		--color-primary-hover: #0ea5e9;
-		--color-border: #1e293b;
-		--color-card: #1e293b;
+		--color-bg: #f8fafc;
+		--color-text: #1e293b;
+		--color-text-muted: #64748b;
+		--color-primary: #2563eb;
+		--color-primary-hover: #1d4ed8;
+		--color-border: #e2e8f0;
+		--color-card: #ffffff;
+		--color-shadow: rgba(0, 0, 0, 0.05);
 	}
 
 	html,
@@ -64,9 +65,10 @@ const { title, description = "Rito-492 的个人网站" } = Astro.props;
 		padding: 1rem 2rem;
 		position: sticky;
 		top: 0;
-		background: rgba(15, 23, 42, 0.8);
+		background: rgba(255, 255, 255, 0.9);
 		backdrop-filter: blur(10px);
 		z-index: 100;
+			box-shadow: 0 1px 3px var(--color-shadow);
 	}
 
 	nav {

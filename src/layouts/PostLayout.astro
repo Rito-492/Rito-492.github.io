@@ -22,13 +22,14 @@ const { title } = Astro.props;
 
 <style>
 	:root {
-		--color-bg: #0f172a;
-		--color-text: #e2e8f0;
-		--color-text-muted: #94a3b8;
-		--color-primary: #38bdf8;
-		--color-primary-hover: #0ea5e9;
-		--color-border: #1e293b;
-		--color-card: #1e293b;
+		--color-bg: #f8fafc;
+		--color-text: #1e293b;
+		--color-text-muted: #64748b;
+		--color-primary: #2563eb;
+		--color-primary-hover: #1d4ed8;
+		--color-border: #e2e8f0;
+		--color-card: #ffffff;
+		--color-shadow: rgba(0, 0, 0, 0.05);
 	}
 
 	html,
@@ -56,6 +57,7 @@ const { title } = Astro.props;
 		border-radius: 4px;
 		font-family: ui-monospace, monospace;
 		font-size: 0.9em;
+		box-shadow: 0 1px 2px var(--color-shadow);
 	}
 
 	pre {
@@ -63,6 +65,7 @@ const { title } = Astro.props;
 		padding: 1rem;
 		border-radius: 8px;
 		overflow-x: auto;
+			box-shadow: 0 2px 8px var(--color-shadow);
 	}
 
 	pre code {
