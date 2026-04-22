@@ -20,6 +20,12 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 
+		<!-- 字体引入：JetBrains Mono + 霞鹜文楷 -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web@latest/style.css" />
+
 		<!-- Basic Meta Tags -->
 		<meta name="description" content={description} />
 		<meta name="author" content="Rito-492" />
@@ -46,10 +52,10 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 			<nav>
 				<a href="/" class="logo">Rito-492</a>
 				<ul class="nav-links">
-					<li><a href="/"><span class="nav-text">首页</span></a></li>
-					<li><a href="/blog"><span class="nav-text">博客</span></a></li>
-					<li><a href="/projects"><span class="nav-text">项目</span></a></li>
-					<li><a href="/about"><span class="nav-text">关于</span></a></li>
+					<li><a href="/"><span class="nav-text">Home</span></a></li>
+					<li><a href="/blog"><span class="nav-text">Blog</span></a></li>
+					<li><a href="/projects"><span class="nav-text">Projects</span></a></li>
+					<li><a href="/about"><span class="nav-text">About</span></a></li>
 					<li class="social-icons">
 						<a href="https://github.com/Rito-492" target="_blank" rel="noopener noreferrer" class="social-link" title="GitHub">
 							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -131,14 +137,15 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 
 <style>
 	:root {
-		--color-bg: #f8fafc;
+		--color-bg: #F8F8F6;
 		--color-text: #1e293b;
 		--color-text-muted: #64748b;
-		--color-primary: #2563eb;
-		--color-primary-hover: #1d4ed8;
-		--color-border: #e2e8f0;
+		--color-primary: #0891b2;
+		--color-primary-hover: #0e7490;
+		--color-border: #e0ded6;
 		--color-card: #ffffff;
-		--color-shadow: rgba(0, 0, 0, 0.05);
+		--color-nav-bg: rgba(255, 255, 255, 0.85);
+		--color-shadow: rgba(0, 0, 0, 0.06);
 	}
 
 	html,
@@ -148,7 +155,7 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 		min-height: 100vh;
 		background: var(--color-bg);
 		color: var(--color-text);
-		font-family: system-ui, -apple-system, sans-serif;
+		font-family: 'JetBrains Mono', 'LXGW WenKai', system-ui, -apple-system, sans-serif;
 		scroll-behavior: smooth;
 	}
 
@@ -157,10 +164,10 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 		padding: 1rem 2rem;
 		position: sticky;
 		top: 0;
-		background: rgba(255, 255, 255, 0.9);
+		background: var(--color-nav-bg);
 		backdrop-filter: blur(10px);
 		z-index: 100;
-			box-shadow: 0 1px 3px var(--color-shadow);
+		box-shadow: 0 1px 3px var(--color-shadow);
 	}
 
 	nav {
@@ -226,7 +233,7 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 	}
 
 	.social-link:hover {
-		background: rgba(37, 99, 235, 0.1);
+		background: rgba(8, 145, 178, 0.1);
 		color: var(--color-primary);
 		transform: translateY(-2px);
 	}
@@ -343,7 +350,7 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 	.back-to-top:hover {
 		background: var(--color-primary);
 		color: white;
-		box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+		box-shadow: 0 6px 20px rgba(8, 145, 178, 0.4);
 		transform: translateY(-4px);
 	}
 
@@ -405,7 +412,7 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 		}
 
 		.nav-links a:hover {
-			background: rgba(37, 99, 235, 0.1);
+			background: rgba(8, 145, 178, 0.1);
 		}
 
 		.social-icons {
