@@ -7,8 +7,10 @@ const blogCollection = defineCollection({
 		title: z.string(),
 		description: z.string(),
 		pubDate: z.coerce.date(),
+		lastUpdated: z.coerce.date().optional(),
 		draft: z.boolean().optional(),
 		tags: z.array(z.string()).optional(),
+		series: z.string().optional(), // 博客系列名称，如 "学习笔记"、"教程" 等
 	}),
 });
 
