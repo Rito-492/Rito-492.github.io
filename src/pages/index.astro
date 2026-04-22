@@ -9,7 +9,7 @@ const posts = await getCollection('blog', ({ data }) => !data.draft);
 const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
 ---
 
-<Layout title="Rito-492 - 个人主页">
+<Layout title="Rito-492's Blog">
 	<!-- 自我介绍 -->
 	<section class="intro-section">
 		<div class="intro-content">
@@ -87,11 +87,17 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 	<section class="featured-section">
 		<div class="section-header">
 			<h2>精选项目</h2>
-			<a href="/projects" class="view-more">查看全部 →</a>
+			<a href="/projects" class="view-more">
+				查看全部
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M5 12h14"/>
+					<path d="m12 5 7 7-7 7"/>
+				</svg>
+			</a>
 		</div>
 		<div class="projects-grid">
 			{featuredProjects.map((project) => (
-				<article class="project-card">
+				<a href={project.data.github} target="_blank" rel="noopener noreferrer" class="project-card">
 					<h3>{project.data.title}</h3>
 					<p>{project.data.description}</p>
 					<div class="tech-stack">
@@ -99,19 +105,7 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 							<span class="tech-tag">{tech}</span>
 						))}
 					</div>
-					<div class="project-links">
-						{project.data.github && (
-							<a href={project.data.github} target="_blank" rel="noopener noreferrer" class="link">
-								GitHub
-							</a>
-						)}
-						{project.data.link && (
-							<a href={project.data.link} target="_blank" rel="noopener noreferrer" class="link">
-								演示
-							</a>
-						)}
-					</div>
-				</article>
+				</a>
 			))}
 		</div>
 	</section>
@@ -120,7 +114,13 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 	<section class="blog-section">
 		<div class="section-header">
 			<h2>最新文章</h2>
-			<a href="/blog" class="view-more">查看全部 →</a>
+			<a href="/blog" class="view-more">
+				查看全部
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M5 12h14"/>
+					<path d="m12 5 7 7-7 7"/>
+				</svg>
+			</a>
 		</div>
 		<div class="posts-list">
 			{latestPosts.length === 0 ? (
@@ -302,18 +302,46 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 		font-size: 1.5rem;
 		font-weight: 600;
 		color: var(--color-text);
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.section-header h2::before {
+		content: '';
+		width: 4px;
+		height: 24px;
+		background: linear-gradient(180deg, var(--color-primary), var(--color-primary-hover));
+		border-radius: 2px;
 	}
 
 	.view-more {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
 		color: var(--color-primary);
 		text-decoration: none;
 		font-weight: 500;
 		font-size: 0.9rem;
-		transition: opacity 0.2s;
+		padding: 0.5rem 1rem;
+		border-radius: 8px;
+		border: 1px solid rgba(8, 145, 178, 0.3);
+		background: rgba(8, 145, 178, 0.05);
+		transition: all 0.3s;
 	}
 
 	.view-more:hover {
-		opacity: 0.8;
+		background: rgba(8, 145, 178, 0.1);
+		border-color: var(--color-primary);
+		transform: translateX(-4px);
+	}
+
+	.view-more svg {
+		transition: transform 0.3s;
+	}
+
+	.view-more:hover svg {
+		transform: translateX(-4px);
 	}
 
 	.projects-grid {
@@ -328,6 +356,7 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 		border-radius: 12px;
 		padding: 1.5rem;
 		transition: all 0.2s;
+		text-decoration: none;
 	}
 
 	.project-card:hover {
@@ -366,26 +395,8 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 		font-weight: 500;
 	}
 
-	.project-links {
-		display: flex;
-		gap: 0.75rem;
-	}
 
-	.project-links .link {
-		color: var(--color-primary);
-		text-decoration: none;
-		font-size: 0.85rem;
-		font-weight: 500;
-		padding: 0.4rem 0.8rem;
-		border: 1px solid transparent;
-		border-radius: 6px;
-		transition: all 0.2s;
-	}
 
-	.project-links .link:hover {
-		border-color: var(--color-primary);
-		background: rgba(8, 145, 178, 0.05);
-	}
 
 	/* 博客区域 */
 	.blog-section {
