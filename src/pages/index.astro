@@ -52,29 +52,22 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 			<div class="skill-group">
 				<span class="skill-group-label">编程语言</span>
 				<div class="skill-tags">
-					<span class="skill-tag">JavaScript/TypeScript</span>
-					<span class="skill-tag">Python</span>
-					<span class="skill-tag">Go</span>
 					<span class="skill-tag">C++</span>
+					<span class="skill-tag">Python</span>
+					<span class="skill-tag">JavaScript/TypeScript</span>
 				</div>
 			</div>
 			<div class="skill-group">
 				<span class="skill-group-label">前端</span>
 				<div class="skill-tags">
-					<span class="skill-tag">React</span>
 					<span class="skill-tag">Vue</span>
 					<span class="skill-tag">Astro</span>
-					<span class="skill-tag">Tailwind CSS</span>
-					<span class="skill-tag">Next.js</span>
 				</div>
 			</div>
 			<div class="skill-group">
 				<span class="skill-group-label">后端</span>
 				<div class="skill-tags">
 					<span class="skill-tag">Node.js</span>
-					<span class="skill-tag">Express</span>
-					<span class="skill-tag">FastAPI</span>
-					<span class="skill-tag">PostgreSQL</span>
 					<span class="skill-tag">MySQL</span>
 				</div>
 			</div>
@@ -85,7 +78,6 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 					<span class="skill-tag">Docker</span>
 					<span class="skill-tag">Linux</span>
 					<span class="skill-tag">PyTorch</span>
-					<span class="skill-tag">CI/CD</span>
 				</div>
 			</div>
 		</div>
@@ -154,25 +146,24 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 	<!-- 访客计数器 -->
 	<section class="visitor-counter-section">
 		<span class="counter-label">访客计数：</span>
-		<span class="counter-number" id="visitCount">加载中...</span>
+		<span class="counter-number" id="visitCount">—</span>
 	</section>
 
 	<script>
 		// 访客计数器 - 使用 CountAPI
 		const visitCountEl = document.getElementById('visitCount');
-		const pageKey = 'rito-492-github-io-home';
+		const namespace = 'rito-492-github-io';
+		const key = 'home-visits';
 
-		fetch('https://api.countapi.xyz/hit/' + pageKey + '/visits')
+		fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
 			.then(res => res.json())
 			.then(data => {
-				if (visitCountEl) {
+				if (visitCountEl && data.value !== undefined) {
 					visitCountEl.textContent = data.value.toLocaleString();
 				}
 			})
-			.catch(err => {
-				if (visitCountEl) {
-					visitCountEl.textContent = 'N/A';
-				}
+			.catch(() => {
+				// CountAPI 服务不可用时，保持显示 "—"
 			});
 	</script>
 </Layout>
@@ -280,7 +271,7 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 	}
 
 	.skill-tag {
-		background: rgba(37, 99, 235, 0.08);
+		background: rgba(8, 145, 178, 0.08);
 		color: var(--color-primary);
 		padding: 0.35rem 0.85rem;
 		border-radius: 9999px;
@@ -290,7 +281,7 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 	}
 
 	.skill-tag:hover {
-		background: rgba(37, 99, 235, 0.15);
+		background: rgba(8, 145, 178, 0.15);
 		transform: translateY(-1px);
 	}
 
@@ -342,7 +333,7 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 	.project-card:hover {
 		border-color: var(--color-primary);
 		transform: translateY(-2px);
-		box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
+		box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
 	}
 
 	.project-card h3 {
@@ -367,7 +358,7 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 	}
 
 	.tech-tag {
-		background: rgba(37, 99, 235, 0.08);
+		background: rgba(8, 145, 178, 0.08);
 		color: var(--color-primary);
 		padding: 0.25rem 0.7rem;
 		border-radius: 9999px;
@@ -393,7 +384,7 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 
 	.project-links .link:hover {
 		border-color: var(--color-primary);
-		background: rgba(37, 99, 235, 0.05);
+		background: rgba(8, 145, 178, 0.05);
 	}
 
 	/* 博客区域 */

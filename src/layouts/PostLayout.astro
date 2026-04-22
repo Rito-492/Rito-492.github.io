@@ -14,6 +14,12 @@ const { title } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+
+		<!-- 字体引入：JetBrains Mono + 霞鹜文楷 -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web@latest/style.css" />
 	</head>
 	<body>
 		<slot />
@@ -22,14 +28,14 @@ const { title } = Astro.props;
 
 <style>
 	:root {
-		--color-bg: #f8fafc;
+		--color-bg: #F8F8F6;
 		--color-text: #1e293b;
 		--color-text-muted: #64748b;
-		--color-primary: #2563eb;
-		--color-primary-hover: #1d4ed8;
-		--color-border: #e2e8f0;
+		--color-primary: #0891b2;
+		--color-primary-hover: #0e7490;
+		--color-border: #e0ded6;
 		--color-card: #ffffff;
-		--color-shadow: rgba(0, 0, 0, 0.05);
+		--color-shadow: rgba(0, 0, 0, 0.06);
 	}
 
 	html,
@@ -39,7 +45,7 @@ const { title } = Astro.props;
 		min-height: 100vh;
 		background: var(--color-bg);
 		color: var(--color-text);
-		font-family: system-ui, -apple-system, sans-serif;
+		font-family: 'JetBrains Mono', 'LXGW WenKai', system-ui, -apple-system, sans-serif;
 		line-height: 1.7;
 	}
 
