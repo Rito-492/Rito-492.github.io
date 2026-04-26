@@ -1,8 +1,8 @@
 ---
-title: "你好，世界！"
+title: "序"
 description: "这是我的第一篇博客文章，标志着新旅程的开始。"
 pubDate: 2026-04-16
-draft: false
+draft: true
 tags: ["生活", "新的开始"]
 series: "生活随笔"  # 添加系列
 ---
