@@ -2,7 +2,6 @@
 title: "项目名称"
 description: "用一句话概括项目"
 tech: ["技术栈 1", "技术栈 2"]
-link: "https://你的项目链接"
 github: "https://github.com/Rito-492/你的仓库"
 draft: true  # 发布前改为 false
 ---
