@@ -6,7 +6,17 @@ const projects = await getCollection('projects', ({ data }) => !data.draft);
 const featuredProjects = projects.slice(0, 3);
 
 const posts = await getCollection('blog', ({ data }) => !data.draft);
-const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
+// 解析日期字符串 YYYYMMDDHHmm 为 Date 对象
+function parseDate(dateStr: string): Date {
+	const year = parseInt(dateStr.substring(0, 4));
+	const month = parseInt(dateStr.substring(4, 6)) - 1;
+	const day = parseInt(dateStr.substring(6, 8));
+	const hour = parseInt(dateStr.substring(8, 10));
+	const minute = parseInt(dateStr.substring(10, 12));
+	return new Date(year, month, day, hour, minute);
+}
+
+const latestPosts = posts.sort((a, b) => parseDate(b.data.pubDate).valueOf() - parseDate(a.data.pubDate).valueOf()).slice(0, 3);
 ---
 
 <Layout title="Rito-492's Blog">
@@ -38,8 +48,8 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 				latestPosts.map((post) => (
 					<article class="post-card">
 						<div class="post-meta">
-							<time datetime={post.data.pubDate.toISOString()}>
-								{post.data.pubDate.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', year: 'numeric' })}
+							<time datetime={parseDate(post.data.pubDate).toISOString()}>
+								{parseDate(post.data.pubDate).toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', year: 'numeric' })}
 							</time>
 						</div>
 						<h3>

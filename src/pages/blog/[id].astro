@@ -20,39 +20,50 @@ let match;
 while ((match = headingRegex.exec(post.body || '')) !== null) {
 	const level = match[1].length;
 	const text = match[2].trim();
-	const id = text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w一-鿿-]/g, '');
+	// 生成与 Astro 渲染一致的 ID：保留中文、字母、数字，空格转连字符
+	const id = text
+		.toLowerCase()
+		.replace(/\s+/g, '-')
+		.replace(/[^\w一-鿿0-9-]/g, '');
 	headings.push({ depth: level, text, id });
+}
+
+// 解析日期字符串 YYYYMMDDHHmm 为 Date 对象
+function parseDate(dateStr: string): Date {
+	const year = parseInt(dateStr.substring(0, 4));
+	const month = parseInt(dateStr.substring(4, 6)) - 1;
+	const day = parseInt(dateStr.substring(6, 8));
+	const hour = parseInt(dateStr.substring(8, 10));
+	const minute = parseInt(dateStr.substring(10, 12));
+	return new Date(year, month, day, hour, minute);
+}
+
+// 格式化日期为 YYYY 年 MM 月 DD 日 HH:mm
+function formatDate(date: Date): string {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+	return `${year}年${month}月${day}日 ${hours}:${minutes}`;
 }
 ---
 
-<Layout title={post.data.title} showToc={true} tocHeadings={headings}>
+<Layout title={post.data.title} showToc={true} tocHeadings={headings} series={post.data.series} postTitle={post.data.title}>
 	<div class="post-page">
 		<article class="post">
 			<header class="post-header">
 				<h1>{post.data.title}</h1>
-				{post.data.summary && (
-					<p class="post-summary">{post.data.summary}</p>
+				{post.data.abstract && (
+					<p class="post-abstract">{post.data.abstract}</p>
 				)}
 				<div class="post-meta">
-					<time datetime={post.data.pubDate.toISOString()}>
-						{post.data.pubDate.toLocaleDateString('zh-CN', {
-							year: 'numeric',
-							month: 'long',
-							day: 'numeric'
-						})}
+					<time datetime={parseDate(post.data.pubDate).toISOString()}>
+						{formatDate(parseDate(post.data.pubDate))}
 					</time>
 					{post.data.lastUpdated && (
 						<span class="last-updated">
-							· 最后更新：{new Date(post.data.lastUpdated).toLocaleDateString('zh-CN', {
-								year: 'numeric',
-								month: 'long',
-								day: 'numeric'
-							})}
-						</span>
-					)}
-					{post.data.series && (
-						<span class="series-tag">
-							📚 {post.data.series}
+							· 最后编辑：{formatDate(parseDate(post.data.lastUpdated))}
 						</span>
 					)}
 				</div>
@@ -94,11 +105,12 @@ while ((match = headingRegex.exec(post.body || '')) !== null) {
 		font-size: 2rem;
 	}
 
-	.post-summary {
+	.post-abstract {
 		color: var(--color-text-muted);
 		font-size: 1.05rem;
 		line-height: 1.7;
-		margin-bottom: 1rem;
+		font-style: italic;
+		margin-bottom: 1.5rem;
 	}
 
 	.post-meta {
@@ -106,16 +118,8 @@ while ((match = headingRegex.exec(post.body || '')) !== null) {
 		gap: 1rem;
 		align-items: center;
 		color: var(--color-text-muted);
-		font-size: 0.9rem;
+		font-size: 0.8rem;
 		flex-wrap: wrap;
-	}
-
-	.series-tag {
-		background: rgba(8, 145, 178, 0.08);
-		color: var(--color-primary);
-		padding: 0.2rem 0.6rem;
-		border-radius: 9999px;
-		font-size: 0.85rem;
 	}
 
 	.post-content {

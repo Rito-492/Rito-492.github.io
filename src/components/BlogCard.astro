@@ -9,19 +9,27 @@ export interface Props {
 const { title, description, pubDate, href } = Astro.props;
 ---
 
-<article class="post-card">
-	<div class="post-meta">
-		<time datetime={pubDate.toISOString()}>
-			{pubDate.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', year: 'numeric' })}
-		</time>
-	</div>
-	<h3>
-		<a href={href}>{title}</a>
-	</h3>
-	<p class="excerpt">{description}</p>
-</article>
+<a href={href} class="post-card-link">
+	<article class="post-card">
+		<div class="post-meta">
+			<time datetime={pubDate.toISOString()}>
+				{pubDate.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', year: 'numeric' })}
+			</time>
+		</div>
+		<h3>
+			{title}
+		</h3>
+		<p class="excerpt">{description}</p>
+	</article>
+</a>
 
 <style>
+	.post-card-link {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+	}
+
 	.post-card {
 		background: var(--color-card);
 		border: 1px solid var(--color-border);
@@ -30,9 +38,13 @@ const { title, description, pubDate, href } = Astro.props;
 		transition: all var(--transition-fast);
 	}
 
-	.post-card:hover {
+	.post-card-link:hover .post-card {
 		border-color: var(--color-primary);
 		transform: translateX(4px);
+	}
+
+	.post-card-link:hover h3 {
+		color: var(--color-primary);
 	}
 
 	.post-meta {
@@ -46,15 +58,6 @@ const { title, description, pubDate, href } = Astro.props;
 		font-weight: 600;
 		color: var(--color-text);
 		margin-bottom: 0.5rem;
-	}
-
-	.post-card h3 a {
-		color: inherit;
-		text-decoration: none;
-	}
-
-	.post-card h3 a:hover {
-		color: var(--color-primary);
 	}
 
 	.post-card .excerpt {
