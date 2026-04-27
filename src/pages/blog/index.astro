@@ -75,13 +75,6 @@ const allSeries = [...new Set(posts.filter(p => p.data.series).map(p => p.data.s
 							<a href={`/blog/${post.id}`}>{post.data.title}</a>
 						</h2>
 						<p class="excerpt">{post.data.description}</p>
-						{post.data.tags && (
-							<div class="tags">
-								{post.data.tags.map((tag) => (
-									<span class="tag">#{tag}</span>
-								))}
-							</div>
-						)}
 					</div>
 					<a href={`/blog/${post.id}`} class="read-more">
 						<span>阅读全文</span>
@@ -263,28 +256,6 @@ const allSeries = [...new Set(posts.filter(p => p.data.series).map(p => p.data.s
 		font-size: 0.85rem;
 		font-weight: 500;
 		border: 1px solid rgba(8, 145, 178, 0.2);
-	}
-
-	.tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		margin-top: 1rem;
-	}
-
-	.tag {
-		background: rgba(8, 145, 178, 0.1);
-		color: var(--color-primary);
-		padding: 0.25rem 0.75rem;
-		border-radius: 9999px;
-		font-size: 0.875rem;
-		font-weight: 500;
-		transition: all 0.2s;
-	}
-
-	.tag:hover {
-		background: rgba(8, 145, 178, 0.2);
-		transform: translateY(-1px);
 	}
 
 	.post-card h2 {

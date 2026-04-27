@@ -28,6 +28,9 @@
     "series": {
       "type": "string"
     },
+    "summary": {
+      "type": "string"
+    },
     "$schema": {
       "type": "string"
     }

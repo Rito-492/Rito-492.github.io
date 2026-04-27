@@ -1,0 +1,68 @@
+---
+export interface Props {
+	title: string;
+	description: string;
+	tech: string[];
+	github?: string;
+	href?: string;
+}
+
+const { title, description, tech, github, href } = Astro.props;
+const linkHref = github || href || '#';
+---
+
+<a href={linkHref} target={github ? "_blank" : undefined} rel={github ? "noopener noreferrer" : undefined} class="project-card">
+	<h3>{title}</h3>
+	<p>{description}</p>
+	<div class="tech-stack">
+		{tech.map((techItem) => (
+			<span class="tech-tag">{techItem}</span>
+		))}
+	</div>
+</a>
+
+<style>
+	.project-card {
+		background: var(--color-card);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		padding: 1.5rem;
+		transition: all var(--transition-fast);
+		text-decoration: none;
+	}
+
+	.project-card:hover {
+		border-color: var(--color-primary);
+		transform: translateY(-2px);
+		box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
+	}
+
+	.project-card h3 {
+		font-size: 1.1rem;
+		font-weight: 600;
+		color: var(--color-text);
+		margin-bottom: 0.75rem;
+	}
+
+	.project-card p {
+		color: var(--color-text-muted);
+		line-height: 1.6;
+		font-size: 0.9rem;
+		margin-bottom: 1rem;
+	}
+
+	.tech-stack {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.tech-tag {
+		background: rgba(8, 145, 178, 0.08);
+		color: var(--color-primary);
+		padding: 0.25rem 0.7rem;
+		border-radius: var(--radius-full);
+		font-size: 0.75rem;
+		font-weight: 500;
+	}
+</style>

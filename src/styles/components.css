@@ -1,0 +1,233 @@
+/* 通用组件样式 */
+
+/* ===== Social Button ===== */
+.social-links {
+	display: flex;
+	gap: 1rem;
+}
+
+.social-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.6rem 1.2rem;
+	background: transparent;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	color: var(--color-text);
+	text-decoration: none;
+	font-size: 0.9rem;
+	transition: all var(--transition-fast);
+}
+
+.social-btn:hover {
+	border-color: var(--color-primary);
+	color: var(--color-primary);
+	transform: translateY(-1px);
+}
+
+/* ===== Project Card ===== */
+.projects-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 1.5rem;
+}
+
+.project-card {
+	background: var(--color-card);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: 1.5rem;
+	transition: all var(--transition-fast);
+	text-decoration: none;
+}
+
+.project-card:hover {
+	border-color: var(--color-primary);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
+}
+
+.project-card h3 {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin-bottom: 0.75rem;
+}
+
+.project-card p {
+	color: var(--color-text-muted);
+	line-height: 1.6;
+	font-size: 0.9rem;
+	margin-bottom: 1rem;
+}
+
+.project-card .tech-stack {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+/* ===== Blog Card ===== */
+.posts-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.no-posts {
+	text-align: center;
+	color: var(--color-text-muted);
+	padding: 2rem;
+}
+
+.post-card {
+	background: var(--color-card);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: 1.5rem;
+	transition: all var(--transition-fast);
+}
+
+.post-card:hover {
+	border-color: var(--color-primary);
+	transform: translateX(4px);
+}
+
+.post-meta {
+	font-size: 0.85rem;
+	color: var(--color-text-muted);
+	margin-bottom: 0.5rem;
+}
+
+.post-card h3 {
+	font-size: 1.15rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin-bottom: 0.5rem;
+}
+
+.post-card h3 a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.post-card h3 a:hover {
+	color: var(--color-primary);
+}
+
+.post-card .excerpt {
+	color: var(--color-text-muted);
+	line-height: 1.6;
+	font-size: 0.9rem;
+	margin-bottom: 0;
+}
+
+/* ===== Visitor Counter ===== */
+.visitor-counter-section {
+	padding: 2rem 0;
+	border-top: 1px solid var(--color-border);
+	text-align: center;
+}
+
+.counter-label {
+	color: var(--color-text-muted);
+	font-size: 0.9rem;
+	margin-right: 0.5rem;
+}
+
+.counter-number {
+	font-family: var(--font-mono);
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var(--color-primary);
+}
+
+/* ===== Skill Tags (for About page) ===== */
+.skill-category {
+	margin-bottom: 1.5rem;
+}
+
+.skill-category:last-child {
+	margin-bottom: 0;
+}
+
+.skill-category h3 {
+	color: var(--color-text);
+	font-size: 1rem;
+	margin-bottom: 0.75rem;
+}
+
+.skill-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.skill-tag {
+	background: rgba(8, 145, 178, 0.1);
+	color: var(--color-primary);
+	padding: 0.4rem 0.9rem;
+	border-radius: var(--radius-full);
+	font-size: 0.85rem;
+	font-weight: 500;
+	transition: all var(--transition-fast);
+	border: 1px solid transparent;
+}
+
+.skill-tag:hover {
+	background: rgba(8, 145, 178, 0.2);
+	border-color: var(--color-primary);
+	transform: translateY(-1px);
+}
+
+/* ===== Hero Section ===== */
+.hero-section {
+	padding: 4rem 0 3rem;
+}
+
+.hero-content h1 {
+	font-size: 3rem;
+	font-weight: 700;
+	color: var(--color-text);
+	margin-bottom: 0.5rem;
+	letter-spacing: -0.02em;
+}
+
+.hero-content .lead {
+	font-size: 1.25rem;
+	color: var(--color-text);
+	margin-bottom: 0.5rem;
+}
+
+.hero-content .tagline {
+	font-size: 1.1rem;
+	color: var(--color-text-muted);
+	margin-bottom: 1.5rem;
+}
+
+/* ===== Section Spacing ===== */
+.projects-section,
+.blog-section {
+	padding: 3rem 0;
+	border-top: 1px solid var(--color-border);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+	.hero-content h1 {
+		font-size: 2rem;
+	}
+
+	.hero-content .lead {
+		font-size: 1.1rem;
+	}
+
+	.projects-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.social-links {
+		flex-wrap: wrap;
+	}
+}
