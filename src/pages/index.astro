@@ -10,110 +10,19 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 ---
 
 <Layout title="Rito-492's Blog">
-	<!-- 自我介绍 -->
-	<section class="intro-section">
-		<div class="intro-content">
+	<!-- 首页介绍 -->
+	<section class="hero-section">
+		<div class="hero-content">
 			<h1>Rito-492</h1>
-			<p class="lead">
-				你好！我是 Rito-492，一名热爱编程的开发者。
-			</p>
-			<div class="intro-text">
-				<p>
-					我热衷于探索新技术，解决有趣的问题，并通过代码创造价值。
-					目前专注于<b>人体运动预测</b>、<b>概率建模</b>和<b>深度学习</b>研究，
-					同时也热衷于全栈开发和开源贡献。
-				</p>
-				<p>
-					这个网站是我学习和分享的地方，在这里你可以找到我的项目作品、技术文章和学习笔记。
-				</p>
-			</div>
-			<div class="contact-links">
-				<a href="https://github.com/Rito-492" target="_blank" rel="noopener noreferrer" class="contact-btn">
-					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-						<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-					</svg>
-					GitHub
-				</a>
-				<a href="mailto:your-email@example.com" class="contact-btn">
-					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<rect width="20" height="16" x="2" y="4" rx="2"/>
-						<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-					</svg>
-					Email
-				</a>
-			</div>
-		</div>
-	</section>
-
-	<!-- 技术栈 -->
-	<section class="skills-section">
-		<h2>技术栈</h2>
-		<div class="skills-list">
-			<div class="skill-group">
-				<span class="skill-group-label">编程语言</span>
-				<div class="skill-tags">
-					<span class="skill-tag">C++</span>
-					<span class="skill-tag">Python</span>
-					<span class="skill-tag">JavaScript/TypeScript</span>
-				</div>
-			</div>
-			<div class="skill-group">
-				<span class="skill-group-label">前端</span>
-				<div class="skill-tags">
-					<span class="skill-tag">Vue</span>
-					<span class="skill-tag">Astro</span>
-				</div>
-			</div>
-			<div class="skill-group">
-				<span class="skill-group-label">后端</span>
-				<div class="skill-tags">
-					<span class="skill-tag">Node.js</span>
-					<span class="skill-tag">MySQL</span>
-				</div>
-			</div>
-			<div class="skill-group">
-				<span class="skill-group-label">工具</span>
-				<div class="skill-tags">
-					<span class="skill-tag">Git</span>
-					<span class="skill-tag">Docker</span>
-					<span class="skill-tag">Linux</span>
-					<span class="skill-tag">PyTorch</span>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- 精选项目 -->
-	<section class="featured-section">
-		<div class="section-header">
-			<h2>精选项目</h2>
-			<a href="/projects" class="view-more">
-				查看全部
-				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M5 12h14"/>
-					<path d="m12 5 7 7-7 7"/>
-				</svg>
-			</a>
-		</div>
-		<div class="projects-grid">
-			{featuredProjects.map((project) => (
-				<a href={project.data.github} target="_blank" rel="noopener noreferrer" class="project-card">
-					<h3>{project.data.title}</h3>
-					<p>{project.data.description}</p>
-					<div class="tech-stack">
-						{project.data.tech.map((tech) => (
-							<span class="tech-tag">{tech}</span>
-						))}
-					</div>
-				</a>
-			))}
+			<p class="lead">你好，我是 Rito-492</p>
+			<p class="tagline">这里是代码与思考的自留地</p>
 		</div>
 	</section>
 
 	<!-- 最新博客 -->
 	<section class="blog-section">
 		<div class="section-header">
-			<h2>最新文章</h2>
+			<h2>📝 最新文章</h2>
 			<a href="/blog" class="view-more">
 				查看全部
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -143,6 +52,33 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 		</div>
 	</section>
 
+	<!-- 精选项目 -->
+	<section class="projects-section">
+		<div class="section-header">
+			<h2>🗂️ 项目作品</h2>
+			<a href="/projects" class="view-more">
+				查看全部
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M5 12h14"/>
+					<path d="m12 5 7 7-7 7"/>
+				</svg>
+			</a>
+		</div>
+		<div class="projects-grid">
+			{featuredProjects.map((project) => (
+				<a href={project.data.github} target="_blank" rel="noopener noreferrer" class="project-card">
+					<h3>{project.data.title}</h3>
+					<p>{project.data.description}</p>
+					<div class="tech-stack">
+						{project.data.tech.map((tech) => (
+							<span class="tech-tag">{tech}</span>
+						))}
+					</div>
+				</a>
+			))}
+		</div>
+	</section>
+
 	<!-- 访客计数器 -->
 	<section class="visitor-counter-section">
 		<span class="counter-label">访客计数：</span>
@@ -169,124 +105,33 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 </Layout>
 
 <style>
-	/* 自我介绍区域 */
-	.intro-section {
+	/* 首页介绍区域 */
+	.hero-section {
 		padding: 4rem 0 3rem;
 	}
 
-	.intro-content {
-		max-width: 720px;
-	}
-
-	.intro-content h1 {
+	.hero-content h1 {
 		font-size: 3rem;
 		font-weight: 700;
 		color: var(--color-text);
-		margin-bottom: 1rem;
+		margin-bottom: 0.5rem;
 		letter-spacing: -0.02em;
 	}
 
-	.intro-content .lead {
+	.hero-content .lead {
 		font-size: 1.25rem;
+		color: var(--color-text);
+		margin-bottom: 0.5rem;
+	}
+
+	.hero-content .tagline {
+		font-size: 1.1rem;
 		color: var(--color-text-muted);
 		margin-bottom: 1.5rem;
 	}
 
-	.intro-text p {
-		color: var(--color-text-muted);
-		line-height: 1.8;
-		margin-bottom: 1rem;
-		font-size: 1.05rem;
-	}
-
-	.intro-text b {
-		color: var(--color-primary);
-		font-weight: 600;
-	}
-
-	.contact-links {
-		display: flex;
-		gap: 1rem;
-		margin-top: 1.5rem;
-	}
-
-	.contact-btn {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.6rem 1.2rem;
-		background: transparent;
-		border: 1px solid var(--color-border);
-		border-radius: 8px;
-		color: var(--color-text);
-		text-decoration: none;
-		font-size: 0.9rem;
-		transition: all 0.2s;
-	}
-
-	.contact-btn:hover {
-		border-color: var(--color-primary);
-		color: var(--color-primary);
-		transform: translateY(-1px);
-	}
-
-	/* 技术栈区域 */
-	.skills-section {
-		padding: 2rem 0;
-		border-top: 1px solid var(--color-border);
-	}
-
-	.skills-section h2 {
-		font-size: 1rem;
-		font-weight: 600;
-		color: var(--color-text-muted);
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		margin-bottom: 1.5rem;
-	}
-
-	.skills-list {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-	}
-
-	.skill-group {
-		display: flex;
-		align-items: baseline;
-		gap: 1rem;
-		flex-wrap: wrap;
-	}
-
-	.skill-group-label {
-		min-width: 80px;
-		font-weight: 600;
-		color: var(--color-text);
-	}
-
-	.skill-tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-	}
-
-	.skill-tag {
-		background: rgba(8, 145, 178, 0.08);
-		color: var(--color-primary);
-		padding: 0.35rem 0.85rem;
-		border-radius: 9999px;
-		font-size: 0.85rem;
-		font-weight: 500;
-		transition: all 0.2s;
-	}
-
-	.skill-tag:hover {
-		background: rgba(8, 145, 178, 0.15);
-		transform: translateY(-1px);
-	}
-
-	/* 精选项目区域 */
-	.featured-section {
+	/* 项目区域 */
+	.projects-section {
 		padding: 3rem 0;
 		border-top: 1px solid var(--color-border);
 	}
@@ -302,17 +147,6 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 		font-size: 1.5rem;
 		font-weight: 600;
 		color: var(--color-text);
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-	}
-
-	.section-header h2::before {
-		content: '';
-		width: 4px;
-		height: 24px;
-		background: linear-gradient(180deg, var(--color-primary), var(--color-primary-hover));
-		border-radius: 2px;
 	}
 
 	.view-more {
@@ -383,7 +217,6 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.5rem;
-		margin-bottom: 1rem;
 	}
 
 	.tech-tag {
@@ -394,9 +227,6 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 		font-size: 0.75rem;
 		font-weight: 500;
 	}
-
-
-
 
 	/* 博客区域 */
 	.blog-section {
@@ -480,11 +310,11 @@ const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDa
 
 	/* 响应式 */
 	@media (max-width: 768px) {
-		.intro-content h1 {
+		.hero-content h1 {
 			font-size: 2rem;
 		}
 
-		.intro-content .lead {
+		.hero-content .lead {
 			font-size: 1.1rem;
 		}
 

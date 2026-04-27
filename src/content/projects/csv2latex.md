@@ -3,7 +3,7 @@ title: "csv2latex"
 description: "一个将csv表格转换成LaTeX表格的小工具,可以自动加粗最小值"
 tech: ["Python"]
 github: "https://github.com/Rito-492/csv2latex"
-draft: false  # 设置为 false 以显示项目
+draft: false
 ---
 
 ## 项目介绍
