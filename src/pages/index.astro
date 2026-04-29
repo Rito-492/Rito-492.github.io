@@ -101,15 +101,15 @@ const latestPosts = posts.sort((a, b) => parseDate(b.data.pubDate).valueOf() - p
 		const namespace = 'rito-492-github-io';
 		const key = 'home-visits';
 
-		fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+		fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
 			.then(res => res.json())
 			.then(data => {
-				if (visitCountEl && data.value !== undefined) {
-					visitCountEl.textContent = data.value.toLocaleString();
+				if (visitCountEl && data.count !== undefined) {
+					visitCountEl.textContent = Number(data.count).toLocaleString();
 				}
 			})
 			.catch(() => {
-				// CountAPI 服务不可用时，保持显示 "—"
+				// 计数器服务不可用时，保持显示 "—"
 			});
 	</script>
 </Layout>
