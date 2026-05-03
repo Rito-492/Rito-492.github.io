@@ -5,7 +5,7 @@ description: "这是整个博客的序"
 abstract: "未来的我应该能读懂现在的我。"
 pubDate: "202605040036"  # 发布时间，格式为 YYYYMMDDHHmm，如 202304181500
 # lastUpdated: "202604271830"  # 最后编辑时间，仅在发布后编辑过时填写，否则删除此行
-draft: true  # 发布前改为 false
+draft: false  # 发布前改为 false
 tags: ["杂谈"]
 ---
 
