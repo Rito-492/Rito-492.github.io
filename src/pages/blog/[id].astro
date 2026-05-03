@@ -49,7 +49,7 @@ function formatDate(date: Date): string {
 }
 ---
 
-<Layout title={post.data.title} showToc={true} tocHeadings={headings} series={post.data.series} postTitle={post.data.title}>
+<Layout title={post.data.title} showToc={true} tocHeadings={headings} series={post.data.series} postTitle={post.data.title} tags={post.data.tags ?? []}>
 	<div class="post-page">
 		<article class="post">
 			<header class="post-header">
@@ -85,9 +85,7 @@ function formatDate(date: Date): string {
 
 <style>
 	.post-page {
-		max-width: 1000px;
-		margin: 0 auto;
-		padding: 2rem;
+		padding: 2rem 0;
 	}
 
 	.post {
