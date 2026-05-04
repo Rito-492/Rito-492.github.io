@@ -36,6 +36,7 @@ const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 
 // 判断是否是首页
 const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 ---
 
 <!doctype html>
@@ -169,7 +170,9 @@ const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.
 						</nav>
 					</aside>
 				</div>
-			) : (
+			) : isBlogListPage ? (
+					<slot />
+				) : (
 				<main class="main-content full-width">
 					<div class="scroll-progress" id="scrollProgress"></div>
 					<slot />
