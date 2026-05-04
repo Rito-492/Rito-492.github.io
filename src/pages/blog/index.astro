@@ -129,12 +129,13 @@ const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.t
 <style>
 	.blog-layout {
 		display: grid;
-		grid-template-columns: 1fr 720px 1fr;
+		grid-template-columns: 1fr 960px 1fr;
 		padding: 2rem 0;
 	}
 	.blog-main { grid-column: 2; min-width: 0; }
 	.blog-sidebar {
 		grid-column: 3;
+		max-width: 260px;
 		width: 100%;
 		box-sizing: border-box;
 		margin-left: 2.5rem;
