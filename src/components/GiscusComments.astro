@@ -1,0 +1,58 @@
+---
+export interface Props {
+	repo: string;
+	repoId: string;
+	category: string;
+	categoryId: string;
+	mapping?: 'pathname' | 'url' | 'title' | 'og:title';
+	reactionsEnabled?: '0' | '1';
+	theme?: string;
+	lang?: string;
+}
+
+const {
+	repo,
+	repoId,
+	category,
+	categoryId,
+	mapping = 'pathname',
+	reactionsEnabled = '1',
+	theme = 'light',
+	lang = 'zh-CN',
+} = Astro.props;
+
+const config = { repo, repoId, category, categoryId, mapping, reactionsEnabled, theme, lang };
+---
+
+<div class="giscus" id="giscus-comments" data-config={JSON.stringify(config)}></div>
+
+<script is:inline>
+	const el = document.getElementById('giscus-comments');
+	if (el) {
+		const cfg = JSON.parse(el.dataset.config);
+		const script = document.createElement('script');
+		script.src = 'https://giscus.app/client.js';
+		script.setAttribute('data-repo', cfg.repo);
+		script.setAttribute('data-repo-id', cfg.repoId);
+		script.setAttribute('data-category', cfg.category);
+		script.setAttribute('data-category-id', cfg.categoryId);
+		script.setAttribute('data-mapping', cfg.mapping);
+		script.setAttribute('data-strict', '0');
+		script.setAttribute('data-reactions-enabled', cfg.reactionsEnabled);
+		script.setAttribute('data-emit-metadata', '0');
+		script.setAttribute('data-input-position', 'top');
+		script.setAttribute('data-theme', cfg.theme);
+		script.setAttribute('data-lang', cfg.lang);
+		script.crossOrigin = 'anonymous';
+		script.async = true;
+		el.appendChild(script);
+	}
+</script>
+
+<style>
+	.giscus {
+		margin-top: 3rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--color-border);
+	}
+</style>
