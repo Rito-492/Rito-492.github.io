@@ -70,6 +70,7 @@ src/
 │   ├── index.astro             # 首页
 │   ├── about.astro             # 关于页面
 │   ├── projects.astro          # 项目列表页
+│   ├── 404.astro               # 自定义 404 页面
 │   └── blog/
 │       ├── index.astro         # 博客列表页
 │       └── [id].astro          # 文章详情页
@@ -104,7 +105,7 @@ src/
 
 ### 1. 修改个人信息（首页侧边栏）
 
-**文件**: `src/layouts/Layout.astro` (约 77-98 行)
+**文件**: `src/layouts/Layout.astro` — 搜索 `profile-card` 定位
 
 ```astro
 <div class="profile-card">
@@ -129,7 +130,7 @@ src/
 
 ### 2. 修改导航栏
 
-**文件**: `src/components/Header.astro` (约 25-60 行)
+**文件**: `src/components/Header.astro` — 搜索 `nav-links` 定位
 
 ```astro
 <nav>
@@ -165,8 +166,9 @@ description: "文章描述，显示在列表页"
 abstract: "文章摘要，显示在文章标题下方"
 pubDate: 202604271200  # 发布时间：YYYYMMDDHHmm
 lastUpdated: 202604271830  # 最后编辑时间（可选）
-series: "学习笔记"  # 系列名称（可选），如"学习笔记"、"教程系列"
+series: "学习笔记"  # 系列名称（可选）
 draft: false  # true=草稿（不显示），false=发布
+tags: ["标签1", "标签2"]  # 必填，至少一个
 ---
 
 ## 章节标题
@@ -181,9 +183,10 @@ draft: false  # true=草稿（不显示），false=发布
 | `title` | ✅ | 文章标题 | 文章顶部、列表页 |
 | `description` | ✅ | 文章描述 | 列表页卡片 |
 | `abstract` | ✅ | 文章摘要 | 文章标题下方 |
-| `pubDate` | ✅ | 发布时间 | 文章元信息 |
+| `pubDate` | ✅ | 发布时间 (YYYYMMDDHHmm) | 文章元信息 |
 | `lastUpdated` | ❌ | 最后编辑时间 | 文章元信息 |
 | `series` | ❌ | 系列名称 | 右侧栏顶部 |
+| `tags` | ✅ | 文章标签 | 右侧栏、列表页筛选 |
 | `draft` | ❌ | 是否草稿 | - |
 
 **写作技巧**:
@@ -240,13 +243,13 @@ draft: false
 
 ```css
 :root {
-    --color-primary: #0891b2;        /* 主色调（蓝色） */
-    --color-primary-hover: #06b6d4;  /* 悬停颜色 */
-    --color-text: #333333;           /* 正文颜色 */
-    --color-text-muted: #666666;     /* 次要文字颜色 */
-    --color-border: #e5e7eb;         /* 边框颜色 */
+    --color-primary: #0891b2;        /* 主色调 */
+    --color-primary-hover: #0e7490;  /* 悬停颜色 */
+    --color-text: #1e293b;           /* 正文颜色 */
+    --color-text-muted: #64748b;     /* 次要文字颜色 */
+    --color-border: #e0ded6;         /* 边框颜色 */
     --color-card: #ffffff;           /* 卡片背景 */
-    --color-bg: #f9fafb;             /* 页面背景 */
+    --color-bg: #F8F8F6;             /* 页面背景 */
 }
 ```
 
@@ -256,7 +259,7 @@ draft: false
 
 ### 7. 添加社交链接（左侧栏）
 
-**文件**: `src/layouts/Layout.astro` (约 87-107 行)
+**文件**: `src/layouts/Layout.astro` — 搜索 `social-links` 定位
 
 在 `<div class="social-links">` 内添加新链接：
 
@@ -456,4 +459,4 @@ body {
 
 ---
 
-最后更新：2026-04-27
+最后更新：2026-05-06

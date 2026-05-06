@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import GiscusComments from '../../components/GiscusComments.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -79,6 +80,13 @@ function formatDate(date: Date): string {
 					<span>返回博客列表</span>
 				</a>
 			</div>
+
+			<GiscusComments
+				repo="Rito-492/Rito-492.github.io"
+				repoId="R_kgDOSEWSAg"
+				category="Announcements"
+				categoryId="DIC_kwDOSEWSAs4C8cvu"
+			/>
 		</article>
 	</div>
 </Layout>
