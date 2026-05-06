@@ -1,11 +1,11 @@
 ---
 title: "序"
-# series: "杂谈"
-description: "这是整个博客的序"
 abstract: "未来的我应该能读懂现在的我。"
+description: "这是整个博客的序"
 pubDate: "202605040036"
 lastUpdated: "202605041215"
 draft: false
+# series: "杂谈"
 tags: ["杂谈"]
 ---
 

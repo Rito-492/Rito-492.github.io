@@ -4,101 +4,96 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="关于我 - Rito-492">
 	<section class="about-section">
-		<div class="about-header">
-			<div class="avatar-container">
-				<div class="avatar">
-					<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-						<circle cx="12" cy="8" r="5"/>
-						<path d="M20 21a8 8 0 1 0-16 0"/>
-					</svg>
-				</div>
+		<header class="about-header">
+			<div class="avatar">
+				<img src="/avatar.jpg" alt="avatar" />
 			</div>
-			<h1>关于我</h1>
-			<p class="subtitle">了解更多关于我的信息</p>
-		</div>
+			<h1>Rito-492</h1>
+			<p class="subtitle">人体运动预测研究者 / 业余全栈开发者</p>
+		</header>
 
 		<div class="about-content">
-			<div class="intro">
-				<h2><span class="icon">👋</span> 简介</h2>
+			<div class="card intro">
+				<h2>关于我</h2>
 				<p>
-					你好！我是 Rito-492，一名热爱编程的开发者。我喜欢探索新技术，
-					解决有趣的问题，并通过代码创造价值。
+					你好，我是 Rito，目前专注于人体运动预测、概率建模和深度学习研究。
+					平时主要和 Python、PyTorch 打交道，偶尔写写 Go 和 C++。
 				</p>
 				<p>
-					目前专注于人体运动预测、概率建模和深度学习研究。
-					我相信技术可以改变世界，而我希望成为其中的一份子。
+					这个网站是我的个人自留地，用来记录学习笔记、技术分享和一些折腾的记录。
+					网站基于 Astro 构建，部署在 GitHub Pages 上。
 				</p>
 			</div>
 
-			<div class="skills-section">
-				<h2><span class="icon">💻</span> 技术技能</h2>
-				<div class="skill-category">
-					<h3>编程语言</h3>
-					<div class="skill-tags">
-						<span class="skill-tag">JavaScript/TypeScript</span>
-						<span class="skill-tag">Python</span>
-						<span class="skill-tag">Go</span>
-						<span class="skill-tag">C++</span>
+			<div class="card toolbox">
+				<h2>
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+					工具箱
+				</h2>
+				<div class="tools-grid">
+					<div class="tool-group">
+						<span class="tool-label">主力语言</span>
+						<div class="tool-tags">
+							<span class="tool-tag">Python</span>
+							<span class="tool-tag">TypeScript</span>
+							<span class="tool-tag">Go</span>
+							<span class="tool-tag">C++</span>
+						</div>
 					</div>
-				</div>
-				<div class="skill-category">
-					<h3>前端技术</h3>
-					<div class="skill-tags">
-						<span class="skill-tag">React</span>
-						<span class="skill-tag">Vue</span>
-						<span class="skill-tag">Astro</span>
-						<span class="skill-tag">Tailwind CSS</span>
-						<span class="skill-tag">Next.js</span>
+					<div class="tool-group">
+						<span class="tool-label">深度学习</span>
+						<div class="tool-tags">
+							<span class="tool-tag">PyTorch</span>
+							<span class="tool-tag">KAN</span>
+							<span class="tool-tag">Diffusion</span>
+						</div>
 					</div>
-				</div>
-				<div class="skill-category">
-					<h3>后端技术</h3>
-					<div class="skill-tags">
-						<span class="skill-tag">Node.js</span>
-						<span class="skill-tag">Express</span>
-						<span class="skill-tag">FastAPI</span>
-						<span class="skill-tag">PostgreSQL</span>
-						<span class="skill-tag">MySQL</span>
-						<span class="skill-tag">MongoDB</span>
+					<div class="tool-group">
+						<span class="tool-label">前端</span>
+						<div class="tool-tags">
+							<span class="tool-tag">Astro</span>
+							<span class="tool-tag">React</span>
+							<span class="tool-tag">Tailwind</span>
+						</div>
 					</div>
-				</div>
-				<div class="skill-category">
-					<h3>工具 & 其他</h3>
-					<div class="skill-tags">
-						<span class="skill-tag">Git</span>
-						<span class="skill-tag">Docker</span>
-						<span class="skill-tag">Linux</span>
-						<span class="skill-tag">CI/CD</span>
-						<span class="skill-tag">PyTorch</span>
+					<div class="tool-group">
+						<span class="tool-label">工具 & 运维</span>
+						<div class="tool-tags">
+							<span class="tool-tag">Git</span>
+							<span class="tool-tag">Docker</span>
+							<span class="tool-tag">Linux</span>
+							<span class="tool-tag">PostgreSQL</span>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="contact-section">
-				<h2><span class="icon">📬</span> 联系方式</h2>
-				<p>
-					如果你有任何问题、合作想法或只是想聊聊技术，欢迎通过以下方式联系我：
-				</p>
+			<div class="card connect">
+				<h2>
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+					找到我
+				</h2>
 				<div class="social-links">
-					<a href="https://github.com/Rito-492" target="_blank" rel="noopener noreferrer" class="social-btn github">
-						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+					<a href="https://github.com/Rito-492" target="_blank" rel="noopener noreferrer" class="social-link">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
 							<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
 						</svg>
 						<span>GitHub</span>
 					</a>
-					<a href="mailto:your-email@example.com" class="social-btn email">
-						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<a href="mailto:richardtowne8284@gmail.com" class="social-link">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							<rect width="20" height="16" x="2" y="4" rx="2"/>
 							<path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
 						</svg>
 						<span>Email</span>
 					</a>
+					<a href="https://steamcommunity.com/profiles/76561199226205480/" target="_blank" rel="noopener noreferrer" class="social-link">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+							<path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/>
+						</svg>
+						<span>Steam</span>
+					</a>
 				</div>
-			</div>
-
-			<div class="cta-section">
-				<p>想看看我的项目和作品？</p>
-				<a href="/" class="btn primary">回到主页</a>
 			</div>
 		</div>
 	</section>
@@ -106,206 +101,189 @@ import Layout from '../layouts/Layout.astro';
 
 <style>
 	.about-section {
-		max-width: 900px;
-		margin: 0 auto;
-		padding: 3rem 0;
+		max-width: none;
+		margin: 0;
+		padding: 2rem;
 	}
 
+	/* Header */
 	.about-header {
 		text-align: center;
-		margin-bottom: 3rem;
+		margin-bottom: 2.5rem;
 	}
 
-	.avatar-container {
-		margin-bottom: 1.5rem;
-	}
-
-	.avatar {
-		width: 120px;
-		height: 120px;
-		margin: 0 auto;
+	.about-header .avatar {
+		width: 80px;
+		height: 80px;
+		margin: 0 auto 1rem;
 		border-radius: 50%;
-		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: white;
-		box-shadow: 0 8px 32px rgba(8, 145, 178, 0.3);
+		overflow: hidden;
 	}
 
-	.about-section h1 {
-		font-size: 2.5rem;
-		margin-bottom: 0.5rem;
+	.about-header .avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		image-rendering: -webkit-optimize-contrast;
 	}
 
-	.subtitle {
+	main.full-width {
+		max-width: none !important;
+		padding: 0 !important;
+	}
+
+	.about-header h1 {
+		font-size: 1.75rem;
+		font-weight: 700;
+		margin: 0 0 0.35rem;
+	}
+
+	.about-header .subtitle {
 		color: var(--color-text-muted);
-		font-size: 1.1rem;
+		font-size: 0.9rem;
+		margin: 0;
 	}
 
+	/* Content */
 	.about-content {
 		display: flex;
 		flex-direction: column;
-		gap: 2rem;
+		gap: 1.25rem;
+		max-width: 780px;
+		margin: 0 auto;
 	}
 
-	.intro, .skills-section, .contact-section {
+	.card {
 		background: var(--color-card);
 		border: 1px solid var(--color-border);
 		border-radius: 12px;
-		padding: 2rem;
-		box-shadow: 0 2px 8px var(--color-shadow);
-		transition: transform 0.2s, box-shadow 0.2s;
+		padding: 1.5rem;
+		transition: all 0.2s;
 	}
 
-	.intro:hover, .skills-section:hover, .contact-section:hover {
-		transform: translateY(-4px);
-		box-shadow: 0 8px 24px rgba(8, 145, 178, 0.15);
+	.card:hover {
+		border-color: rgba(8, 145, 178, 0.3);
+		box-shadow: 0 4px 16px rgba(8, 145, 178, 0.08);
 	}
 
-	.intro h2, .skills-section h2, .contact-section h2 {
-		color: var(--color-primary);
-		margin-bottom: 1rem;
+	.card h2 {
+		font-size: 1.05rem;
+		font-weight: 600;
+		color: var(--color-text);
+		margin: 0 0 1rem;
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		font-size: 1.3rem;
 	}
 
-	.intro h2 .icon, .skills-section h2 .icon, .contact-section h2 .icon {
-		font-size: 1.5rem;
+	.card h2 svg {
+		color: var(--color-primary);
+		flex-shrink: 0;
 	}
 
 	.intro p {
 		color: var(--color-text-muted);
 		line-height: 1.8;
-		margin-bottom: 1rem;
+		margin: 0 0 1rem;
 	}
 
-	.skill-category {
-		margin-bottom: 1.5rem;
-	}
-
-	.skill-category:last-child {
+	.intro p:last-child {
 		margin-bottom: 0;
 	}
 
-	.skill-category h3 {
-		color: var(--color-text);
-		font-size: 1rem;
-		margin-bottom: 0.75rem;
+	/* Toolbox */
+	.tools-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
 	}
 
-	.skill-tags {
+	.tool-group {
+		display: flex;
+		align-items: baseline;
+		gap: 0.75rem;
+	}
+
+	.tool-label {
+		font-size: 0.8rem;
+		font-weight: 500;
+		color: var(--color-text-muted);
+		min-width: 70px;
+		flex-shrink: 0;
+	}
+
+	.tool-tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: 0.4rem;
 	}
 
-	.skill-tag {
-		background: rgba(8, 145, 178, 0.1);
+	.tool-tag {
+		background: rgba(8, 145, 178, 0.08);
 		color: var(--color-primary);
-		padding: 0.4rem 0.9rem;
+		padding: 0.25rem 0.65rem;
 		border-radius: 9999px;
-		font-size: 0.85rem;
+		font-size: 0.78rem;
 		font-weight: 500;
 		transition: all 0.2s;
 		border: 1px solid transparent;
 	}
 
-	.skill-tag:hover {
-		background: rgba(8, 145, 178, 0.2);
+	.tool-tag:hover {
+		background: rgba(8, 145, 178, 0.15);
 		border-color: var(--color-primary);
 		transform: translateY(-1px);
 	}
 
-	.contact-section p {
-		color: var(--color-text-muted);
-		line-height: 1.8;
-		margin-bottom: 1.5rem;
-	}
-
+	/* Social links */
 	.social-links {
 		display: flex;
-		gap: 1rem;
 		flex-wrap: wrap;
+		gap: 0.5rem;
 	}
 
-	.social-btn {
+	.social-link {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
-		padding: 0.75rem 1.25rem;
-		background: var(--color-card);
-		border: 1px solid var(--color-border);
-		border-radius: 8px;
-		color: var(--color-text);
+		color: var(--color-text-muted);
 		text-decoration: none;
-		font-weight: 500;
+		font-size: 0.88rem;
 		transition: all 0.2s;
-		box-shadow: 0 2px 4px var(--color-shadow);
+		padding: 0.4rem 0.7rem;
+		border-radius: 8px;
 	}
 
-	.social-btn:hover {
-		border-color: var(--color-primary);
+	.social-link svg {
+		width: 16px;
+		height: 16px;
+		flex-shrink: 0;
+	}
+
+	.social-link:hover {
 		color: var(--color-primary);
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
+		background: rgba(8, 145, 178, 0.06);
 		text-decoration: none;
 	}
 
-	.cta-section {
-		text-align: center;
-		padding: 2rem;
-		background: linear-gradient(135deg, rgba(8, 145, 178, 0.05), rgba(14, 116, 144, 0.1));
-		border-radius: 12px;
-		border: 1px solid rgba(8, 145, 178, 0.1);
-	}
-
-	.cta-section p {
-		color: var(--color-text);
-		font-size: 1.1rem;
-		margin-bottom: 1.5rem;
-	}
-
-	.btn {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.875rem 1.75rem;
-		border-radius: 12px;
-		text-decoration: none;
-		font-weight: 600;
-		transition: all 0.3s;
-	}
-
-	.btn.primary {
-		background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-		color: #ffffff;
-		box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
-	}
-
-	.btn.primary:hover {
-		transform: translateY(-3px);
-		box-shadow: 0 8px 25px rgba(8, 145, 178, 0.4);
-	}
-
+	/* Responsive */
 	@media (max-width: 640px) {
 		.about-section {
 			padding: 2rem 1rem;
 		}
 
-		.about-section h1 {
-			font-size: 2rem;
+		.about-header h1 {
+			font-size: 1.5rem;
+		}
+
+		.tool-group {
+			flex-direction: column;
+			gap: 0.4rem;
 		}
 
 		.social-links {
 			flex-direction: column;
-		}
-
-		.social-btn {
-			justify-content: center;
-			width: 100%;
 		}
 	}
 </style>
