@@ -136,23 +136,28 @@ const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.t
 <style>
 	.blog-layout {
 		display: grid;
-		grid-template-columns: 25% 50% 25%;
-		gap: 2rem;
-		padding: 2rem;
-		max-width: 1400px;
-		margin: 0 auto;
+		grid-template-columns: 1fr 700px 1fr;
+		gap: 2.5rem;
+		padding: 2rem 0;
+		max-width: none;
+		width: 100%;
+		margin: 0;
 	}
 	main.blog-main {
 		grid-column: 2;
 		min-width: 0;
 		max-width: none !important;
 		padding: 0 !important;
-		margin: 0;
+		margin: 0 !important;
+		position: static !important;
 	}
 	.blog-sidebar {
 		grid-column: 3;
 		position: sticky;
 		top: 5rem;
+		width: 100%;
+		box-sizing: border-box;
+		margin-left: 2.5rem;
 		height: fit-content;
 		max-height: calc(100vh - 7rem);
 		overflow-y: auto;
@@ -179,9 +184,6 @@ const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.t
 		border-left: 2px solid transparent;
 		transition: all 0.15s;
 		cursor: pointer;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 	.sidebar-item:hover { color: var(--color-text); border-left-color: var(--color-primary); }
 	.sidebar-item.active {
@@ -320,7 +322,7 @@ const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.t
 	@media (max-width: 1150px) {
 		.blog-layout { grid-template-columns: 1fr; padding: 1.5rem 1rem; }
 		.blog-main { grid-column: 1; }
-		.blog-sidebar { grid-column: 1; position: static; max-height: none; border-top: 1px solid var(--color-border); padding: 1.5rem 0 0; margin-top: 2rem; }
+		.blog-sidebar { grid-column: 1; margin-left: 0; position: static; max-height: none; border-top: 1px solid var(--color-border); padding: 1.5rem 0 0; margin-top: 2rem; }
 	}
 </style>
 

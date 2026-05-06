@@ -387,6 +387,8 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 
 	.post-layout.full-width {
 		padding: 2rem 0;
+		max-width: none !important;
+		margin: 0 !important;
 	}
 
 	.post-layout .main-content {
@@ -400,7 +402,6 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 		grid-column: 3;
 		width: 100%;
 		box-sizing: border-box;
-		margin-left: 2.5rem;
 		position: sticky;
 		top: 5rem;
 		height: fit-content;
@@ -483,9 +484,6 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 		text-decoration: none;
 		font-size: 0.85rem;
 		line-height: 1.5;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 		transition: all 0.2s;
 		border-left: 2px solid transparent;
 	}
