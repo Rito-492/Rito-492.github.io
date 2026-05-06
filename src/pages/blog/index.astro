@@ -19,62 +19,87 @@ const sortedPosts = posts.sort((a, b) => {
 	return parseDate(b.data.pubDate).valueOf() - parseDate(a.data.pubDate).valueOf();
 });
 
+// 按月分组
+const monthGroups: Map<string, typeof sortedPosts> = new Map();
+sortedPosts.forEach(post => {
+	const date = parseDate(post.data.pubDate);
+	const key = `${date.getFullYear()}年${date.getMonth() + 1}月`;
+	if (!monthGroups.has(key)) monthGroups.set(key, []);
+	monthGroups.get(key)!.push(post);
+});
+
 const allSeries = [...new Set(posts.filter(p => p.data.series).map(p => p.data.series!))].sort();
 const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.tags!))].sort();
+
+// 最近6个月
+const recentMonths = [...monthGroups.keys()].slice(0, 6);
 ---
 
 <Layout title="博客 - Rito">
 	<div class="blog-layout">
 		<main class="blog-main">
 			<header class="blog-header">
-				<span class="header-icon">📝</span>
-				<h1>博客</h1>
-				<p class="header-desc">在这里分享我的技术笔记和学习心得</p>
+				<div class="header-top">
+					<span class="header-icon">📝</span>
+					<h1>博客</h1>
+				</div>
+				<p class="header-desc">表达一些我的想法</p>
+				<div class="header-stats">
+					<span class="stat-item">共 <strong>{posts.length}</strong> 篇</span>
+				</div>
 				<div class="result-info" id="resultInfo"></div>
 			</header>
 
-			<div class="posts-list" id="postsList">
+			<div class="timeline" id="postsList">
 				{sortedPosts.length === 0 ? (
 					<div class="empty-state">
 						<span class="empty-icon">🌱</span>
 						<p class="no-posts">还没有文章，敬请期待！</p>
 					</div>
 				) : (
-					sortedPosts.map((post) => (
-						<a href={`/blog/${post.id}`} class="post-card-link"
-							 data-series={post.data.series ?? ''}
-							 data-tags={JSON.stringify(post.data.tags ?? [])}
-							 data-date={post.data.pubDate}>
-							<article class="post-card">
-								<div class="post-card-content">
-									<div class="post-meta">
-										<time datetime={parseDate(post.data.pubDate).toISOString()}>
-											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-											{parseDate(post.data.pubDate).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
-										</time>
-										<span class="reading-time">
-											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-											{Math.max(1, Math.ceil(post.body.length / 500))} 分钟
-										</span>
-										{post.data.series && (
-											<span class="series-badge">{post.data.series}</span>
-										)}
-									</div>
-									<h2>{post.data.title}</h2>
-									<p class="excerpt">{post.data.description}</p>
-									{post.data.tags && post.data.tags.length > 0 && (
-										<div class="card-tags">
-											{post.data.tags.map(tag => (
-												<span class="card-tag">{tag}</span>
-											))}
-										</div>
-									)}
-								</div>
-								<span class="read-arrow">
-									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-								</span>
-							</article>
-						</a>
+					[...monthGroups.entries()].map(([month, monthPosts]) => (
+						<div class="month-group" data-month={month}>
+							<h2 class="month-label">{month}</h2>
+							<div class="month-posts">
+								{monthPosts.map((post) => (
+									<a href={`/blog/${post.id}`} class="post-card-link"
+										 data-series={post.data.series ?? ''}
+										 data-tags={JSON.stringify(post.data.tags ?? [])}
+										 data-date={post.data.pubDate}>
+										<article class="post-card">
+											<div class="timeline-dot"></div>
+											<div class="post-card-content">
+												<div class="post-meta">
+													<time datetime={parseDate(post.data.pubDate).toISOString()}>
+														<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+														{parseDate(post.data.pubDate).toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' })}
+													</time>
+													<span class="reading-time">
+														<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+														{Math.max(1, Math.ceil(post.body.length / 500))} 分钟
+													</span>
+													{post.data.series && (
+														<span class="series-badge">{post.data.series}</span>
+													)}
+												</div>
+												<h3>{post.data.title}</h3>
+												<p class="excerpt">{post.data.description}</p>
+												{post.data.tags && post.data.tags.length > 0 && (
+													<div class="card-tags">
+														{post.data.tags.map(tag => (
+															<span class="card-tag">{tag}</span>
+														))}
+													</div>
+												)}
+											</div>
+											<span class="read-arrow">
+												<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+											</span>
+										</article>
+									</a>
+								))}
+							</div>
+						</div>
 					))
 				)}
 			</div>
@@ -102,9 +127,9 @@ const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.t
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
 						<span>标签</span>
 					</div>
-					<nav id="tagFilter">
+					<nav id="tagFilter" class="tag-cloud">
 						{allTags.map(tag => (
-							<a class="sidebar-item tag-item" data-tag={tag}>{tag}</a>
+							<a class="tag-pill" data-tag={tag}>{tag}</a>
 						))}
 					</nav>
 					<a class="sidebar-item clear-item" id="clearTags" style="display:none">清除筛选</a>
@@ -129,16 +154,21 @@ const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.t
 <style>
 	.blog-layout {
 		display: grid;
-		grid-template-columns: 1fr 960px 1fr;
-		padding: 2rem 0;
+		grid-template-columns: 25% 50% 25%;
+		gap: 2rem;
+		padding: 2rem;
+		max-width: 1400px;
+		margin: 0 auto;
 	}
-	.blog-main { grid-column: 2; min-width: 0; }
+	main.blog-main {
+		grid-column: 2;
+		min-width: 0;
+		max-width: none !important;
+		padding: 0 !important;
+		margin: 0;
+	}
 	.blog-sidebar {
 		grid-column: 3;
-		max-width: 260px;
-		width: 100%;
-		box-sizing: border-box;
-		margin-left: 2.5rem;
 		position: sticky;
 		top: 5rem;
 		height: fit-content;
@@ -180,113 +210,155 @@ const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.t
 	.clear-item { font-size: 0.8rem; margin-top: 0.25rem; }
 
 	/* Header */
-	.blog-header { padding: 1rem 0 3rem; text-align: center; }
-	.header-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; animation: float 3s ease-in-out infinite; }
-	@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-	.blog-header h1 { margin-bottom: 0.5rem; font-size: 2rem; }
-	.header-desc { color: var(--color-text-muted); font-size: 0.95rem; }
-	.result-info { color: var(--color-text-muted); font-size: 0.85rem; margin-top: 0.5rem; min-height: 1.25rem; }
+	.blog-header { padding: 0.5rem 0 2rem; }
+	.header-top { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+	.header-icon { font-size: 1.5rem; animation: float 3s ease-in-out infinite; }
+	@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+	.blog-header h1 { margin: 0; font-size: 1.5rem; font-weight: 700; }
+	.header-desc { color: var(--color-text-muted); font-size: 0.85rem; margin: 0; }
+	.header-stats { display: flex; gap: 1rem; margin-top: 0.75rem; }
+	.stat-item { font-size: 0.8rem; color: var(--color-text-muted); }
+	.stat-item strong { color: var(--color-primary); font-weight: 600; }
+	.result-info { color: var(--color-text-muted); font-size: 0.8rem; margin-top: 0.5rem; min-height: 1.25rem; }
 
-	/* Posts */
-	.posts-list { display: flex; flex-direction: column; gap: 1.25rem; }
+	/* Timeline */
+	.timeline { position: relative; }
+	.timeline::before {
+		content: '';
+		position: absolute;
+		left: 8px;
+		top: 0;
+		bottom: 0;
+		width: 2px;
+		background: linear-gradient(to bottom, var(--color-border), transparent);
+	}
+
+	.month-group { margin-bottom: 2rem; }
+	.month-group:last-child { margin-bottom: 0; }
+
+	.month-label {
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: var(--color-primary);
+		margin: 0 0 1rem;
+		padding-left: 28px;
+		position: relative;
+		background: var(--color-bg);
+		display: inline-block;
+	}
+	.month-label::before {
+		content: '';
+		position: absolute;
+		left: 2px;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		background: var(--color-primary);
+		border: 3px solid var(--color-bg);
+		box-shadow: 0 0 0 2px var(--color-primary);
+	}
+
+	.month-posts { display: flex; flex-direction: column; gap: 1rem; }
+
 	.empty-state { text-align: center; padding: 4rem 2rem; }
 	.empty-icon { font-size: 4rem; display: block; margin-bottom: 1rem; }
 	.no-posts { color: var(--color-text-muted); font-size: 1.1rem; }
 
 	.post-card-link { display: block; text-decoration: none; color: inherit; }
 	.post-card {
-		background: var(--color-card); border: 1px solid var(--color-border);
-		border-radius: 12px; padding: 1.25rem 1.5rem;
-		transition: all 0.2s; display: flex;
-		justify-content: space-between; align-items: center; gap: 1rem;
-		position: relative; overflow: hidden;
+		background: var(--color-card);
+		border: 1px solid var(--color-border);
+		border-radius: 12px;
+		padding: 1.25rem 1.5rem;
+		transition: all 0.2s;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		position: relative;
+		margin-left: 28px;
 	}
 	.post-card::before {
-		content: ''; position: absolute; left: 0; top: 0;
-		height: 100%; width: 3px;
-		background: var(--color-primary);
-		transform: scaleY(0); transform-origin: top; transition: transform 0.2s;
+		content: '';
+		position: absolute;
+		left: -24px;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--color-border);
+		transition: all 0.2s;
 	}
-	.post-card-link:hover .post-card { border-color: var(--color-primary); transform: translateX(4px); box-shadow: 0 4px 16px rgba(8,145,178,0.12); }
-	.post-card-link:hover .post-card::before { transform: scaleY(1); }
-	.post-card-link:hover h2 { color: var(--color-primary); }
+	.post-card::after {
+		content: '';
+		position: absolute;
+		left: -16px;
+		top: 50%;
+		width: 16px;
+		height: 2px;
+		background: var(--color-border);
+		transition: all 0.2s;
+	}
+	.post-card-link:hover .post-card {
+		border-color: var(--color-primary);
+		transform: translateX(4px);
+		box-shadow: 0 4px 16px rgba(8,145,178,0.12);
+	}
+	.post-card-link:hover .post-card::before { background: var(--color-primary); }
+	.post-card-link:hover .post-card::after { background: var(--color-primary); }
+	.post-card-link:hover h3 { color: var(--color-primary); }
 
 	.post-card-content { flex: 1; min-width: 0; }
 	.post-meta { display: flex; gap: 1rem; align-items: center; margin-bottom: 0.5rem; font-size: 0.78rem; color: var(--color-text-muted); flex-wrap: wrap; }
 	.post-meta time, .reading-time { display: flex; align-items: center; gap: 0.3rem; }
 	.series-badge { background: rgba(8,145,178,0.08); color: var(--color-primary); padding: 0.15rem 0.6rem; border-radius: 9999px; font-size: 0.78rem; font-weight: 500; border: 1px solid rgba(8,145,178,0.2); }
-	.post-card h2 { margin: 0 0 0.5rem; font-size: 1.25rem; line-height: 1.4; }
-	.excerpt { color: var(--color-text-muted); line-height: 1.6; margin-bottom: 0.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+	.post-card h3 { margin: 0 0 0.5rem; font-size: 1.1rem; line-height: 1.4; font-weight: 600; color: var(--color-text); transition: color 0.2s; }
+	.excerpt { color: var(--color-text-muted); line-height: 1.6; margin-bottom: 0.5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.88rem; }
 	.card-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 	.card-tag { background: var(--color-bg); color: var(--color-text-muted); padding: 0.15rem 0.55rem; border-radius: 6px; font-size: 0.75rem; border: 1px solid var(--color-border); }
 	.read-arrow { flex-shrink: 0; color: var(--color-text-muted); opacity: 0; transform: translateX(-8px); transition: all 0.2s; }
 	.post-card-link:hover .read-arrow { opacity: 1; transform: translateX(0); }
 
+	/* Tag cloud */
+	.tag-cloud { display: flex; flex-wrap: wrap; gap: 0.6rem; padding-left: 0.5rem; }
+		.tag-pill {
+			color: var(--color-text-muted);
+			font-size: 0.78rem;
+			text-decoration: none;
+			cursor: pointer;
+			transition: color 0.15s;
+		}
+		.tag-pill:hover { color: var(--color-primary); }
+		.tag-pill.active { color: var(--color-primary); font-weight: 500; }
+	.clear-item { font-size: 0.8rem; margin-top: 0.5rem; }
+
 	@media (max-width: 1150px) {
 		.blog-layout { grid-template-columns: 1fr; padding: 1.5rem 1rem; }
 		.blog-main { grid-column: 1; }
-		.blog-sidebar { grid-column: 1; position: static; max-height: none; border-left: none; border-top: 1px solid var(--color-border); margin-left: 0; padding: 1.5rem 0 0; margin-top: 2rem; }
+		.blog-sidebar { grid-column: 1; position: static; max-height: none; border-top: 1px solid var(--color-border); padding: 1.5rem 0 0; margin-top: 2rem; }
+		.post-card { margin-left: 20px; }
+		.timeline::before { left: 4px; }
 	}
 </style>
 
 <script>
-	const postsList = document.getElementById('postsList')!;
-	const links = postsList.querySelectorAll('.post-card-link') as NodeListOf<HTMLElement>;
-	const resultInfo = document.getElementById('resultInfo')!;
-	const clearTagsBtn = document.getElementById('clearTags') as HTMLElement;
-	const sortBtn = document.getElementById('sortBtn')!;
-	const sortLabel = document.getElementById('sortLabel')!;
-
-	let activeSeries = 'all';
-	let activeTags = new Set<string>();
-	let sortNewest = true;
-
-	function applyFilters() {
-		let count = 0;
-		links.forEach(link => {
-			const series = link.dataset.series || '';
-			const tags: string[] = JSON.parse(link.dataset.tags || '[]');
-			const seriesMatch = activeSeries === 'all' || series === activeSeries;
-			const tagsMatch = activeTags.size === 0 || [...activeTags].every(t => tags.includes(t));
-			if (seriesMatch && tagsMatch) { link.style.display = ''; count++; }
-			else { link.style.display = 'none'; }
+	const tagFilter = document.getElementById('tagFilter');
+	if (tagFilter) {
+		tagFilter.addEventListener('click', (e) => {
+			const item = (e.target as HTMLElement).closest('.tag-pill') as HTMLElement;
+			if (!item) return;
+			const tag = item.dataset.tag!;
+			if (activeTags.has(tag)) { activeTags.delete(tag); item.classList.remove('active'); }
+			else { activeTags.add(tag); item.classList.add('active'); }
+			updateAll();
 		});
-		resultInfo.textContent = count === links.length ? '' : `显示 ${count} / ${links.length} 篇`;
-		clearTagsBtn.style.display = activeTags.size > 0 ? '' : 'none';
 	}
-
-	function applySort() {
-		const visible = [...links].filter(l => l.style.display !== 'none');
-		visible.sort((a, b) => {
-			const da = a.dataset.date || '', db = b.dataset.date || '';
-			return sortNewest ? db.localeCompare(da) : da.localeCompare(db);
-		});
-		visible.forEach(link => postsList.appendChild(link));
-	}
-
-	function updateAll() { applyFilters(); applySort(); }
-
-	document.getElementById('seriesFilter')?.addEventListener('click', (e) => {
-		const item = (e.target as HTMLElement).closest('.sidebar-item') as HTMLElement;
-		if (!item) return;
-		document.querySelectorAll('#seriesFilter .sidebar-item').forEach(b => b.classList.remove('active'));
-		item.classList.add('active');
-		activeSeries = item.dataset.series || 'all';
-		updateAll();
-	});
-
-	document.getElementById('tagFilter')?.addEventListener('click', (e) => {
-		const item = (e.target as HTMLElement).closest('.tag-item') as HTMLElement;
-		if (!item) return;
-		const tag = item.dataset.tag!;
-		if (activeTags.has(tag)) { activeTags.delete(tag); item.classList.remove('active'); }
-		else { activeTags.add(tag); item.classList.add('active'); }
-		updateAll();
-	});
 
 	clearTagsBtn.addEventListener('click', () => {
 		activeTags.clear();
-		document.querySelectorAll('.tag-item').forEach(b => b.classList.remove('active'));
+		document.querySelectorAll('.tag-pill').forEach(b => b.classList.remove('active'));
 		updateAll();
 	});
 
@@ -299,7 +371,7 @@ const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.t
 	const urlParams = new URLSearchParams(window.location.search);
 	const urlTag = urlParams.get('tag');
 	if (urlTag) {
-		const tagBtn = document.querySelector(`.tag-item[data-tag="${urlTag}"]`) as HTMLElement;
+		const tagBtn = document.querySelector(`.tag-pill[data-tag="${urlTag}"]`) as HTMLElement;
 		if (tagBtn) tagBtn.click();
 	}
 </script>
