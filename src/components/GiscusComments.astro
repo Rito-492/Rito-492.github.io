@@ -25,28 +25,44 @@ const config = { repo, repoId, category, categoryId, mapping, reactionsEnabled, 
 ---
 
 <div class="giscus" id="giscus-comments" data-config={JSON.stringify(config)}></div>
+<div class="giscus-placeholder" id="giscus-placeholder">
+	<p>加载评论中...</p>
+</div>
 
 <script is:inline>
-	const el = document.getElementById('giscus-comments');
-	if (el) {
+	(function() {
+		const el = document.getElementById('giscus-comments');
+		const placeholder = document.getElementById('giscus-placeholder');
+		if (!el) return;
+
 		const cfg = JSON.parse(el.dataset.config);
-		const script = document.createElement('script');
-		script.src = 'https://giscus.app/client.js';
-		script.setAttribute('data-repo', cfg.repo);
-		script.setAttribute('data-repo-id', cfg.repoId);
-		script.setAttribute('data-category', cfg.category);
-		script.setAttribute('data-category-id', cfg.categoryId);
-		script.setAttribute('data-mapping', cfg.mapping);
-		script.setAttribute('data-strict', '0');
-		script.setAttribute('data-reactions-enabled', cfg.reactionsEnabled);
-		script.setAttribute('data-emit-metadata', '0');
-		script.setAttribute('data-input-position', 'top');
-		script.setAttribute('data-theme', cfg.theme);
-		script.setAttribute('data-lang', cfg.lang);
-		script.crossOrigin = 'anonymous';
-		script.async = true;
-		el.appendChild(script);
-	}
+
+		function loadGiscus() {
+			const script = document.createElement('script');
+			script.src = 'https://giscus.app/client.js';
+			script.setAttribute('data-repo', cfg.repo);
+			script.setAttribute('data-repo-id', cfg.repoId);
+			script.setAttribute('data-category', cfg.category);
+			script.setAttribute('data-category-id', cfg.categoryId);
+			script.setAttribute('data-mapping', cfg.mapping);
+			script.setAttribute('data-strict', '0');
+			script.setAttribute('data-reactions-enabled', cfg.reactionsEnabled);
+			script.setAttribute('data-emit-metadata', '0');
+			script.setAttribute('data-input-position', 'top');
+			script.setAttribute('data-theme', cfg.theme);
+			script.setAttribute('data-lang', cfg.lang);
+			script.crossOrigin = 'anonymous';
+			script.async = true;
+			el.appendChild(script);
+			if (placeholder) placeholder.remove();
+		}
+
+		if ('requestIdleCallback' in window) {
+			requestIdleCallback(loadGiscus, { timeout: 3000 });
+		} else {
+			setTimeout(loadGiscus, 2000);
+		}
+	})();
 </script>
 
 <style>
@@ -54,5 +70,12 @@ const config = { repo, repoId, category, categoryId, mapping, reactionsEnabled, 
 		margin-top: 3rem;
 		padding-top: 2rem;
 		border-top: 1px solid var(--color-border);
+	}
+
+	.giscus-placeholder {
+		text-align: center;
+		padding: 2rem 0;
+		color: var(--color-text-muted);
+		font-size: 0.85rem;
 	}
 </style>
