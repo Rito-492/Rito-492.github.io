@@ -6,14 +6,13 @@ const posts = await getCollection('blog', ({ data }) => {
 	return data.isPublished;
 });
 
-function parseDate(dateStr: string): Date {
-	const parts = dateStr.split('_');
-	const year = parseInt(parts[0]);
-	const month = parseInt(parts[1]) - 1;
-	const day = parseInt(parts[2]);
-	const hour = parseInt(parts[3]);
-	const minute = parseInt(parts[4]);
-	return new Date(year, month, day, hour, minute);
+function parseDate(value: string | number): Date {
+	const s = String(value);
+	if (s.includes('_')) {
+		const parts = s.split('_');
+		return new Date(+parts[0], +parts[1] - 1, +parts[2], +parts[3], +parts[4]);
+	}
+	return new Date(+s.substring(0, 4), +s.substring(4, 6) - 1, +s.substring(6, 8), +s.substring(8, 10), +s.substring(10, 12));
 }
 
 const sortedPosts = posts.sort((a, b) => {

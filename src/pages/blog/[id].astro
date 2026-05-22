@@ -29,15 +29,15 @@ while ((match = headingRegex.exec(post.body || '')) !== null) {
 	headings.push({ depth: level, text, id });
 }
 
-// 解析日期字符串 YYYY_MM_DD_HH_mm 为 Date 对象
-function parseDate(dateStr: string): Date {
-	const parts = dateStr.split('_');
-	const year = parseInt(parts[0]);
-	const month = parseInt(parts[1]) - 1;
-	const day = parseInt(parts[2]);
-	const hour = parseInt(parts[3]);
-	const minute = parseInt(parts[4]);
-	return new Date(year, month, day, hour, minute);
+// 解析日期值（string 或 number）为 Date 对象
+// 兼容两种格式：有引号 "2026_04_27_12_00"（string），无引号 202604271200（number，YAML 解析）
+function parseDate(value: string | number): Date {
+	const s = String(value);
+	if (s.includes('_')) {
+		const parts = s.split('_');
+		return new Date(+parts[0], +parts[1] - 1, +parts[2], +parts[3], +parts[4]);
+	}
+	return new Date(+s.substring(0, 4), +s.substring(4, 6) - 1, +s.substring(6, 8), +s.substring(8, 10), +s.substring(10, 12));
 }
 
 // 格式化日期为 YYYY 年 MM 月 DD 日 HH:mm
