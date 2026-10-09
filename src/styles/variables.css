@@ -11,6 +11,21 @@
 	--color-shadow: rgba(0, 0, 0, 0.06);
 }
 
+/* 暗色调色板：跟随系统切换，无需手动开关 */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-bg: #15171c;
+		--color-text: #e2e6ec;
+		--color-text-muted: #94a0af;
+		--color-primary: #22a3c7;
+		--color-primary-hover: #3ab5d6;
+		--color-border: #2b3038;
+		--color-card: #1d2026;
+		--color-nav-bg: rgba(24, 26, 31, 0.85);
+		--color-shadow: rgba(0, 0, 0, 0.45);
+	}
+}
+
 /* 字体变量 */
 :root {
 	--font-mono: 'JetBrains Mono', monospace;
