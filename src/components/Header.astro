@@ -22,21 +22,21 @@ const isActive = (href: string) =>
 		<a href="/" class="logo">
 			{title}
 		</a>
-		<ul class="nav-links">
-			{navItems.map((item) => (
-				<li>
-					<a
-						href={item.href}
-						class:list={{ active: isActive(item.href) }}
-						aria-current={isActive(item.href) ? 'page' : undefined}
-					>
-						<span>{item.label}</span>
-					</a>
-				</li>
-			))}
-		</ul>
-		<div class="nav-actions">
+		<div class="nav-right">
 			<ThemeToggle />
+			<ul class="nav-links">
+				{navItems.map((item) => (
+					<li>
+						<a
+							href={item.href}
+							class:list={{ active: isActive(item.href) }}
+							aria-current={isActive(item.href) ? 'page' : undefined}
+						>
+							<span>{item.label}</span>
+						</a>
+					</li>
+				))}
+			</ul>
 			<button class="mobile-menu-btn" aria-label="切换菜单">
 				<span class="hamburger"></span>
 			</button>
@@ -100,10 +100,11 @@ const isActive = (href: string) =>
 		text-decoration: none;
 	}
 
-	.nav-actions {
+	/* 链接与右侧控件同组贴右，导航链接保持在原位（logo 左、菜单右） */
+	.nav-right {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
+		gap: 1.25rem;
 	}
 
 	.nav-links {
