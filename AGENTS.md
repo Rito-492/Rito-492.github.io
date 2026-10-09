@@ -157,6 +157,7 @@ src/
 │   ├── SocialLinks.astro       # 社交链接（数据来自 config.ts；ids 属性可控制各页顺序）
 │   ├── TocSidebar.astro        # 文章页右侧：系列/标签/目录
 │   ├── ContentShell.astro      # 内容主栏：滚动进度条 + slot + 返回顶部
+│   ├── ThemeToggle.astro       # 三态主题切换（浅色/深色/跟随系统，localStorage 持久化）
 │   └── GiscusComments.astro    # Giscus comments, lazy loaded with requestIdleCallback
 └── styles/
     ├── variables.css           # CSS 自定义属性（含 prefers-color-scheme 暗色调色板）
