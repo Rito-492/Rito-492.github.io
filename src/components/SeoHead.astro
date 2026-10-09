@@ -1,0 +1,46 @@
+---
+// <head> 全部内容：SEO / Open Graph / Twitter Card / 字体引入
+import { SITE } from '../config';
+
+interface Props {
+	title: string;
+	description?: string;
+	image?: string;
+	type?: 'website' | 'article';
+}
+
+const { title, description = SITE.description, image = '/og-image.png', type = 'website' } = Astro.props;
+const ogImage = image.startsWith('http') ? image : `${SITE.url}${image}`;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/png" href="/logo.png" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- 字体引入：JetBrains Mono + 霞鹜文楷（TODO：自托管，见 AGENTS.md 待办） -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web@latest/style.css" />
+
+<!-- Basic Meta Tags -->
+<meta name="description" content={description} />
+<meta name="author" content={SITE.author} />
+<link rel="canonical" href={SITE.url + Astro.url.pathname} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={SITE.url + Astro.url.pathname} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content="zh_CN" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<title>{title}</title>
