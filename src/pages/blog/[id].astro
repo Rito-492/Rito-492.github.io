@@ -4,7 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import GiscusComments from '../../components/GiscusComments.astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
+	const posts = await getCollection('blog', ({ data }) => data.isPublished);
 	return posts.map((post) => ({
 		params: { id: post.id },
 		props: { post },

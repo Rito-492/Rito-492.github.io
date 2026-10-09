@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ main ]
+  schedule:
+    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 permissions:
@@ -20,8 +22,19 @@ jobs:
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - name: Checkout
+      - name: Checkout site
         uses: actions/checkout@v4
+
+      - name: Checkout blog content (private vault)
+        uses: actions/checkout@v4
+        with:
+          repository: Rito-492/garden
+          path: _garden
+          sparse-checkout: 20_blog        # 只拉 20_blog/，vault 其余内容不进 CI
+          token: ${{ secrets.BLOG_REPO_TOKEN }}
+
+      - name: Move content into place
+        run: mv _garden/20_blog src/content/blog
 
       - name: Setup Node
         uses: actions/setup-node@v4
