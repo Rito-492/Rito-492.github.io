@@ -4,6 +4,7 @@ import Footer from '../components/Footer.astro';
 import SeoHead from '../components/SeoHead.astro';
 import ProfileCard from '../components/ProfileCard.astro';
 import TocSidebar from '../components/TocSidebar.astro';
+import MobileToc from '../components/MobileToc.astro';
 import ContentShell from '../components/ContentShell.astro';
 import { SITE } from '../config';
 import '../styles/variables.css';
@@ -75,6 +76,7 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 					tags={tags}
 					tocHeadings={tocHeadings}
 				/>
+				<MobileToc tocHeadings={tocHeadings} />
 			</div>
 		) : isBlogListPage ? (
 			<slot />

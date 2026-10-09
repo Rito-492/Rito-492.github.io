@@ -20,6 +20,13 @@ const tocHeadings = headings
 	.filter((h) => h.depth >= 2 && h.depth <= 3)
 	.map((h) => ({ depth: h.depth, text: h.text, id: h.slug }));
 
+const sortedPosts = (await getCollection('blog', ({ data }) => data.isPublished)).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const idx = sortedPosts.findIndex((p) => p.id === post.id);
+const newerPost = idx > 0 ? sortedPosts[idx - 1] : null;
+const olderPost = idx >= 0 && idx < sortedPosts.length - 1 ? sortedPosts[idx + 1] : null;
+
 const jsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',
@@ -44,6 +51,9 @@ const jsonLd = {
 >
 	<div class="post-page">
 		<article class="post">
+			<a href="/blog" class="back-link">
+				← 返回博客
+			</a>
 			<header class="post-header">
 				<h1>{post.data.title}</h1>
 				{post.data.abstract && <p class="post-abstract">{post.data.abstract}</p>}
@@ -61,6 +71,25 @@ const jsonLd = {
 			<div class="post-content">
 				<Content />
 			</div>
+
+			<nav class="post-nav">
+				{olderPost ? (
+					<a href={`/blog/${olderPost.id}`} class="post-nav-link prev">
+						<span class="post-nav-label">← 上一篇</span>
+						<span class="post-nav-title">{olderPost.data.title}</span>
+					</a>
+				) : (
+					<span />
+				)}
+				{newerPost ? (
+					<a href={`/blog/${newerPost.id}`} class="post-nav-link next">
+						<span class="post-nav-label">下一篇 →</span>
+						<span class="post-nav-title">{newerPost.data.title}</span>
+					</a>
+				) : (
+					<span />
+				)}
+			</nav>
 
 			<GiscusComments {...GISCUS} />
 		</article>
@@ -91,7 +120,6 @@ const jsonLd = {
 		color: var(--color-text-muted);
 		font-size: 1.05rem;
 		line-height: 1.7;
-		font-style: italic;
 		margin-bottom: 1.5rem;
 	}
 
@@ -161,6 +189,106 @@ const jsonLd = {
 		margin: 1rem 0;
 	}
 
+	/* 返回博客 */
+	.back-link {
+		display: inline-block;
+		color: var(--color-text-muted);
+		text-decoration: none;
+		font-size: 0.85rem;
+		margin-bottom: 1.5rem;
+		transition: color 0.2s;
+	}
+
+	.back-link:hover {
+		color: var(--color-primary);
+	}
+
+	/* 上一篇 / 下一篇 */
+	.post-nav {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+		margin: 2.5rem 0 1rem;
+	}
+
+	.post-nav-link {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		padding: 0.9rem 1.1rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		transition: all 0.2s;
+		min-width: 0;
+	}
+
+	.post-nav-link:hover {
+		border-color: var(--color-primary);
+		box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
+	}
+
+	.post-nav-link.next {
+		text-align: right;
+		align-items: flex-end;
+	}
+
+	.post-nav-label {
+		color: var(--color-text-muted);
+		font-size: 0.75rem;
+	}
+
+	.post-nav-title {
+		color: var(--color-text);
+		font-size: 0.92rem;
+		font-weight: 500;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		max-width: 100%;
+	}
+
+	/* 标题锚点（hover 显示） */
+	.post-content :global(.heading-anchor) {
+		opacity: 0;
+		margin-left: 0.4rem;
+		color: var(--color-text-muted);
+		text-decoration: none;
+		font-weight: 400;
+		transition: opacity 0.2s;
+	}
+
+	.post-content :global(h2:hover .heading-anchor),
+	.post-content :global(h3:hover .heading-anchor),
+	.post-content :global(.heading-anchor:hover) {
+		opacity: 1;
+	}
+
+	/* 代码块复制按钮 */
+	.post-content :global(pre) {
+		position: relative;
+	}
+
+	.post-content :global(.copy-btn) {
+		position: absolute;
+		top: 0.5rem;
+		right: 0.5rem;
+		padding: 0.25rem 0.6rem;
+		border: 1px solid rgba(255, 255, 255, 0.15);
+		border-radius: 6px;
+		background: rgba(255, 255, 255, 0.06);
+		color: #d4d4d4;
+		font-size: 0.72rem;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.post-content :global(.copy-btn:hover) {
+		background: rgba(8, 145, 178, 0.6);
+		border-color: transparent;
+		color: #ffffff;
+	}
+
 	@media (max-width: 640px) {
 		.post-page {
 			padding: 1.5rem 1rem;
@@ -169,5 +297,47 @@ const jsonLd = {
 		.post-header h1 {
 			font-size: 1.5rem;
 		}
+
+		.post-nav {
+			grid-template-columns: 1fr;
+		}
+
+		.post-nav-link.next {
+			text-align: left;
+			align-items: flex-start;
+		}
 	}
 </style>
+
+<script>
+	// 标题锚点：hover 标题时显示 #，方便复制章节链接
+	document
+		.querySelectorAll<HTMLHeadingElement>('.post-content h2[id], .post-content h3[id]')
+		.forEach((heading) => {
+			const anchor = document.createElement('a');
+			anchor.className = 'heading-anchor';
+			anchor.href = `#${heading.id}`;
+			anchor.textContent = '#';
+			anchor.setAttribute('aria-label', '链接到此标题');
+			heading.appendChild(anchor);
+		});
+
+	// 代码块复制按钮
+	document.querySelectorAll<HTMLPreElement>('.post-content pre').forEach((pre) => {
+		const btn = document.createElement('button');
+		btn.className = 'copy-btn';
+		btn.type = 'button';
+		btn.textContent = '复制';
+		btn.addEventListener('click', async () => {
+			const code = pre.querySelector('code');
+			try {
+				await navigator.clipboard.writeText((code ?? pre).textContent ?? '');
+				btn.textContent = '已复制';
+			} catch {
+				btn.textContent = '复制失败';
+			}
+			setTimeout(() => (btn.textContent = '复制'), 1500);
+		});
+		pre.appendChild(btn);
+	});
+</script>

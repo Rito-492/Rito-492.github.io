@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '../config';
 
@@ -28,6 +29,21 @@ const jsonLd = {
 			<h1>Rito-492</h1>
 			<p class="lead">你好，我是 Rito-492</p>
 			<p class="tagline">这里是代码与思考的自留地</p>
+			<!-- 移动端身份信息：桌面端个人卡片在左侧栏，窄屏栏隐藏后用这里补位 -->
+			<div class="hero-profile">
+				<img
+					class="hero-avatar"
+					src={SITE.avatar}
+					alt="avatar"
+					width="56"
+					height="56"
+					decoding="async"
+				/>
+				<div class="hero-profile-text">
+					<p class="hero-bio">{SITE.bio}</p>
+					<SocialLinks variant="row" />
+				</div>
+			</div>
 		</div>
 	</section>
 
@@ -171,6 +187,40 @@ const jsonLd = {
 		font-size: 1.1rem;
 		color: var(--color-text-muted);
 		margin-bottom: 1.5rem;
+	}
+
+	/* 移动端身份信息（桌面端隐藏，个人卡片在左侧栏） */
+	.hero-profile {
+		display: none;
+	}
+
+	.hero-avatar {
+		width: 56px;
+		height: 56px;
+		border-radius: 50%;
+		object-fit: cover;
+		flex-shrink: 0;
+	}
+
+	.hero-profile-text {
+		min-width: 0;
+	}
+
+	.hero-bio {
+		color: var(--color-text-muted);
+		font-size: 0.88rem;
+		margin-bottom: 0.5rem;
+	}
+
+	@media (max-width: 1150px) {
+		.hero-profile {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			margin-top: 0.5rem;
+			padding-top: 1.5rem;
+			border-top: 1px solid var(--color-border);
+		}
 	}
 
 	/* 项目区域 */

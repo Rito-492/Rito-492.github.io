@@ -1,0 +1,151 @@
+---
+interface Props {
+	tocHeadings: Array<{ depth: number; text: string; id: string }>;
+}
+
+const { tocHeadings } = Astro.props;
+const items = tocHeadings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{items.length > 0 && (
+	<div class="mobile-toc">
+		<button
+			class="mobile-toc-btn"
+			id="mobileTocBtn"
+			type="button"
+			aria-label="目录"
+			aria-expanded="false"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="16"
+				height="16"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<line x1="8" y1="6" x2="21" y2="6" />
+				<line x1="8" y1="12" x2="21" y2="12" />
+				<line x1="8" y1="18" x2="21" y2="18" />
+				<line x1="3" y1="6" x2="3.01" y2="6" />
+				<line x1="3" y1="12" x2="3.01" y2="12" />
+				<line x1="3" y1="18" x2="3.01" y2="18" />
+			</svg>
+			目录
+		</button>
+		<nav class="mobile-toc-panel" id="mobileTocPanel" aria-label="文章目录">
+			<ul>
+				{items.map((h) => (
+					<li class={`depth-${h.depth}`}>
+						<a href={`#${h.id}`}>{h.text}</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+	</div>
+)}
+
+<script>
+	const btn = document.getElementById('mobileTocBtn');
+	const panel = document.getElementById('mobileTocPanel');
+
+	if (btn && panel) {
+		const setOpen = (open: boolean) => {
+			panel.classList.toggle('open', open);
+			btn.setAttribute('aria-expanded', String(open));
+		};
+
+		btn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			setOpen(!panel.classList.contains('open'));
+		});
+
+		// 点目录跳转后收起；点面板外 / Esc 收起
+		panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+		document.addEventListener('click', (e) => {
+			if (!panel.contains(e.target as Node) && !btn.contains(e.target as Node)) setOpen(false);
+		});
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') setOpen(false);
+		});
+	}
+</script>
+
+<style>
+	/* 桌面端用 TocSidebar，浮钮只在窄屏出现 */
+	.mobile-toc {
+		display: none;
+	}
+
+	.mobile-toc-btn {
+		position: fixed;
+		bottom: 7.5rem;
+		right: 2rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.7rem 1rem;
+		border-radius: var(--radius-full);
+		background: var(--color-card);
+		border: 1px solid var(--color-border);
+		box-shadow: 0 4px 12px var(--color-shadow);
+		color: var(--color-primary);
+		font-size: 0.85rem;
+		cursor: pointer;
+		z-index: 99;
+	}
+
+	.mobile-toc-panel {
+		position: fixed;
+		bottom: 12.5rem;
+		right: 2rem;
+		left: auto;
+		width: min(75vw, 300px);
+		max-height: 55vh;
+		overflow-y: auto;
+		background: var(--color-card);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		box-shadow: 0 8px 32px var(--color-shadow);
+		padding: 0.75rem 0;
+		z-index: 99;
+		display: none;
+	}
+
+	.mobile-toc-panel.open {
+		display: block;
+	}
+
+	.mobile-toc-panel ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.mobile-toc-panel a {
+		display: block;
+		padding: 0.5rem 1rem;
+		color: var(--color-text-muted);
+		text-decoration: none;
+		font-size: 0.85rem;
+		line-height: 1.5;
+	}
+
+	.mobile-toc-panel a:hover {
+		color: var(--color-primary);
+	}
+
+	.mobile-toc-panel li.depth-3 a {
+		padding-left: 2rem;
+		font-size: 0.8rem;
+	}
+
+	@media (max-width: 1150px) {
+		.mobile-toc {
+			display: contents;
+		}
+	}
+</style>
