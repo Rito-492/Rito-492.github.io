@@ -71,21 +71,6 @@ a:hover {
 	box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
 }
 
-/* 通用标签样式 */
-.tag {
-	background: rgba(8, 145, 178, 0.08);
-	color: var(--color-primary);
-	padding: 0.25rem 0.7rem;
-	border-radius: var(--radius-full);
-	font-size: 0.75rem;
-	font-weight: 500;
-}
-
-.tag:hover {
-	background: rgba(8, 145, 178, 0.15);
-	transform: translateY(-1px);
-}
-
 /* 通用区块标题样式 */
 .section-header {
 	display: flex;

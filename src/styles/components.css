@@ -1,31 +1,5 @@
 /* 通用组件样式 */
 
-/* ===== Social Button ===== */
-.social-links {
-	display: flex;
-	gap: 1rem;
-}
-
-.social-btn {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	padding: 0.6rem 1.2rem;
-	background: transparent;
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-md);
-	color: var(--color-text);
-	text-decoration: none;
-	font-size: 0.9rem;
-	transition: all var(--transition-fast);
-}
-
-.social-btn:hover {
-	border-color: var(--color-primary);
-	color: var(--color-primary);
-	transform: translateY(-1px);
-}
-
 /* ===== Project Card ===== */
 .projects-grid {
 	display: grid;
@@ -141,44 +115,6 @@
 	font-size: 1.25rem;
 	font-weight: 700;
 	color: var(--color-primary);
-}
-
-/* ===== Skill Tags (for About page) ===== */
-.skill-category {
-	margin-bottom: 1.5rem;
-}
-
-.skill-category:last-child {
-	margin-bottom: 0;
-}
-
-.skill-category h3 {
-	color: var(--color-text);
-	font-size: 1rem;
-	margin-bottom: 0.75rem;
-}
-
-.skill-tags {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.5rem;
-}
-
-.skill-tag {
-	background: rgba(8, 145, 178, 0.1);
-	color: var(--color-primary);
-	padding: 0.4rem 0.9rem;
-	border-radius: var(--radius-full);
-	font-size: 0.85rem;
-	font-weight: 500;
-	transition: all var(--transition-fast);
-	border: 1px solid transparent;
-}
-
-.skill-tag:hover {
-	background: rgba(8, 145, 178, 0.2);
-	border-color: var(--color-primary);
-	transform: translateY(-1px);
 }
 
 /* ===== Hero Section ===== */
