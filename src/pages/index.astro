@@ -11,7 +11,6 @@ const latestPosts = posts
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 3);
 
-// 结构化数据：帮助搜索引擎理解站点
 const jsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'WebSite',

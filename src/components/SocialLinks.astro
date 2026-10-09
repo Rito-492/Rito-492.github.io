@@ -1,5 +1,4 @@
 ---
-// 社交链接（首页侧栏 / about 页共用），数据来自 src/config.ts
 import { SOCIALS, type SocialId } from '../config';
 
 interface Props {
@@ -8,7 +7,6 @@ interface Props {
 }
 
 const { variant = 'stack', ids } = Astro.props;
-// 按调用方传入的 ids 顺序渲染；不传则用配置默认顺序
 const links = (ids ?? SOCIALS.map((s) => s.id))
 	.map((id) => SOCIALS.find((s) => s.id === id))
 	.filter((s): s is (typeof SOCIALS)[number] => Boolean(s));

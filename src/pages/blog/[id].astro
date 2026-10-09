@@ -16,12 +16,10 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content, headings } = await render(post);
 
-// 目录直接来自 Astro 渲染结果，slug 与正文标题 id 严格一致（不要再用正则抓 body）
 const tocHeadings = headings
 	.filter((h) => h.depth >= 2 && h.depth <= 3)
 	.map((h) => ({ depth: h.depth, text: h.text, id: h.slug }));
 
-// 结构化数据：帮助搜索引擎理解文章
 const jsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'BlogPosting',

@@ -34,10 +34,9 @@ const {
 	tocHeadings = [],
 	series = '',
 	postTitle = '',
-	tags = []
+	tags = [],
 } = Astro.props;
 
-// 判断是否是首页
 const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
 const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 ---
@@ -45,13 +44,18 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<SeoHead title={title} description={description} image={image} type={type} jsonLd={jsonLd} />
+		<SeoHead
+			title={title}
+			description={description}
+			image={image}
+			type={type}
+			jsonLd={jsonLd}
+		/>
 	</head>
 	<body>
 		<Header title={SITE.title} />
 
 		{isHomePage ? (
-			<!-- 首页布局：左侧 Sidebar + 中间内容 -->
 			<div class="layout-container home-layout">
 				<aside class="sidebar-column">
 					<ProfileCard />
@@ -61,18 +65,20 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 				</ContentShell>
 			</div>
 		) : showToc && tocHeadings.length > 0 ? (
-			<!-- 博客文章页：文章 + 右侧目录 -->
 			<div class="post-layout full-width">
 				<ContentShell>
 					<slot />
 				</ContentShell>
-				<TocSidebar series={series} postTitle={postTitle} tags={tags} tocHeadings={tocHeadings} />
+				<TocSidebar
+					series={series}
+					postTitle={postTitle}
+					tags={tags}
+					tocHeadings={tocHeadings}
+				/>
 			</div>
 		) : isBlogListPage ? (
-			<!-- 博客列表页：整页交给页面自己布局 -->
 			<slot />
 		) : (
-			<!-- 其他页面：只有中间内容 -->
 			<ContentShell fullWidth={true}>
 				<slot />
 			</ContentShell>

@@ -1,76 +1,72 @@
----
-// 页面结构布局（全局样式）：首页三栏 / 文章页三栏 / 通用内容区
-// 这些类由 Layout 及其子组件共同参与，故不放在 scoped style 里
----
+/* 页面结构布局（全局样式）：首页三栏 / 文章页三栏 / 通用内容区
+   这些类由 Layout 及其子组件共同参与，故为全局样式而非 scoped */
 
-<style is:global>
-	/* 首页布局：左侧 Sidebar + 中间内容 */
+/* 首页布局：左侧 Sidebar + 中间内容 */
+.home-layout {
+	display: grid;
+	grid-template-columns: 1fr 720px 1fr;
+	padding: 2rem 0;
+	position: relative;
+}
+
+.sidebar-column {
+	grid-column: 1;
+	justify-self: end;
+	margin-right: 2.5rem;
+	width: 200px;
+	position: sticky;
+	top: 5rem;
+	height: fit-content;
+}
+
+/* 通用内容区 */
+.main-content {
+	grid-column: 2;
+	min-width: 0;
+}
+
+.full-width {
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 2rem;
+}
+
+/* 博客文章页布局：文章 + 右侧目录 */
+.post-layout {
+	display: grid;
+	grid-template-columns: 1fr 680px 1fr;
+	padding: 2rem 0;
+}
+
+.post-layout.full-width {
+	padding: 2rem 0;
+	max-width: none !important;
+	margin: 0 !important;
+}
+
+.post-layout .main-content {
+	grid-column: 2;
+	min-width: 0;
+	padding: 0;
+}
+
+/* 响应式 */
+@media (max-width: 1150px) {
 	.home-layout {
-		display: grid;
-		grid-template-columns: 1fr 720px 1fr;
-		padding: 2rem 0;
-		position: relative;
+		grid-template-columns: 1fr;
+		padding: 2rem 1rem;
 	}
 
 	.sidebar-column {
-		grid-column: 1;
-		justify-self: end;
-		margin-right: 2.5rem;
-		width: 200px;
-		position: sticky;
-		top: 5rem;
-		height: fit-content;
+		display: none;
 	}
 
-	/* 通用内容区 */
-	.main-content {
-		grid-column: 2;
-		min-width: 0;
+	.post-layout {
+		grid-template-columns: 1fr;
+		padding: 2rem 1rem;
 	}
 
 	.full-width {
-		max-width: 900px;
-		margin: 0 auto;
-		padding: 2rem;
+		padding: 1rem;
 	}
-
-	/* 博客文章页布局：文章 + 右侧目录 */
-	.post-layout {
-		display: grid;
-		grid-template-columns: 1fr 680px 1fr;
-		padding: 2rem 0;
-	}
-
-	.post-layout.full-width {
-		padding: 2rem 0;
-		max-width: none !important;
-		margin: 0 !important;
-	}
-
-	.post-layout .main-content {
-		grid-column: 2;
-		min-width: 0;
-		padding: 0;
-	}
-
-	/* 响应式 */
-	@media (max-width: 1150px) {
-		.home-layout {
-			grid-template-columns: 1fr;
-			padding: 2rem 1rem;
-		}
-
-		.sidebar-column {
-			display: none;
-		}
-
-		.post-layout {
-			grid-template-columns: 1fr;
-			padding: 2rem 1rem;
-		}
-
-		.full-width {
-			padding: 1rem;
-		}
-	}
-</style>
+}
