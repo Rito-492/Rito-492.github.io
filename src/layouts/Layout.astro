@@ -16,6 +16,7 @@ export interface Props {
 	description?: string;
 	image?: string;
 	type?: 'website' | 'article';
+	jsonLd?: Record<string, unknown>;
 	showToc?: boolean;
 	tocHeadings?: Array<{ depth: number; text: string; id: string }>;
 	series?: string;
@@ -28,6 +29,7 @@ const {
 	description = SITE.description,
 	image = '/og-image.png',
 	type = 'website',
+	jsonLd,
 	showToc = false,
 	tocHeadings = [],
 	series = '',
@@ -43,7 +45,7 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 <!doctype html>
 <html lang="zh-CN">
 	<head>
-		<SeoHead title={title} description={description} image={image} type={type} />
+		<SeoHead title={title} description={description} image={image} type={type} jsonLd={jsonLd} />
 	</head>
 	<body>
 		<Header title={SITE.title} />

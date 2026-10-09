@@ -1,5 +1,5 @@
 ---
-// <head> 全部内容：SEO / Open Graph / Twitter Card / 字体引入
+// <head> 全部内容：SEO / Open Graph / Twitter Card / 字体引入 / JSON-LD
 import { SITE } from '../config';
 
 interface Props {
@@ -7,9 +7,16 @@ interface Props {
 	description?: string;
 	image?: string;
 	type?: 'website' | 'article';
+	jsonLd?: Record<string, unknown>;
 }
 
-const { title, description = SITE.description, image = '/og-image.png', type = 'website' } = Astro.props;
+const {
+	title,
+	description = SITE.description,
+	image = '/og-image.png',
+	type = 'website',
+	jsonLd,
+} = Astro.props;
 const ogImage = image.startsWith('http') ? image : `${SITE.url}${image}`;
 ---
 
@@ -43,4 +50,11 @@ const ogImage = image.startsWith('http') ? image : `${SITE.url}${image}`;
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
 
+<!-- RSS -->
+<link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+
 <title>{title}</title>
+
+{jsonLd && (
+	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}

@@ -8,9 +8,19 @@ const featuredProjects = projects.slice(0, 3);
 
 const posts = await getCollection('blog', ({ data }) => data.isPublished);
 const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
+
+// 结构化数据：帮助搜索引擎理解站点
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	name: SITE.title,
+	description: SITE.description,
+	url: SITE.url,
+	author: { '@type': 'Person', name: SITE.author, url: SITE.url },
+};
 ---
 
-<Layout title={SITE.title}>
+<Layout title={SITE.title} jsonLd={jsonLd}>
 	<!-- 首页介绍 -->
 	<section class="hero-section">
 		<div class="hero-content">
