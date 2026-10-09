@@ -26,7 +26,7 @@ const config = { repo, repoId, category, categoryId, mapping, reactionsEnabled, 
 
 <div class="giscus" id="giscus-comments" data-config={JSON.stringify(config)}></div>
 <div class="giscus-placeholder" id="giscus-placeholder">
-	<p>加载评论中...</p>
+	<p>滚动到此处自动加载评论</p>
 </div>
 
 <script is:inline>
@@ -74,7 +74,19 @@ const config = { repo, repoId, category, categoryId, mapping, reactionsEnabled, 
 			if (placeholder) placeholder.remove();
 		}
 
-		if ('requestIdleCallback' in window) {
+		// 滚入视口才加载（评论区 iframe 内存开销大，用户没看到评论前不加载）
+		if ('IntersectionObserver' in window) {
+			const io = new IntersectionObserver(
+				(entries) => {
+					if (entries.some((entry) => entry.isIntersecting)) {
+						io.disconnect();
+						loadGiscus();
+					}
+				},
+				{ rootMargin: '200px' },
+			);
+			io.observe(el);
+		} else if ('requestIdleCallback' in window) {
 			requestIdleCallback(loadGiscus, { timeout: 3000 });
 		} else {
 			setTimeout(loadGiscus, 2000);

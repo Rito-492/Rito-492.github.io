@@ -97,18 +97,26 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 			const backToTopBtn = document.getElementById('backToTop');
 
 			if (scrollProgress && backToTopBtn) {
-				window.addEventListener('scroll', () => {
-					const scrollTop = window.scrollY;
-					const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-					const scrollPercent = (scrollTop / docHeight) * 100;
-					scrollProgress.style.width = scrollPercent + '%';
-
-					if (scrollTop > 300) {
-						backToTopBtn.classList.add('visible');
-					} else {
-						backToTopBtn.classList.remove('visible');
-					}
-				});
+				// passive + rAF 节流：滚动回调不阻塞合成器，每帧最多算一次
+				let ticking = false;
+				window.addEventListener(
+					'scroll',
+					() => {
+						if (ticking) return;
+						ticking = true;
+						requestAnimationFrame(() => {
+							const scrollTop = window.scrollY;
+							const docHeight =
+								document.documentElement.scrollHeight -
+								document.documentElement.clientHeight;
+							const scrollPercent = (scrollTop / docHeight) * 100;
+							scrollProgress.style.width = scrollPercent + '%';
+							backToTopBtn.classList.toggle('visible', scrollTop > 300);
+							ticking = false;
+						});
+					},
+					{ passive: true },
+				);
 
 				backToTopBtn.addEventListener('click', () => {
 					window.scrollTo({ top: 0, behavior: 'smooth' });
