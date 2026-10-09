@@ -16,7 +16,7 @@
 
 ### 环境要求
 
-- Node.js 18+ (推荐 20+)
+- Node.js 22.12+（与 `package.json` 的 `engines` 一致）
 - npm 或 pnpm
 
 ### 安装依赖
@@ -105,21 +105,20 @@ src/
 
 ### 1. 修改个人信息（首页侧边栏）
 
-**文件**: `src/layouts/Layout.astro` — 搜索 `profile-card` 定位
+**文件**: `src/config.ts`（站点级配置集中在这里）
 
-```astro
-<div class="profile-card">
-    <div class="avatar">
-        <img src="/avatar.jpg" alt="avatar" />  <!-- 头像图片 -->
-    </div>
-    <h2 class="name">Rito-492</h2>              <!-- 名字 -->
-    <p class="bio">世界很大，开心第一。</p>       <!-- 个人简介 -->
-    <div class="social-links">
-        <a href="https://github.com/Rito-492" class="social-link">GitHub</a>
-        <a href="mailto:your-email@gmail.com" class="social-link">Email</a>
-    </div>
-</div>
+```ts
+export const SITE = {
+	title: "Rito-492's Blog",
+	description: 'Rito-492 的个人网站',
+	url: 'https://rito-492.github.io',
+	author: 'Rito-492',              // 名字
+	bio: '世界很大，开心第一。',        // 个人简介
+	avatar: '/avatar.jpg',           // 头像
+} as const;
 ```
+
+页面结构在 `src/components/ProfileCard.astro`，社交链接在 `src/components/SocialLinks.astro`（数据来自 `config.ts` 的 `SOCIALS`）。
 
 **修改头像**:
 - 将新头像图片命名为 `avatar.jpg`
@@ -153,7 +152,9 @@ src/
 
 ### 3. 发布博客文章
 
-**文件位置**: `src/content/blog/` 目录下创建 `.md` 文件
+博客内容与网站代码**已解耦**：文章存放在私有 Obsidian 库（garden 仓库）的 `20_blog/` 目录，本地通过软链接 `src/content/blog` 接入，CI 构建时自动拉取。
+
+**写作位置**: 在 Obsidian 里编辑 `20_blog/*.md`，推送 garden 仓库即可（详见 `AGENTS.md`「博客内容解耦」）
 
 **文件命名**: 建议使用英文或数字，如 `my-first-post.md`
 
@@ -164,10 +165,10 @@ src/
 title: "文章标题"
 description: "文章描述，显示在列表页"
 abstract: "文章摘要，显示在文章标题下方"
-pubDate: 202604271200  # 发布时间：YYYYMMDDHHmm
-lastUpdated: 202604271830  # 最后编辑时间（可选）
+pubDate: "2026_04_27_12_00"  # 发布时间（也兼容 202604271200 数字写法）
+modDate: "2026_04_27_18_30"  # 最后编辑时间（可选）
 series: "学习笔记"  # 系列名称（可选）
-draft: false  # true=草稿（不显示），false=发布
+isPublished: true  # true=发布，false=草稿（不会构建出页面）
 tags: ["标签1", "标签2"]  # 必填，至少一个
 ---
 
@@ -182,12 +183,12 @@ tags: ["标签1", "标签2"]  # 必填，至少一个
 |------|------|------|----------|
 | `title` | ✅ | 文章标题 | 文章顶部、列表页 |
 | `description` | ✅ | 文章描述 | 列表页卡片 |
-| `abstract` | ✅ | 文章摘要 | 文章标题下方 |
-| `pubDate` | ✅ | 发布时间 (YYYYMMDDHHmm) | 文章元信息 |
-| `lastUpdated` | ❌ | 最后编辑时间 | 文章元信息 |
+| `abstract` | ❌ | 文章摘要 | 文章标题下方 |
+| `pubDate` | ✅ | 发布时间（`YYYY_MM_DD_HH_mm` 或 `YYYYMMDDHHmm`） | 文章元信息 |
+| `modDate` | ❌ | 最后编辑时间 | 文章元信息 |
 | `series` | ❌ | 系列名称 | 右侧栏顶部 |
 | `tags` | ✅ | 文章标签 | 右侧栏、列表页筛选 |
-| `draft` | ❌ | 是否草稿 | - |
+| `isPublished` | ❌ | 是否发布（默认不发布） | - |
 
 **写作技巧**:
 - 使用 `## 标题` 和 `### 标题` 创建章节（会自动生成右侧目录）
@@ -259,25 +260,17 @@ draft: false
 
 ### 7. 添加社交链接（左侧栏）
 
-**文件**: `src/layouts/Layout.astro` — 搜索 `social-links` 定位
+**数据**: `src/config.ts` 的 `SOCIALS` 数组 — 加一项即可出现在首页侧栏和 About 页：
 
-在 `<div class="social-links">` 内添加新链接：
-
-```astro
-<div class="social-links">
-    <!-- 现有链接 -->
-    <a href="mailto:your-email@gmail.com" class="social-link">
-        <svg>...</svg>
-        Email
-    </a>
-    
-    <!-- 添加新链接 -->
-    <a href="你的链接 URL" class="social-link">
-        <!-- SVG 图标代码 -->
-        显示文字
-    </a>
-</div>
+```ts
+export const SOCIALS: ReadonlyArray<{ id: SocialId; label: string; href: string }> = [
+	{ id: 'email', label: 'Email', href: 'mailto:your-email@gmail.com' },
+	// 添加新链接：
+	// { id: 'twitter', label: 'Twitter', href: 'https://twitter.com/你的id' },
+];
 ```
+
+**图标**: `src/components/SocialLinks.astro` — 为新 `id` 加一个 `<svg>` 分支（图标代码见下文）。如需控制某页面的显示顺序，用 `ids` 属性（见 About 页用法）。
 
 #### 完整示例：添加 Twitter/X 链接
 
@@ -412,9 +405,9 @@ const title = "页面标题";
 3. 访问 `https://你的用户名.github.io/仓库名`
 
 ### Q3: 博客文章不显示？
-检查 `draft` 字段是否为 `false`：
+检查 `isPublished` 字段是否为 `true`：
 ```markdown
-draft: false  <!-- 必须是 false 才会显示 -->
+isPublished: true  <!-- 必须是 true 才会显示 -->
 ```
 
 ### Q4: 如何添加新的配色方案？
