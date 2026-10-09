@@ -22,6 +22,8 @@ Astro 6 静态站点（个人博客，部署到 GitHub Pages；单包仓库，�
 - **字体**：JetBrains Mono（代码）+ LXGW WenKai（正文）
 - **博客内容与网页代码解耦**：网页代码开源（本仓库），博客文章在私有 vault 仓库，构建时拉取（见下节）
 
+**性能预算**：单页 HTML+CSS+JS+图片 ≈ 60KB（字体除外，字体见「待办」）。Giscus 评论 iframe 滚入视口才加载；字体只请求实际用到的字重（JetBrains Mono 400/700）；新资源尽量保持这个量级。
+
 ## 博客内容解耦（网页开源 / 内容私有）
 
 博客写作和网页代码分离：网页代码开源（本仓库），博客文章存放在私有仓库（Obsidian 库，位于 Windows 主机）的 `blog/` 子目录。网站仓库运行在 WSL 中。
@@ -158,7 +160,8 @@ src/
 │   ├── TocSidebar.astro        # 文章页右侧：系列/标签/目录
 │   ├── ContentShell.astro      # 内容主栏：滚动进度条 + slot + 返回顶部
 │   ├── ThemeToggle.astro       # 三态主题切换（浅色/深色/跟随系统，localStorage 持久化）
-│   └── GiscusComments.astro    # Giscus comments, lazy loaded with requestIdleCallback
+│   ├── MobileToc.astro         # 移动端目录浮钮 + 上拉面板（<1150px 替代 TocSidebar）
+│   └── GiscusComments.astro    # Giscus comments，滚入视口才加载（省内存）
 └── styles/
     ├── variables.css           # CSS 自定义属性（含 prefers-color-scheme 暗色调色板）
     ├── base.css                # Reset + base element styles
@@ -262,6 +265,8 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 
 - **字体自托管**：当前 JetBrains Mono 走 Google Fonts、霞鹜文楷走 jsdelivr（`SeoHead.astro`）——国内访问不稳。方案：自托管 unicode-range 分片子集（如 `lxgw-wenkai-webfont`）+ `@fontsource/jetbrains-mono`，替换 CDN 引用。
 - **文章内图片发布通道**：`20_blog/` 目前无图片所以无感；一旦文章插图（Obsidian `![[img]]` 或相对路径），构建不会带图。方案：vault 侧 `20_blog/assets/` + CI sparse-checkout 一并搬运 + markdown 用相对路径，另需处理本地软链接下的解析。
+- **UI 待办（C 组·首页）**：hero 区加行动引导按钮；访客计数（counterapi.dev 第三方依赖）换更稳服务或去掉。
+- **UI 待办（D 组·质感）**：`:focus-visible` 键盘焦点样式；View Transitions 页面切换过渡（需回归测试 Giscus/脚本）；正文外链视觉标识（↗）；per-post OG 分享卡（satori 按标题生成）。
 
 ## 部署
 
