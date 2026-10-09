@@ -2,6 +2,8 @@
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import GiscusComments from '../../components/GiscusComments.astro';
+import { formatDate } from '../../lib/date';
+import { GISCUS } from '../../config';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog', ({ data }) => data.isPublished);
@@ -12,46 +14,15 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
-// 提取目录（从 markdown 正文中提取 ## 和 ### 标题）
-const headings: Array<{ depth: number; text: string; id: string }> = [];
-const headingRegex = /^(#{2,3})\s+(.+)$/gm;
-let match;
-while ((match = headingRegex.exec(post.body || '')) !== null) {
-	const level = match[1].length;
-	const text = match[2].trim();
-	// 生成与 Astro 渲染一致的 ID：保留中文、字母、数字，空格转连字符
-	const id = text
-		.toLowerCase()
-		.replace(/\s+/g, '-')
-		.replace(/[^\w一-鿿0-9-]/g, '');
-	headings.push({ depth: level, text, id });
-}
-
-// 解析日期值（string 或 number）为 Date 对象
-// 兼容两种格式：有引号 "2026_04_27_12_00"（string），无引号 202604271200（number，YAML 解析）
-function parseDate(value: string | number): Date {
-	const s = String(value);
-	if (s.includes('_')) {
-		const parts = s.split('_');
-		return new Date(+parts[0], +parts[1] - 1, +parts[2], +parts[3], +parts[4]);
-	}
-	return new Date(+s.substring(0, 4), +s.substring(4, 6) - 1, +s.substring(6, 8), +s.substring(8, 10), +s.substring(10, 12));
-}
-
-// 格式化日期为 YYYY 年 MM 月 DD 日 HH:mm
-function formatDate(date: Date): string {
-	const year = date.getFullYear();
-	const month = String(date.getMonth() + 1).padStart(2, '0');
-	const day = String(date.getDate()).padStart(2, '0');
-	const hours = String(date.getHours()).padStart(2, '0');
-	const minutes = String(date.getMinutes()).padStart(2, '0');
-	return `${year}年${month}月${day}日 ${hours}:${minutes}`;
-}
+// 目录直接来自 Astro 渲染结果，slug 与正文标题 id 严格一致（不要再用正则抓 body）
+const tocHeadings = headings
+	.filter((h) => h.depth >= 2 && h.depth <= 3)
+	.map((h) => ({ depth: h.depth, text: h.text, id: h.slug }));
 ---
 
-<Layout title={post.data.title} showToc={true} tocHeadings={headings} series={post.data.series} postTitle={post.data.title} tags={post.data.tags ?? []}>
+<Layout title={post.data.title} showToc={true} tocHeadings={tocHeadings} series={post.data.series} postTitle={post.data.title} tags={post.data.tags ?? []}>
 	<div class="post-page">
 		<article class="post">
 			<header class="post-header">
@@ -60,12 +31,12 @@ function formatDate(date: Date): string {
 					<p class="post-abstract">{post.data.abstract}</p>
 				)}
 				<div class="post-meta">
-					<time datetime={parseDate(post.data.pubDate).toISOString()}>
-						{formatDate(parseDate(post.data.pubDate))}
+					<time datetime={post.data.pubDate.toISOString()}>
+						{formatDate(post.data.pubDate)}
 					</time>
 					{post.data.modDate && (
 						<span class="last-updated">
-							· 最后编辑：{formatDate(parseDate(post.data.modDate))}
+							· 最后编辑：{formatDate(post.data.modDate)}
 						</span>
 					)}
 				</div>
@@ -74,12 +45,7 @@ function formatDate(date: Date): string {
 				<Content />
 			</div>
 
-			<GiscusComments
-				repo="Rito-492/Rito-492.github.io"
-				repoId="R_kgDOSEWSAg"
-				category="Blog Comments"
-				categoryId="DIC_kwDOSEWSAs4C8fbP"
-			/>
+			<GiscusComments {...GISCUS} />
 		</article>
 	</div>
 </Layout>

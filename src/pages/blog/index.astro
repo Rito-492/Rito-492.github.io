@@ -6,17 +6,8 @@ const posts = await getCollection('blog', ({ data }) => {
 	return data.isPublished;
 });
 
-function parseDate(value: string | number): Date {
-	const s = String(value);
-	if (s.includes('_')) {
-		const parts = s.split('_');
-		return new Date(+parts[0], +parts[1] - 1, +parts[2], +parts[3], +parts[4]);
-	}
-	return new Date(+s.substring(0, 4), +s.substring(4, 6) - 1, +s.substring(6, 8), +s.substring(8, 10), +s.substring(10, 12));
-}
-
 const sortedPosts = posts.sort((a, b) => {
-	return parseDate(b.data.pubDate).valueOf() - parseDate(a.data.pubDate).valueOf();
+	return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
 });
 
 const allSeries = [...new Set(posts.filter(p => p.data.series).map(p => p.data.series!))].sort();
@@ -49,7 +40,7 @@ const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.t
 						<a href={`/blog/${post.id}`} class="post-card"
 							 data-series={post.data.series ?? ''}
 							 data-tags={JSON.stringify(post.data.tags ?? [])}
-							 data-date={post.data.pubDate}>
+							 data-date={post.data.pubDate.toISOString()}>
 							<div class="post-title-row">
 								<h3 class="post-title">{post.data.title}</h3>
 								<span class="post-arrow">
@@ -58,8 +49,8 @@ const allTags = [...new Set(posts.filter(p => p.data.tags).flatMap(p => p.data.t
 							</div>
 							<p class="post-desc">{post.data.description}</p>
 							<div class="post-foot">
-								<time class="post-date" datetime={parseDate(post.data.pubDate).toISOString()}>
-									{parseDate(post.data.pubDate).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+								<time class="post-date" datetime={post.data.pubDate.toISOString()}>
+									{post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
 								</time>
 								<span class="foot-sep">·</span>
 								<span class="foot-reading">

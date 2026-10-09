@@ -1,25 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { SITE } from '../config';
 
 const projects = await getCollection('projects', ({ data }) => !data.draft);
 const featuredProjects = projects.slice(0, 3);
 
 const posts = await getCollection('blog', ({ data }) => data.isPublished);
-// 解析日期值（string 或 number）为 Date 对象
-function parseDate(value: string | number): Date {
-	const s = String(value);
-	if (s.includes('_')) {
-		const parts = s.split('_');
-		return new Date(+parts[0], +parts[1] - 1, +parts[2], +parts[3], +parts[4]);
-	}
-	return new Date(+s.substring(0, 4), +s.substring(4, 6) - 1, +s.substring(6, 8), +s.substring(8, 10), +s.substring(10, 12));
-}
-
-const latestPosts = posts.sort((a, b) => parseDate(b.data.pubDate).valueOf() - parseDate(a.data.pubDate).valueOf()).slice(0, 3);
+const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
 ---
 
-<Layout title="Rito-492's Blog">
+<Layout title={SITE.title}>
 	<!-- 首页介绍 -->
 	<section class="hero-section">
 		<div class="hero-content">
@@ -48,8 +39,8 @@ const latestPosts = posts.sort((a, b) => parseDate(b.data.pubDate).valueOf() - p
 				latestPosts.map((post) => (
 					<article class="post-card">
 						<div class="post-meta">
-							<time datetime={parseDate(post.data.pubDate).toISOString()}>
-								{parseDate(post.data.pubDate).toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', year: 'numeric' })}
+							<time datetime={post.data.pubDate.toISOString()}>
+								{post.data.pubDate.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', year: 'numeric' })}
 							</time>
 						</div>
 						<h3>
