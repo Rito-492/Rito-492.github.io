@@ -1,36 +1,35 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Dependencies
-node_modules
-dist
-dist-ssr
+# 依赖与构建产物
+node_modules/
+dist/
+# 本地覆盖配置（如 .env.development.local）
 *.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# 博客内容：私有仓库 garden 的软链接，绝不入库
+# 注意不能带尾斜杠——`src/content/blog/` 只匹配真目录，盖不住软链接
+src/content/blog
 
-# Astro
-.astro
+# 生成文件：Astro 类型与内容缓存，每次构建都会变
+.astro/
 
+# 本地工具与临时目录
 .claude/
-
+# 已弃用（内容在 AGENTS.md），防止工具重建后误提交
 CLAUDE.md
-
 tmp/
 
-src/content/blog
+# 密钥与环境变量
+.env
+.env.*
+!.env.example
+
+# 日志
+logs/
+*.log
+
+# 编辑器与系统杂项
+.vscode/
+.idea/
+*.sw?
+.DS_Store
+Thumbs.db
+desktop.ini
