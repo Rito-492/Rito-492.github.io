@@ -103,10 +103,10 @@ git -C ~/workspace/40_garden pull
 - [x] 2. `deploy.yml`：内容 checkout + 搬运步骤、`schedule` 每 2 小时重建（定时 + 手动，已选定）
 - [x] 3. `blog/[id].astro` 草稿过滤（`isPublished`），build 验证通过
 - [x] 4. `.gitignore` 规则改为 `src/content/blog`（无尾斜杠，盖住软链接）
-- [ ] 5. **用户操作**：创建 fine-grained PAT（只勾 garden、Contents 只读）→ 配 `BLOG_REPO_TOKEN` secret
-- [ ] 6. `git push`（务必在第 5 步之后，否则 CI 拉不到内容）
+- [x] 5. **用户操作**：创建 fine-grained PAT（只勾 garden、Contents 只读）→ 配 `BLOG_REPO_TOKEN` secret（2026-10-09 完成）
+- [x] 6. `git push`（2026-10-09 完成，workflow 运行成功，线上已有文章）
 
-> 状态（2026-10-09）：WSL 侧全部完成并 build 验证通过（草稿不进产物）；待 PAT/secret + push。
+> 状态（2026-10-09）：**迁移完成**。workflow 成功、线上站点已带文章、草稿不进产物。
 
 ### 文件变更清单
 
