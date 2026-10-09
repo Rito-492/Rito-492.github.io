@@ -118,7 +118,8 @@ git -C ~/workspace/40_garden pull
 
 ### 已知遗留
 
-- 旧文章（《序》《我如何创建了这个博客》）仍在公开仓库的 git 历史提交里；已决定暂不清理（2026-05）。
+- 博客文章旧稿保留在公开仓库 git 历史中（用户决定：原文已公开发布，无需清理，2026-10）。
+- 其余垃圾历史（`node_modules`、`.astro`、`.claude`、`CLAUDE.md`）已于 2026-10-09 用 `git filter-repo` 从历史清除（仓库 27MB → 1MB）；清除对象均无敏感信息，无需向 GitHub support 申请缓存清理。注意：`node_modules/`、`.astro/`、`.claude/`、`CLAUDE.md` 不要再提交进仓库（`.gitignore` 已有规则）。
 
 ## 项目结构
 
