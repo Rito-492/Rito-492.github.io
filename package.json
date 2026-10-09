@@ -1,19 +1,24 @@
 {
-  "name": "rito-492-github-io",
-  "type": "module",
-  "version": "0.0.1",
-  "engines": {
-    "node": ">=22.12.0"
-  },
-  "scripts": {
-    "dev": "astro dev --host",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@astrojs/rss": "^4.0.19",
-    "@astrojs/sitemap": "^3.7.4",
-    "astro": "^6.1.7"
-  }
+	"name": "rito-492-github-io",
+	"type": "module",
+	"version": "0.0.1",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"scripts": {
+		"dev": "astro dev --host",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"format": "prettier --write ."
+	},
+	"dependencies": {
+		"@astrojs/rss": "^4.0.19",
+		"@astrojs/sitemap": "^3.7.4",
+		"astro": "^6.1.7"
+	},
+	"devDependencies": {
+		"prettier": "^3.9.9",
+		"prettier-plugin-astro": "^1.1.0"
+	}
 }

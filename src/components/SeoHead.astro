@@ -29,8 +29,14 @@ const ogImage = image.startsWith('http') ? image : `${SITE.url}${image}`;
 <!-- 字体引入：JetBrains Mono + 霞鹜文楷（TODO：自托管，见 AGENTS.md 待办） -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web@latest/style.css" />
+<link
+	href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+	rel="stylesheet"
+/>
+<link
+	rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@callmebill/lxgw-wenkai-web@latest/style.css"
+/>
 
 <!-- Basic Meta Tags -->
 <meta name="description" content={description} />
@@ -56,6 +62,4 @@ const ogImage = image.startsWith('http') ? image : `${SITE.url}${image}`;
 
 <title>{title}</title>
 
-{jsonLd && (
-	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-)}
+{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}

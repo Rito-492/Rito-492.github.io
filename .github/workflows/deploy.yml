@@ -1,65 +1,65 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [ main ]
-  schedule:
-    - cron: '0 */2 * * *'
-  workflow_dispatch:
+    push:
+        branches: [main]
+    schedule:
+        - cron: '0 */2 * * *'
+    workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+    contents: read
+    pages: write
+    id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+    group: 'pages'
+    cancel-in-progress: false
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-    steps:
-      - name: Checkout site
-        uses: actions/checkout@v4
+    build:
+        runs-on: ubuntu-latest
+        env:
+            FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+        steps:
+            - name: Checkout site
+              uses: actions/checkout@v4
 
-      - name: Checkout blog content (private vault)
-        uses: actions/checkout@v4
-        with:
-          repository: Rito-492/garden
-          path: _garden
-          sparse-checkout: 20_blog        # 只拉 20_blog/，vault 其余内容不进 CI
-          token: ${{ secrets.BLOG_REPO_TOKEN }}
+            - name: Checkout blog content (private vault)
+              uses: actions/checkout@v4
+              with:
+                  repository: Rito-492/garden
+                  path: _garden
+                  sparse-checkout: 20_blog # 只拉 20_blog/，vault 其余内容不进 CI
+                  token: ${{ secrets.BLOG_REPO_TOKEN }}
 
-      - name: Move content into place
-        run: mv _garden/20_blog src/content/blog
+            - name: Move content into place
+              run: mv _garden/20_blog src/content/blog
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '22'
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Build
-        run: npm run build
+            - name: Build
+              run: npm run build
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: ./dist
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    deploy:
+        runs-on: ubuntu-latest
+        needs: build
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
 
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4

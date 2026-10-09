@@ -1,26 +1,36 @@
 ---
-
 export interface Props {
 	title: string;
 }
 const { title } = Astro.props;
-
-
 ---
 
 <header>
 	<nav>
-		<a href="/" class="logo">{title}</a>
+		<a href="/" class="logo">
+			{title}
+		</a>
 		<ul class="nav-links">
 			<li>
-				<a href="/"><span>Home</span></a>
+				<a href="/">
+					<span>Home</span>
+				</a>
 			</li>
 			<li>
-				<a href="/blog"><span>Blog</span></a>
+				<a href="/blog">
+					<span>Blog</span>
+				</a>
 			</li>
-			<li><a href="/projects"><span>Projects</span></a></li>
-			<li><a href="/about"><span>About</span></a></li>
-
+			<li>
+				<a href="/projects">
+					<span>Projects</span>
+				</a>
+			</li>
+			<li>
+				<a href="/about">
+					<span>About</span>
+				</a>
+			</li>
 		</ul>
 		<button class="mobile-menu-btn" aria-label="切换菜单">
 			<span class="hamburger"></span>
@@ -48,7 +58,7 @@ const { title } = Astro.props;
 		});
 
 		// Close menu when clicking a link
-		navLinks.querySelectorAll('a').forEach(link => {
+		navLinks.querySelectorAll('a').forEach((link) => {
 			link.addEventListener('click', () => {
 				mobileMenuBtn.classList.remove('active');
 				navLinks.classList.remove('active');

@@ -7,7 +7,12 @@ body {
 	min-height: 100vh;
 	background: var(--color-bg);
 	color: var(--color-text);
-	font-family: 'JetBrains Mono', 'LXGW WenKai', system-ui, -apple-system, sans-serif;
+	font-family:
+		'JetBrains Mono',
+		'LXGW WenKai',
+		system-ui,
+		-apple-system,
+		sans-serif;
 	scroll-behavior: smooth;
 }
 

@@ -4,11 +4,11 @@ Astro 6 静态站点（个人博客，部署到 GitHub Pages；单包仓库，�
 
 ## 命令
 
-| Command | Action |
-| :------ | :----- |
-| `npm run dev` | 开发服务器（`--host`，`localhost:4321`） |
-| `npm run build` | 构建生产站点到 `./dist/` |
-| `npm run preview` | 本地预览生产构建 |
+| Command           | Action                                   |
+| :---------------- | :--------------------------------------- |
+| `npm run dev`     | 开发服务器（`--host`，`localhost:4321`） |
+| `npm run build`   | 构建生产站点到 `./dist/`                 |
+| `npm run preview` | 本地预览生产构建                         |
 
 - **仓库没有配置任何 lint / format / typecheck / test 工具**（无 tsconfig、eslint、prettier）。验证手段只有 `npm run build`。Node 要求 `>=22.12`（engines 字段；CI 用 22）。
 
@@ -65,31 +65,31 @@ git -C ~/workspace/40_garden pull
 `.github/workflows/deploy.yml` build job 的步骤（内容先拉到 `_garden` 再搬进 `src/content/blog`，与本地软链接的最终结构一致）：
 
 ```yaml
-    steps:
-      - name: Checkout site
-        uses: actions/checkout@v4
+steps:
+    - name: Checkout site
+      uses: actions/checkout@v4
 
-      - name: Checkout blog content (private vault)
-        uses: actions/checkout@v4
-        with:
+    - name: Checkout blog content (private vault)
+      uses: actions/checkout@v4
+      with:
           repository: Rito-492/garden
           path: _garden
-          sparse-checkout: 20_blog        # 只拉 20_blog/，vault 其余内容不进 CI
+          sparse-checkout: 20_blog # 只拉 20_blog/，vault 其余内容不进 CI
           token: ${{ secrets.BLOG_REPO_TOKEN }}
 
-      - name: Move content into place
-        run: mv _garden/20_blog src/content/blog
+    - name: Move content into place
+      run: mv _garden/20_blog src/content/blog
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+          node-version: '22'
 
-      - name: Install dependencies
-        run: npm ci
+    - name: Install dependencies
+      run: npm ci
 
-      - name: Build
-        run: npm run build
+    - name: Build
+      run: npm run build
 ```
 
 ### GitHub 配置
@@ -161,19 +161,23 @@ src/
 ## 关键设计决策
 
 ### Layout system
+
 - **Home page**: 3-column grid — `1fr 720px 1fr`. Left sidebar (profile card), center content, empty right column.
 - **Blog post**: 3-column grid — `1fr 680px 1fr`. Center article, right TOC sidebar with `border-left`.
 - **Blog list**: 3-column grid — `25% 50% 25%`. Center timeline, right sidebar with series/tag filters.
 - **Other pages** (about, projects): single column with `max-width: 900px` via `.full-width` class.
 
 ### Blog list sidebar vs Blog post sidebar
+
 Both sidebars share the same visual language:
+
 - `border-left: 1px solid var(--color-border)`
 - Section titles: `1rem / font-weight: 600 / color: var(--color-primary)` with icon
 - Items: `0.85rem / color: var(--color-text-muted)` with `border-left: 2px solid transparent` → `var(--color-primary)` on hover/active
 - Tags: plain text (no border/background), `0.78rem`, `padding-left: 0.5rem`
 
 ### Blog list timeline
+
 Posts are grouped by month (parsed from `pubDate` format `YYYY_MM_DD_HH_mm`). A vertical timeline line runs down the left with month labels as nodes. Each post card connects to the timeline via a dot + line pseudo-element.
 
 ## 内容 Schema
@@ -185,13 +189,13 @@ Posts are grouped by month (parsed from `pubDate` format `YYYY_MM_DD_HH_mm`). A 
 title: 文章标题
 description: 用一句话概括文章内容，显示在列表页
 abstract: 用一句话概括全文，显示在文章标题下方
-pubDate: "2026_04_27_12_00"       # YYYY_MM_DD_HH_mm（建议加引号；不加引号 YAML 会解析为数字，但 schema 和 parseDate() 两种都兼容）
-modDate: "2026_04_27_12_00"       # Optional — 最后编辑时间（同上）
-isPublished: false                # 是否发布（替代旧 draft 字段，语义反转）
-series: 系列名                    # Optional — groups posts into a series
-tags:                             # Required — at least one
-  - 标签1
-  - 标签2
+pubDate: '2026_04_27_12_00' # YYYY_MM_DD_HH_mm（建议加引号；不加引号 YAML 会解析为数字，但 schema 和 parseDate() 两种都兼容）
+modDate: '2026_04_27_12_00' # Optional — 最后编辑时间（同上）
+isPublished: false # 是否发布（替代旧 draft 字段，语义反转）
+series: 系列名 # Optional — groups posts into a series
+tags: # Required — at least one
+    - 标签1
+    - 标签2
 ---
 ```
 
@@ -199,11 +203,11 @@ tags:                             # Required — at least one
 
 ```markdown
 ---
-title: "Project Name"
-description: "Short description"
-tech: ["React", "TypeScript"]
-github: "https://github.com/Rito-492/repo"  # Optional
-link: "https://demo.url"                    # Optional
+title: 'Project Name'
+description: 'Short description'
+tech: ['React', 'TypeScript']
+github: 'https://github.com/Rito-492/repo' # Optional
+link: 'https://demo.url' # Optional
 draft: false
 ---
 ```
@@ -220,17 +224,17 @@ draft: false
 
 CSS 自定义属性定义在 `src/styles/variables.css`：
 
-| Variable | Value | Usage |
-| :------- | :---- | :---- |
-| `--color-primary` | `#0891b2` | Links, accents, active states |
-| `--color-primary-hover` | `#0e7490` | Hover states |
-| `--color-bg` | `#F8F8F6` | Page background |
-| `--color-card` | `#ffffff` | Card backgrounds |
-| `--color-text` | `#1e293b` | Body text |
-| `--color-text-muted` | `#64748b` | Secondary text |
-| `--color-border` | `#e0ded6` | Borders, dividers |
-| `--font-mono` | `'JetBrains Mono', monospace` | Code |
-| `--font-sans` | `'LXGW WenKai', ...` | Body text |
+| Variable                | Value                         | Usage                         |
+| :---------------------- | :---------------------------- | :---------------------------- |
+| `--color-primary`       | `#0891b2`                     | Links, accents, active states |
+| `--color-primary-hover` | `#0e7490`                     | Hover states                  |
+| `--color-bg`            | `#F8F8F6`                     | Page background               |
+| `--color-card`          | `#ffffff`                     | Card backgrounds              |
+| `--color-text`          | `#1e293b`                     | Body text                     |
+| `--color-text-muted`    | `#64748b`                     | Secondary text                |
+| `--color-border`        | `#e0ded6`                     | Borders, dividers             |
+| `--font-mono`           | `'JetBrains Mono', monospace` | Code                          |
+| `--font-sans`           | `'LXGW WenKai', ...`          | Body text                     |
 
 ## 易错点 / CSS Gotchas
 

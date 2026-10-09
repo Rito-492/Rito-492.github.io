@@ -35,14 +35,20 @@ const jsonLd = {
 };
 ---
 
-<Layout title={post.data.title} showToc={true} tocHeadings={tocHeadings} series={post.data.series} postTitle={post.data.title} tags={post.data.tags ?? []} jsonLd={jsonLd}>
+<Layout
+	title={post.data.title}
+	showToc={true}
+	tocHeadings={tocHeadings}
+	series={post.data.series}
+	postTitle={post.data.title}
+	tags={post.data.tags ?? []}
+	jsonLd={jsonLd}
+>
 	<div class="post-page">
 		<article class="post">
 			<header class="post-header">
 				<h1>{post.data.title}</h1>
-				{post.data.abstract && (
-					<p class="post-abstract">{post.data.abstract}</p>
-				)}
+				{post.data.abstract && <p class="post-abstract">{post.data.abstract}</p>}
 				<div class="post-meta">
 					<time datetime={post.data.pubDate.toISOString()}>
 						{formatDate(post.data.pubDate)}
@@ -156,7 +162,6 @@ const jsonLd = {
 		border-radius: 8px;
 		margin: 1rem 0;
 	}
-
 
 	@media (max-width: 640px) {
 		.post-page {

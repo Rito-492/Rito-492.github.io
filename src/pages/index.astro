@@ -7,7 +7,9 @@ const projects = await getCollection('projects', ({ data }) => !data.draft);
 const featuredProjects = projects.slice(0, 3);
 
 const posts = await getCollection('blog', ({ data }) => data.isPublished);
-const latestPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
+const latestPosts = posts
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 
 // 结构化数据：帮助搜索引擎理解站点
 const jsonLd = {
@@ -36,9 +38,19 @@ const jsonLd = {
 			<h2>📝 最新文章</h2>
 			<a href="/blog" class="view-more">
 				查看全部
-				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M5 12h14"/>
-					<path d="m12 5 7 7-7 7"/>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path d="M5 12h14" />
+					<path d="m12 5 7 7-7 7" />
 				</svg>
 			</a>
 		</div>
@@ -50,7 +62,11 @@ const jsonLd = {
 					<article class="post-card">
 						<div class="post-meta">
 							<time datetime={post.data.pubDate.toISOString()}>
-								{post.data.pubDate.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', year: 'numeric' })}
+								{post.data.pubDate.toLocaleDateString('zh-CN', {
+									month: 'long',
+									day: 'numeric',
+									year: 'numeric',
+								})}
 							</time>
 						</div>
 						<h3>
@@ -69,15 +85,30 @@ const jsonLd = {
 			<h2>🗂️ 项目作品</h2>
 			<a href="/projects" class="view-more">
 				查看全部
-				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M5 12h14"/>
-					<path d="m12 5 7 7-7 7"/>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path d="M5 12h14" />
+					<path d="m12 5 7 7-7 7" />
 				</svg>
 			</a>
 		</div>
 		<div class="projects-grid">
 			{featuredProjects.map((project) => (
-				<a href={project.data.github} target="_blank" rel="noopener noreferrer" class="project-card">
+				<a
+					href={project.data.github}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="project-card"
+				>
 					<h3>{project.data.title}</h3>
 					<p>{project.data.description}</p>
 					<div class="tech-stack">
@@ -93,7 +124,9 @@ const jsonLd = {
 	<!-- 访客计数器 -->
 	<section class="visitor-counter-section">
 		<span class="counter-label">访客计数：</span>
-		<span class="counter-number" id="visitCount">—</span>
+		<span class="counter-number" id="visitCount">
+			—
+		</span>
 	</section>
 
 	<script>
@@ -103,8 +136,8 @@ const jsonLd = {
 		const key = 'home-visits';
 
 		fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
-			.then(res => res.json())
-			.then(data => {
+			.then((res) => res.json())
+			.then((data) => {
 				if (visitCountEl && data.count !== undefined) {
 					visitCountEl.textContent = Number(data.count).toLocaleString();
 				}

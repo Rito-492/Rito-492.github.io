@@ -1,0 +1,7 @@
+dist/
+node_modules/
+.astro/
+src/content/blog
+package-lock.json
+public/
+tmp/

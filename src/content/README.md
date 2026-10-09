@@ -21,29 +21,29 @@ src/content/
 
 ### Frontmatter 字段
 
-| 字段 | 必填 | 类型 | 说明 |
-|------|------|------|------|
-| `title` | ✅ | string | 文章标题 |
-| `description` | ✅ | string | 简短描述（列表页卡片） |
-| `abstract` | ❌ | string | 文章摘要（标题下方） |
-| `pubDate` | ✅ | string \| number | 发布时间：`"2026_04_27_12_00"` 或 `202604271200` |
-| `modDate` | ❌ | string \| number | 最后编辑时间（同上格式） |
-| `isPublished` | ❌ | boolean | **true 才发布**（false/缺省 = 草稿，不构建页面） |
-| `series` | ❌ | string | 系列名称 |
-| `tags` | ✅ | array | 标签数组（至少一个） |
+| 字段          | 必填 | 类型             | 说明                                             |
+| ------------- | ---- | ---------------- | ------------------------------------------------ |
+| `title`       | ✅   | string           | 文章标题                                         |
+| `description` | ✅   | string           | 简短描述（列表页卡片）                           |
+| `abstract`    | ❌   | string           | 文章摘要（标题下方）                             |
+| `pubDate`     | ✅   | string \| number | 发布时间：`"2026_04_27_12_00"` 或 `202604271200` |
+| `modDate`     | ❌   | string \| number | 最后编辑时间（同上格式）                         |
+| `isPublished` | ❌   | boolean          | **true 才发布**（false/缺省 = 草稿，不构建页面） |
+| `series`      | ❌   | string           | 系列名称                                         |
+| `tags`        | ✅   | array            | 标签数组（至少一个）                             |
 
 ### 示例
 
 ```markdown
 ---
-title: "我的文章"
-description: "文章描述"
-abstract: "文章摘要"
-pubDate: "2026_04_27_12_00"
-modDate: "2026_04_28_09_30"
+title: '我的文章'
+description: '文章描述'
+abstract: '文章摘要'
+pubDate: '2026_04_27_12_00'
+modDate: '2026_04_28_09_30'
 isPublished: true
-series: "学习笔记"
-tags: ["React", "前端"]
+series: '学习笔记'
+tags: ['React', '前端']
 ---
 
 ## 正文开始
@@ -55,14 +55,14 @@ tags: ["React", "前端"]
 
 ### Frontmatter 字段
 
-| 字段 | 必填 | 类型 | 说明 |
-|------|------|------|------|
-| `title` | ✅ | string | 项目名称 |
-| `description` | ✅ | string | 简短描述 |
-| `tech` | ✅ | array | 技术栈数组 |
-| `link` | ❌ | URL | 在线演示链接 |
-| `github` | ❌ | URL | GitHub 仓库 |
-| `draft` | ❌ | boolean | 草稿（true 不显示） |
+| 字段          | 必填 | 类型    | 说明                |
+| ------------- | ---- | ------- | ------------------- |
+| `title`       | ✅   | string  | 项目名称            |
+| `description` | ✅   | string  | 简短描述            |
+| `tech`        | ✅   | array   | 技术栈数组          |
+| `link`        | ❌   | URL     | 在线演示链接        |
+| `github`      | ❌   | URL     | GitHub 仓库         |
+| `draft`       | ❌   | boolean | 草稿（true 不显示） |
 
 > ⚠️ 注意：项目集合用 `draft`（true = 隐藏），博客集合用 `isPublished`（true = 发布），语义相反，勿混用。
 
@@ -70,10 +70,10 @@ tags: ["React", "前端"]
 
 ```markdown
 ---
-title: "ProbMotion"
-description: "基于 KAN 的概率人体运动预测模型"
-tech: ["Python", "PyTorch", "Deep Learning"]
-github: "https://github.com/Rito-492/ProbMotion"
+title: 'ProbMotion'
+description: '基于 KAN 的概率人体运动预测模型'
+tech: ['Python', 'PyTorch', 'Deep Learning']
+github: 'https://github.com/Rito-492/ProbMotion'
 draft: false
 ---
 

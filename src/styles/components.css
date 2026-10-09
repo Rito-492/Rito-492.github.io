@@ -173,8 +173,18 @@
 }
 
 @keyframes ripple-expand {
-	0% { width: 20px; height: 20px; opacity: 1; transform: translate(-50%, -50%) scale(1); }
-	100% { width: 120px; height: 120px; opacity: 0; transform: translate(-50%, -50%) scale(1); }
+	0% {
+		width: 20px;
+		height: 20px;
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+	100% {
+		width: 120px;
+		height: 120px;
+		opacity: 0;
+		transform: translate(-50%, -50%) scale(1);
+	}
 }
 
 .click-particle {
