@@ -17,7 +17,7 @@ const {
 	categoryId,
 	mapping = 'pathname',
 	reactionsEnabled = '1',
-	theme = 'light',
+	theme,
 	lang = 'zh-CN',
 } = Astro.props;
 
@@ -37,6 +37,23 @@ const config = { repo, repoId, category, categoryId, mapping, reactionsEnabled, 
 
 		const cfg = JSON.parse(el.dataset.config);
 
+		// 跟随站点主题；ThemeToggle 切换时通过 themechange 事件热更新评论区主题
+		function resolvedTheme() {
+			const forced = document.documentElement.getAttribute('data-theme');
+			if (forced === 'light' || forced === 'dark') return forced;
+			return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		}
+
+		document.addEventListener('themechange', (e) => {
+			const frame = document.querySelector('iframe.giscus-frame');
+			if (frame && frame.contentWindow) {
+				frame.contentWindow.postMessage(
+					{ giscus: { setConfig: { theme: e.detail.theme } } },
+					'https://giscus.app',
+				);
+			}
+		});
+
 		function loadGiscus() {
 			const script = document.createElement('script');
 			script.src = 'https://giscus.app/client.js';
@@ -49,7 +66,7 @@ const config = { repo, repoId, category, categoryId, mapping, reactionsEnabled, 
 			script.setAttribute('data-reactions-enabled', cfg.reactionsEnabled);
 			script.setAttribute('data-emit-metadata', '0');
 			script.setAttribute('data-input-position', 'top');
-			script.setAttribute('data-theme', cfg.theme);
+			script.setAttribute('data-theme', cfg.theme || resolvedTheme());
 			script.setAttribute('data-lang', cfg.lang);
 			script.crossOrigin = 'anonymous';
 			script.async = true;

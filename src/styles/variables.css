@@ -11,9 +11,13 @@
 	--color-shadow: rgba(0, 0, 0, 0.06);
 }
 
-/* 暗色调色板：跟随系统切换，无需手动开关 */
+/* 暗色调色板：
+   - data-theme="dark"  强制深色
+   - data-theme="light" 强制浅色
+   - 无属性（跟随系统）  系统偏好深色时生效
+   切换逻辑见 components/ThemeToggle.astro（localStorage['theme'] 持久化） */
 @media (prefers-color-scheme: dark) {
-	:root {
+	:root:not([data-theme='light']) {
 		--color-bg: #15171c;
 		--color-text: #e2e6ec;
 		--color-text-muted: #94a0af;
@@ -24,6 +28,18 @@
 		--color-nav-bg: rgba(24, 26, 31, 0.85);
 		--color-shadow: rgba(0, 0, 0, 0.45);
 	}
+}
+
+:root[data-theme='dark'] {
+	--color-bg: #15171c;
+	--color-text: #e2e6ec;
+	--color-text-muted: #94a0af;
+	--color-primary: #22a3c7;
+	--color-primary-hover: #3ab5d6;
+	--color-border: #2b3038;
+	--color-card: #1d2026;
+	--color-nav-bg: rgba(24, 26, 31, 0.85);
+	--color-shadow: rgba(0, 0, 0, 0.45);
 }
 
 /* 字体变量 */

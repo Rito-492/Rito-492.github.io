@@ -245,7 +245,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 | `--font-mono`           | `'JetBrains Mono', monospace` | Code                          |
 | `--font-sans`           | `'LXGW WenKai', ...`          | Body text                     |
 
-暗色模式（2026-10 起）：**跟随系统自动切换**（`prefers-color-scheme: dark`），暗色调色板也在 `variables.css`（`--color-primary` 提亮为 `#22a3c7` 保证对比度）。无手动开关；新增样式尽量用变量，硬编码的 `rgba(8, 145, 178, …)` 青色点缀在暗色下可接受。
+暗色模式（2026-10 起）：**三态主题选择器**（Header 右侧按钮循环：跟随系统 → 浅色 → 深色，`localStorage['theme']` 持久化）。CSS 语义：`html[data-theme='dark']` 强制深色、`html[data-theme='light']` 强制浅色、无属性跟随系统（`prefers-color-scheme`，无 JS 也可用）；防闪烁预置脚本在 `SeoHead.astro`。Giscus 评论区通过 `themechange` 事件 + postMessage 联动切换。暗色调色板在 `variables.css`（`--color-primary` 提亮为 `#22a3c7` 保证对比度）。
 
 ## 易错点 / CSS Gotchas
 
