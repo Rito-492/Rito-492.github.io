@@ -249,10 +249,11 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 | `--font-mono`           | `'JetBrains Mono', monospace` | Code                          |
 | `--font-sans`           | `'LXGW WenKai', ...`          | Body text                     |
 
-暗色模式（2026-10 起）：**三态主题选择器**（Header 右侧按钮循环：跟随系统 → 浅色 → 深色，`localStorage['theme']` 持久化）。CSS 语义：`html[data-theme='dark']` 强制深色、`html[data-theme='light']` 强制浅色、无属性跟随系统（`prefers-color-scheme`，无 JS 也可用）；防闪烁预置脚本在 `SeoHead.astro`。Giscus 评论区通过 `themechange` 事件 + postMessage 联动切换。暗色调色板在 `variables.css`（`--color-primary` 提亮为 `#22a3c7` 保证对比度）。
+暗色模式（2026-10 起）：**三态主题选择器**（Header 导航菜单左侧按钮循环：跟随系统 → 浅色 → 深色，`localStorage['theme']` 持久化）。CSS 语义：`html[data-theme='dark']` 强制深色、`html[data-theme='light']` 强制浅色、无属性跟随系统（`prefers-color-scheme`，无 JS 也可用）；防闪烁预置脚本在 `SeoHead.astro`。Giscus 评论区通过 `themechange` 事件 + postMessage 联动切换。暗色调色板在 `variables.css`（`--color-primary` 提亮为 `#22a3c7` 保证对比度）。
 
 ## 易错点 / CSS Gotchas
 
+- **UI/样式改动必须按「UI 改动工作流」截图核验后交付**，禁止盲改。
 - **格式化交给 `npm run format`**，别手调缩进/引号，`prettier --check .` 不干净 CI 体验会差。
 - Astro scoped 样式覆盖不到 markdown 渲染出的内容，需要用 `:global()`。
 - `base.css` 给 `main` 应用了 `max-width: 1200px; padding: 2rem`；自定义布局的页面要么覆盖它（`!important`），要么用 `.full-width` 类。
@@ -267,6 +268,40 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - **文章内图片发布通道**：`20_blog/` 目前无图片所以无感；一旦文章插图（Obsidian `![[img]]` 或相对路径），构建不会带图。方案：vault 侧 `20_blog/assets/` + CI sparse-checkout 一并搬运 + markdown 用相对路径，另需处理本地软链接下的解析。
 - **UI 待办（C 组·首页）**：hero 区加行动引导按钮；访客计数（counterapi.dev 第三方依赖）换更稳服务或去掉。
 - **UI 待办（D 组·质感）**：`:focus-visible` 键盘焦点样式；View Transitions 页面切换过渡（需回归测试 Giscus/脚本）；正文外链视觉标识（↗）；per-post OG 分享卡（satori 按标题生成）。
+
+## UI 改动工作流：先截图，再交付
+
+改任何视觉/布局的东西**必须**用无头浏览器看渲染截图再交付，不要只看代码就下结论（血泪教训：导航被挤、按钮丑都是盲改出来的）。
+
+**环境已就绪**（一次性配置，均已装好，勿重复装）：
+
+- playwright + chromium：toolkit 环境（`/home/r1t0/miniconda3/envs/toolkit/bin/playwright`），浏览器在 `~/.cache/ms-playwright/`；缺失的系统库已用 conda-forge 装进 toolkit（本机无免密 sudo，走不了 apt）
+- **启动浏览器必须带库路径**：`p.chromium.launch(env={'LD_LIBRARY_PATH': '/home/r1t0/miniconda3/envs/toolkit/lib'})`
+
+**流程**：
+
+1. `npm run build`
+2. 起静态服务：`cd dist && python3 -m http.server 8877`——**用后台任务方式起**（普通 `&` 会随 shell 退出被回收）
+3. 截图脚本用 toolkit python 跑（临时放 `/tmp/opencode/shoot*.py`）：
+
+```python
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    b = p.chromium.launch(env={'LD_LIBRARY_PATH': '/home/r1t0/miniconda3/envs/toolkit/lib'})
+    pg = b.new_page(viewport={'width': 1280, 'height': 800})  # 桌面
+    m = b.new_page(viewport={'width': 390, 'height': 844})    # 移动
+    pg.goto('http://localhost:8877/...', wait_until='load')
+    pg.wait_for_timeout(500)
+    pg.locator('.某元素').screenshot(path='/tmp/opencode/shots/x.png')
+    b.close()
+```
+
+4. 用 read 工具**逐张看截图**；不满意就改样式 → 重建 → 再截，直到顺眼
+5. **多方案比稿**：写一个 `variants.html` 用站点 CSS 变量把候选排开、整页截图择优，再落地（比反复改真页面高效）
+6. 坑：`locator('header')` 会撞名（站点 header 与 `.post-header`），用 `.first` 或更精确选择器
+
+交付前把关键页面（首页/列表/文章 × 桌面/移动）整体扫一遍截图。
 
 ## 部署
 
