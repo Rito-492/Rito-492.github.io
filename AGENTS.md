@@ -9,8 +9,9 @@ Astro 6 静态站点（个人博客，部署到 GitHub Pages；单包仓库，�
 | `npm run dev`     | 开发服务器（`--host`，`localhost:4321`） |
 | `npm run build`   | 构建生产站点到 `./dist/`                 |
 | `npm run preview` | 本地预览生产构建                         |
+| `npm run format`  | Prettier 格式化全部代码                  |
 
-- **仓库没有配置任何 lint / format / typecheck / test 工具**（无 tsconfig、eslint、prettier）。验证手段只有 `npm run build`。Node 要求 `>=22.12`（engines 字段；CI 用 22）。
+- **格式化用 Prettier**（`.prettierrc.json`：tab 缩进 / 单引号 / `embeddedLanguageFormatting: off`，配合 `.editorconfig`）；**无 typecheck / lint / test 工具**。验证手段是 `npm run build` + `npm run format` 后 `prettier --check .` 干净。Node 要求 `>=22.12`（engines 字段；CI 用 22）。
 
 ## 架构
 
@@ -126,41 +127,49 @@ steps:
 
 ```
 src/
-├── content.config.ts           # Content collection schemas
+├── config.ts                   # 站点级配置：SITE（标题/简介/头像）/ SOCIALS / GISCUS，改配置只动这里
+├── content.config.ts           # Content collection schemas（日期在此层转成 Date）
+├── lib/
+│   └── date.ts                 # parseDate / formatDate —— schema 与页面共用
 ├── content/
 │   ├── blog/                   # 软链接 → ~/workspace/40_garden/20_blog（仅本地；CI 构建时拉取/搬运）
 │   │   └── *.md                # 实际文章（来自 vault 的 20_blog/）
 │   ├── projects/               # Project showcase (Markdown，保留在本仓库)
 │   │   ├── _template.md        # Frontmatter template
 │   │   └── *.md                # Actual projects
-│   └── README.md               # Content authoring guidelines（字段说明已过时）
+│   └── README.md               # Content authoring guidelines（字段说明与 schema 同步）
 ├── layouts/
-│   ├── Layout.astro            # Main layout: header, footer, SEO, font loading, responsive grids
-│   │                           # Also handles: home page sidebar, blog post TOC sidebar
-│   └── PostLayout.astro        # Minimal wrapper (legacy, mostly superseded by Layout.astro)
+│   └── Layout.astro            # 组装层：按页面形态分发到下述组件 + 全局交互脚本（滚动进度/返回顶部/点击特效/TOC高亮）
 ├── pages/
 │   ├── index.astro             # Home page — hero + latest 3 posts
 │   ├── about.astro             # About page — avatar, intro, toolbox, social links
 │   ├── projects.astro          # Project showcase grid
 │   ├── 404.astro               # Custom 404 page
+│   ├── rss.xml.ts              # RSS feed（只含 isPublished: true）
 │   └── blog/
 │       ├── index.astro         # Blog list — timeline grouped by month, sidebar filters
-│       └── [id].astro          # Blog post — renders markdown, builds TOC from h2/h3
+│       └── [id].astro          # Blog post — render(post).headings 出 TOC，JSON-LD
 ├── components/
 │   ├── Header.astro            # Sticky nav bar with mobile hamburger menu
 │   ├── Footer.astro            # Site footer
-│   ├── BlogCard.astro          # Blog post card (used on home page)
-│   ├── ProjectCard.astro       # Project card
+│   ├── SeoHead.astro           # <head> 全部内容：meta/OG/Twitter/字体/RSS/JSON-LD
+│   ├── ProfileCard.astro       # 首页左侧个人卡片
+│   ├── SocialLinks.astro       # 社交链接（数据来自 config.ts；ids 属性可控制各页顺序）
+│   ├── TocSidebar.astro        # 文章页右侧：系列/标签/目录
+│   ├── ContentShell.astro      # 内容主栏：滚动进度条 + slot + 返回顶部
 │   └── GiscusComments.astro    # Giscus comments, lazy loaded with requestIdleCallback
 └── styles/
-    ├── variables.css           # CSS custom properties (colors, fonts, spacing, radius, transitions)
+    ├── variables.css           # CSS 自定义属性（含 prefers-color-scheme 暗色调色板）
     ├── base.css                # Reset + base element styles
-    └── components.css          # Reusable component styles (buttons, cards, etc.)
+    ├── components.css          # Reusable component styles (buttons, cards, etc.)
+    └── layouts.css             # 页面结构布局（全局）：home/post 三栏网格、.full-width
 ```
 
 ## 关键设计决策
 
 ### Layout system
+
+`Layout.astro` 是纯组装层（2026-10 重构）：`SeoHead`（head）+ `Header` + 四种页面形态分支 + `Footer` + 全局交互脚本。结构布局样式在 `styles/layouts.css`（全局），组件样式跟随各自组件。
 
 - **Home page**: 3-column grid — `1fr 720px 1fr`. Left sidebar (profile card), center content, empty right column.
 - **Blog post**: 3-column grid — `1fr 680px 1fr`. Center article, right TOC sidebar with `border-left`.
@@ -189,7 +198,7 @@ Posts are grouped by month (parsed from `pubDate` format `YYYY_MM_DD_HH_mm`). A 
 title: 文章标题
 description: 用一句话概括文章内容，显示在列表页
 abstract: 用一句话概括全文，显示在文章标题下方
-pubDate: '2026_04_27_12_00' # YYYY_MM_DD_HH_mm（建议加引号；不加引号 YAML 会解析为数字，但 schema 和 parseDate() 两种都兼容）
+pubDate: '2026_04_27_12_00' # YYYY_MM_DD_HH_mm（建议加引号；不加引号 YAML 会解析为数字，schema 层 parseDate() 两种都兼容，页面拿到的已是 Date）
 modDate: '2026_04_27_12_00' # Optional — 最后编辑时间（同上）
 isPublished: false # 是否发布（替代旧 draft 字段，语义反转）
 series: 系列名 # Optional — groups posts into a series
@@ -236,15 +245,22 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 | `--font-mono`           | `'JetBrains Mono', monospace` | Code                          |
 | `--font-sans`           | `'LXGW WenKai', ...`          | Body text                     |
 
+暗色模式（2026-10 起）：**跟随系统自动切换**（`prefers-color-scheme: dark`），暗色调色板也在 `variables.css`（`--color-primary` 提亮为 `#22a3c7` 保证对比度）。无手动开关；新增样式尽量用变量，硬编码的 `rgba(8, 145, 178, …)` 青色点缀在暗色下可接受。
+
 ## 易错点 / CSS Gotchas
 
-- 所有 `.astro` 文件的 `<style>` 块用 **tab 缩进** — 必须严格一致。
+- **格式化交给 `npm run format`**，别手调缩进/引号，`prettier --check .` 不干净 CI 体验会差。
 - Astro scoped 样式覆盖不到 markdown 渲染出的内容，需要用 `:global()`。
 - `base.css` 给 `main` 应用了 `max-width: 1200px; padding: 2rem`；自定义布局的页面要么覆盖它（`!important`），要么用 `.full-width` 类。
-- `parseDate()` 在 `src/pages/index.astro`、`src/pages/blog/index.astro`、`src/pages/blog/[id].astro` 三处复制粘贴 — 修改时保持同步。
-- 文章 TOC 是在 `blog/[id].astro` 里用正则从 `post.body` 抓取 `##`/`###` 生成的，slug 生成逻辑是手写模拟 Astro 的 heading ID。如果改动 heading ID 生成或 markdown 渲染器，正则/slug 也要同步更新，否则 TOC 锚点会失效。
-- Giscus 评论配置（repo/category ID）硬编码在 `blog/[id].astro`。
+- **博客列表页排序依赖 `data-date` 属性的字符串比较**（`localeCompare`）— 必须输出 ISO 字符串这类定长可排序格式，改日期输出时勿破坏。
+- `.astro` 的三元/表达式分支里**不能写 HTML 注释**（Astro 编译器容忍但 prettier 的 astro 解析器会崩）；`.css` 文件写纯 CSS，别套 `<style>` 标签。
+- Giscus 评论配置（repo/category ID）在 `src/config.ts` 的 `GISCUS`，不在页面里。
 - `.astro/` 和 `dist/` 是生成产物 — 永远不要直接编辑。
+
+## 待办 / TODO
+
+- **字体自托管**：当前 JetBrains Mono 走 Google Fonts、霞鹜文楷走 jsdelivr（`SeoHead.astro`）——国内访问不稳。方案：自托管 unicode-range 分片子集（如 `lxgw-wenkai-webfont`）+ `@fontsource/jetbrains-mono`，替换 CDN 引用。
+- **文章内图片发布通道**：`20_blog/` 目前无图片所以无感；一旦文章插图（Obsidian `![[img]]` 或相对路径），构建不会带图。方案：vault 侧 `20_blog/assets/` + CI sparse-checkout 一并搬运 + markdown 用相对路径，另需处理本地软链接下的解析。
 
 ## 部署
 
