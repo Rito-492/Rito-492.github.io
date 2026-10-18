@@ -157,10 +157,11 @@ src/
 │       └── [id].astro          # Blog post — render(post).headings 出 TOC，JSON-LD
 ├── components/
 │   ├── Header.astro            # Sticky nav bar with mobile hamburger menu
-│   ├── Footer.astro            # Site footer
-│   ├── SeoHead.astro           # <head> 全部内容：meta/OG/Twitter/字体/RSS/JSON-LD
+│   ├── Footer.astro            # 页脚：© / Powered by / RSS / 网站源码 / CC
+│   ├── SeoHead.astro           # <head> 全部内容：meta/OG/Twitter/字体/RSS/JSON-LD + ClientRouter
 │   ├── ProfileCard.astro       # 首页左侧个人卡片
 │   ├── SocialLinks.astro       # 社交链接（数据来自 config.ts；ids 属性可控制各页顺序）
+│   ├── Icon.astro              # 全站统一线性图标（lucide 路径内联）
 │   ├── TocSidebar.astro        # 文章页右侧：系列/标签/目录
 │   ├── ContentShell.astro      # 内容主栏：滚动进度条 + slot + 返回顶部
 │   ├── ThemeToggle.astro       # 三态主题切换（浅色/深色/跟随系统，localStorage 持久化）
@@ -273,6 +274,17 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - CI 零改动（sparse-checkout 递归含 assets）；RSS 仅摘要不受影响；本地 dev 实测可用（无需 fs.allow）
 - 大图注意：原图进 git 历史（Astro 只优化产物、不减仓库），建议插图前压缩（长边 ~2000px）
 
+## 页面前端（View Transitions / 交互）
+
+- 已启用 **View Transitions**（`<ClientRouter />` 在 SeoHead，默认 crossfade）。页面脚本三原则：
+    - 打包脚本全站只执行一次：页面级逻辑一律写成 `function init(){}` + `document.addEventListener('astro:page-load', init)`，带 DOM 存在性守卫、可重复安全执行
+    - 文档级监听（scroll/click/keydown）只在模块顶层绑一次；目标元素在回调里**实时查询**，不缓存引用
+    - 主题：`<html>` 属性在导航后可能被重置，ThemeToggle 在 `astro:after-swap` 从 localStorage 重放
+- **图片灯箱**：点文章图全屏预览（点击任意处 / Esc 关闭；滚动锁在 after-swap 清理）。遮罩由 JS 动态挂到 `<body>`——放页面容器里会被祖先 stacking context 压到顶栏下面；样式在 `components.css`
+- **Footer**：© / Powered by Astro · GitHub Pages / RSS 订阅 / 网站源码 / CC 许可；数据都在 `config.ts`
+- 图标：全站统一用 `Icon.astro`（lucide 内联路径），不要再用 emoji
+- 侧栏细滚动条：`components.css`（`.toc-sidebar` / `.blog-sidebar` / `.mobile-toc-panel`）
+
 ## 易错点 / CSS Gotchas
 
 - **UI/样式改动必须按「UI 改动工作流」截图核验后交付**，禁止盲改。
@@ -283,12 +295,14 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - `.astro` 的三元/表达式分支里**不能写 HTML 注释**（Astro 编译器容忍但 prettier 的 astro 解析器会崩）；`.css` 文件写纯 CSS，别套 `<style>` 标签。
 - Giscus 评论配置（repo/category ID）在 `src/config.ts` 的 `GISCUS`，不在页面里。
 - `.astro/` 和 `dist/` 是生成产物 — 永远不要直接编辑。
+- **View Transitions 已启用**：脚本必须遵守「页面前端」一节的三原则（page-load 重 init / 文档级监听只绑一次 / 主题 after-swap 重放），否则会出现重复绑定、元素引用失效等诡异 bug。
+- **固定定位的全屏遮罩别放页面容器内**：祖先若形成 stacking context，遮罩会被压在顶栏下面——挂到 `<body>` 下 + 全局样式（参考灯箱做法）。
 
 ## 待办 / TODO
 
 - **字体自托管**：当前 JetBrains Mono 走 Google Fonts、霞鹜文楷走 jsdelivr（`SeoHead.astro`）——国内访问不稳。方案：自托管 unicode-range 分片子集（如 `lxgw-wenkai-webfont`）+ `@fontsource/jetbrains-mono`，替换 CDN 引用。
-- **UI 待办（C 组·首页）**：hero 区加行动引导按钮；访客计数（counterapi.dev 第三方依赖）换更稳服务或去掉。
-- **UI 待办（D 组·质感）**：`:focus-visible` 键盘焦点样式；View Transitions 页面切换过渡（需回归测试 Giscus/脚本）；正文外链视觉标识（↗）；per-post OG 分享卡（satori 按标题生成）。
+- **UI 待办（C 组·首页，用户暂缓）**：hero 区加行动引导按钮；访客计数换服务或去掉——counterapi.dev 已确认下线（HTTP 410，2026-10 实测）。
+- **per-post OG 分享卡（D 组唯一遗留）**：satori 按标题生成。先决问题：CJK 字库方案（~10MB 字体入库或构建期下载），待拍板。
 
 ## UI 改动工作流：先截图，再交付
 

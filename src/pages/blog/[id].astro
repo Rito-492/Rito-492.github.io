@@ -66,9 +66,14 @@ const jsonLd = {
 						{formatDate(post.data.pubDate)}
 					</time>
 					{post.data.modDate && (
-						<span class="last-updated">
-							· 最后编辑：{formatDate(post.data.modDate)}
-						</span>
+						<>
+							<span class="meta-sep" aria-hidden="true">
+								·
+							</span>
+							<span class="last-updated">
+								最后编辑：{formatDate(post.data.modDate)}
+							</span>
+						</>
 					)}
 				</div>
 			</header>
@@ -179,6 +184,11 @@ const jsonLd = {
 		flex-wrap: wrap;
 	}
 
+	.meta-sep {
+		opacity: 0.7;
+		margin: 0 -0.55rem;
+	}
+
 	.post-content {
 		line-height: 1.8;
 	}
@@ -197,6 +207,15 @@ const jsonLd = {
 	.post-content :global(a) {
 		color: var(--color-primary);
 		text-decoration: underline;
+	}
+
+	/* 正文外链：尾部 ↗ 标识（同站绝对链接除外） */
+	.post-content :global(a[href^='http']:not([href*='rito-492.github.io'])::after) {
+		content: '↗';
+		display: inline-block;
+		margin-left: 0.15em;
+		font-size: 0.75em;
+		color: var(--color-text-muted);
 	}
 
 	.post-content :global(code) {
@@ -234,6 +253,7 @@ const jsonLd = {
 		height: auto;
 		border-radius: 8px;
 		margin: 1rem 0;
+		cursor: zoom-in;
 	}
 
 	/* 版权声明：正文与分页之间的安静声明行 */
@@ -389,6 +409,8 @@ const jsonLd = {
 		color: #ffffff;
 	}
 
+	/* 图片灯箱样式在 components.css（元素由 JS 动态挂到 body，避免层叠上下文限制） */
+
 	@media (max-width: 640px) {
 		.post-page {
 			padding: 1.5rem 1rem;
@@ -396,6 +418,10 @@ const jsonLd = {
 
 		.post-header h1 {
 			font-size: 1.5rem;
+		}
+
+		.meta-sep {
+			display: none;
 		}
 
 		.post-nav {
@@ -410,34 +436,107 @@ const jsonLd = {
 </style>
 
 <script>
-	// 标题锚点：hover 标题时显示 #，方便复制章节链接
-	document
-		.querySelectorAll<HTMLHeadingElement>('.post-content h2[id], .post-content h3[id]')
-		.forEach((heading) => {
-			const anchor = document.createElement('a');
-			anchor.className = 'heading-anchor';
-			anchor.href = `#${heading.id}`;
-			anchor.textContent = '#';
-			anchor.setAttribute('aria-label', '链接到此标题');
-			heading.appendChild(anchor);
-		});
+	// 标题锚点 + 代码复制按钮（View Transitions 安全：每次导航重扫，带防重复守卫）
+	function initPostContent() {
+		document
+			.querySelectorAll<HTMLHeadingElement>('.post-content h2[id], .post-content h3[id]')
+			.forEach((heading) => {
+				if (heading.querySelector('.heading-anchor')) return;
+				const anchor = document.createElement('a');
+				anchor.className = 'heading-anchor';
+				anchor.href = `#${heading.id}`;
+				anchor.textContent = '#';
+				anchor.setAttribute('aria-label', '链接到此标题');
+				heading.appendChild(anchor);
+			});
 
-	// 代码块复制按钮
-	document.querySelectorAll<HTMLPreElement>('.post-content pre').forEach((pre) => {
-		const btn = document.createElement('button');
-		btn.className = 'copy-btn';
-		btn.type = 'button';
-		btn.textContent = '复制';
-		btn.addEventListener('click', async () => {
-			const code = pre.querySelector('code');
-			try {
-				await navigator.clipboard.writeText((code ?? pre).textContent ?? '');
-				btn.textContent = '已复制';
-			} catch {
-				btn.textContent = '复制失败';
-			}
-			setTimeout(() => (btn.textContent = '复制'), 1500);
+		document.querySelectorAll<HTMLPreElement>('.post-content pre').forEach((pre) => {
+			if (pre.querySelector('.copy-btn')) return;
+			const btn = document.createElement('button');
+			btn.className = 'copy-btn';
+			btn.type = 'button';
+			btn.textContent = '复制';
+			btn.addEventListener('click', async () => {
+				const code = pre.querySelector('code');
+				try {
+					await navigator.clipboard.writeText((code ?? pre).textContent ?? '');
+					btn.textContent = '已复制';
+				} catch {
+					btn.textContent = '复制失败';
+				}
+				setTimeout(() => (btn.textContent = '复制'), 1500);
+			});
+			pre.appendChild(btn);
 		});
-		pre.appendChild(btn);
+	}
+	document.addEventListener('astro:page-load', initPostContent);
+
+	// ── 图片灯箱（文档级委托，只绑一次；挂载点动态创建在 <body> 下） ──
+	function getLightbox() {
+		let el = document.getElementById('img-lightbox');
+		if (!el) {
+			el = document.createElement('div');
+			el.id = 'img-lightbox';
+			el.className = 'img-lightbox';
+			el.hidden = true;
+			el.setAttribute('role', 'dialog');
+			el.setAttribute('aria-modal', 'true');
+			el.setAttribute('aria-label', '图片预览');
+			el.innerHTML = '<figure><img alt=""><figcaption hidden></figcaption></figure>';
+			document.body.appendChild(el);
+		}
+		return el;
+	}
+
+	function openLightbox(source: HTMLImageElement) {
+		const lightbox = getLightbox();
+		const lightboxImg = lightbox.querySelector('img');
+		const caption = lightbox.querySelector('figcaption');
+		if (!lightboxImg) return;
+
+		lightboxImg.src = source.currentSrc || source.src;
+		lightboxImg.alt = source.alt;
+		if (caption) {
+			caption.textContent = source.alt;
+			caption.hidden = !source.alt;
+		}
+		lightbox.hidden = false;
+
+		// 锁定滚动并补偿滚动条宽度，避免页面跳动
+		const sbw = window.innerWidth - document.documentElement.clientWidth;
+		if (sbw > 0) document.documentElement.style.paddingRight = sbw + 'px';
+		document.documentElement.style.overflow = 'hidden';
+	}
+
+	function closeLightbox() {
+		const lightbox = document.getElementById('img-lightbox');
+		if (!lightbox || lightbox.hidden) return;
+		lightbox.hidden = true;
+		const img = lightbox.querySelector('img');
+		if (img) img.src = '';
+		document.documentElement.style.overflow = '';
+		document.documentElement.style.paddingRight = '';
+	}
+
+	document.addEventListener('click', (e) => {
+		const target = e.target instanceof Element ? e.target : null;
+		if (!target) return;
+		const lightbox = document.getElementById('img-lightbox');
+		if (lightbox && !lightbox.hidden) {
+			closeLightbox();
+			return;
+		}
+		const img = target.closest('.post-content img');
+		if (img instanceof HTMLImageElement) openLightbox(img);
+	});
+
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') closeLightbox();
+	});
+
+	// 导航离开时清理滚动锁（<html> 上的内联样式会被 VT 保留）
+	document.addEventListener('astro:after-swap', () => {
+		document.documentElement.style.overflow = '';
+		document.documentElement.style.paddingRight = '';
 	});
 </script>

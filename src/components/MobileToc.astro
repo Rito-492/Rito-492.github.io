@@ -49,29 +49,41 @@ const items = tocHeadings.filter((h) => h.depth >= 2 && h.depth <= 3);
 )}
 
 <script>
-	const btn = document.getElementById('mobileTocBtn');
-	const panel = document.getElementById('mobileTocPanel');
+	// 移动端目录浮钮 + 面板（View Transitions 安全：元素级监听每次导航重绑）
+	const setPanelOpen = (open: boolean) => {
+		const btn = document.getElementById('mobileTocBtn');
+		const panel = document.getElementById('mobileTocPanel');
+		if (!btn || !panel) return;
+		panel.classList.toggle('open', open);
+		btn.setAttribute('aria-expanded', String(open));
+	};
 
-	if (btn && panel) {
-		const setOpen = (open: boolean) => {
-			panel.classList.toggle('open', open);
-			btn.setAttribute('aria-expanded', String(open));
-		};
+	const initMobileToc = () => {
+		const btn = document.getElementById('mobileTocBtn');
+		const panel = document.getElementById('mobileTocPanel');
+		if (!btn || !panel) return;
 
+		setPanelOpen(false);
 		btn.addEventListener('click', (e) => {
 			e.stopPropagation();
-			setOpen(!panel.classList.contains('open'));
+			setPanelOpen(!panel.classList.contains('open'));
 		});
+		// 点目录跳转后收起
+		panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setPanelOpen(false)));
+	};
 
-		// 点目录跳转后收起；点面板外 / Esc 收起
-		panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
-		document.addEventListener('click', (e) => {
-			if (!panel.contains(e.target as Node) && !btn.contains(e.target as Node)) setOpen(false);
-		});
-		document.addEventListener('keydown', (e) => {
-			if (e.key === 'Escape') setOpen(false);
-		});
-	}
+	// 点面板外 / Esc 收起（文档级，只绑一次）
+	document.addEventListener('click', (e) => {
+		const btn = document.getElementById('mobileTocBtn');
+		const panel = document.getElementById('mobileTocPanel');
+		if (!btn || !panel) return;
+		if (!panel.contains(e.target as Node) && !btn.contains(e.target as Node)) setPanelOpen(false);
+	});
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') setPanelOpen(false);
+	});
+
+	document.addEventListener('astro:page-load', initMobileToc);
 </script>
 
 <style>

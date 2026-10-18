@@ -5,6 +5,7 @@ export const SITE = {
 	title: "Rito-492's Blog",
 	description: 'Rito-492 的个人网站',
 	url: 'https://rito-492.github.io',
+	repo: 'https://github.com/Rito-492/Rito-492.github.io',
 	author: 'Rito-492',
 	bio: '世界很大，开心第一。',
 	avatar: '/avatar.jpg',

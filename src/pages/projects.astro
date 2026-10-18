@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
 import { getCollection } from 'astro:content';
 
 const projects = await getCollection('projects', ({ data }) => {
@@ -14,7 +15,9 @@ const sortedProjects = projects.sort((a, b) => {
 <Layout title="Projects - Rito-492">
 	<section class="projects-header">
 		<div class="header-content">
-			<span class="header-icon">🚀</span>
+			<span class="header-icon">
+				<Icon name="rocket" size={48} strokeWidth={1.5} />
+			</span>
 			<h1>项目作品</h1>
 			<p>这里展示了我的一些个人项目和作品</p>
 		</div>
@@ -23,7 +26,9 @@ const sortedProjects = projects.sort((a, b) => {
 	<section class="projects-grid">
 		{sortedProjects.length === 0 ? (
 			<div class="empty-state">
-				<span class="empty-icon">🌱</span>
+				<span class="empty-icon">
+					<Icon name="sprout" size={48} strokeWidth={1.5} />
+				</span>
 				<p class="no-projects">还没有项目，敬请期待！</p>
 			</div>
 		) : (
@@ -35,20 +40,7 @@ const sortedProjects = projects.sort((a, b) => {
 					class="project-card"
 				>
 					<div class="card-icon">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="32"
-							height="32"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="1.5"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						>
-							<path d="M12 19V5" />
-							<path d="m5 12 7 7 7-7" />
-						</svg>
+						<Icon name="folder" size={28} strokeWidth={1.5} />
 					</div>
 					<h3>{project.data.title}</h3>
 					<p>{project.data.description}</p>
@@ -77,7 +69,8 @@ const sortedProjects = projects.sort((a, b) => {
 	}
 
 	.header-icon {
-		font-size: 3rem;
+		display: inline-flex;
+		color: var(--color-primary);
 		animation: float 3s ease-in-out infinite;
 	}
 
@@ -127,9 +120,9 @@ const sortedProjects = projects.sort((a, b) => {
 	}
 
 	.empty-icon {
-		font-size: 4rem;
-		display: block;
+		display: inline-flex;
 		margin-bottom: 1rem;
+		color: var(--color-text-muted);
 	}
 
 	.no-projects {

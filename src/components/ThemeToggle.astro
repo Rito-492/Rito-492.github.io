@@ -64,11 +64,15 @@
 
 <script>
 	// 三态循环：跟随系统 → 浅色 → 深色 → 跟随系统
+	// View Transitions 安全：状态存模块变量 + localStorage；按钮/属性每次导航后同步
 	const LABELS = { system: '跟随系统', light: '浅色', dark: '深色' } as const;
 	const ORDER = ['system', 'light', 'dark'] as const;
 	type Theme = (typeof ORDER)[number];
 
-	const btn = document.getElementById('theme-toggle');
+	let current: Theme = (() => {
+		const stored = localStorage.getItem('theme');
+		return ORDER.includes(stored as Theme) ? (stored as Theme) : 'system';
+	})();
 
 	function resolvedTheme(): 'light' | 'dark' {
 		const forced = document.documentElement.getAttribute('data-theme');
@@ -83,36 +87,51 @@
 		);
 	}
 
-	if (btn) {
-		const apply = (mode: Theme) => {
-			if (mode === 'system') {
-				document.documentElement.removeAttribute('data-theme');
-				localStorage.removeItem('theme');
-			} else {
-				document.documentElement.setAttribute('data-theme', mode);
-				localStorage.setItem('theme', mode);
-			}
-			btn.dataset.mode = mode;
-			const label = `主题：${LABELS[mode]}`;
-			btn.setAttribute('aria-label', label);
-			btn.title = label;
-			announce();
-		};
-
-		const stored = localStorage.getItem('theme') as Theme | null;
-		apply(ORDER.includes(stored as Theme) ? (stored as Theme) : 'system');
-
-		btn.addEventListener('click', () => {
-			const current = (btn.dataset.mode as Theme) || 'system';
-			const next = ORDER[(ORDER.indexOf(current) + 1) % ORDER.length];
-			apply(next);
-		});
-
-		// 跟随系统模式下，系统主题变化时同步通知
-		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-			if (!document.documentElement.hasAttribute('data-theme')) announce();
-		});
+	// 从 localStorage 重放主题属性（VT 导航后 <html> 属性可能被重置）
+	function applyStoredTheme() {
+		if (current === 'system') {
+			document.documentElement.removeAttribute('data-theme');
+		} else {
+			document.documentElement.setAttribute('data-theme', current);
+		}
 	}
+
+	function syncButton() {
+		const btn = document.getElementById('theme-toggle');
+		if (!btn) return;
+		btn.dataset.mode = current;
+		const label = `主题：${LABELS[current]}`;
+		btn.setAttribute('aria-label', label);
+		btn.title = label;
+	}
+
+	function apply(mode: Theme) {
+		current = mode;
+		if (mode === 'system') {
+			localStorage.removeItem('theme');
+		} else {
+			localStorage.setItem('theme', mode);
+		}
+		applyStoredTheme();
+		syncButton();
+		announce();
+	}
+
+	// 点击（事件委托：按钮每次导航后是新元素）
+	document.addEventListener('click', (e) => {
+		const btn = e.target instanceof Element ? e.target.closest('#theme-toggle') : null;
+		if (!btn) return;
+		apply(ORDER[(ORDER.indexOf(current) + 1) % ORDER.length]);
+	});
+
+	// 跟随系统模式下，系统主题变化时同步通知
+	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+		if (!document.documentElement.hasAttribute('data-theme')) announce();
+	});
+
+	syncButton();
+	document.addEventListener('astro:page-load', syncButton);
+	document.addEventListener('astro:after-swap', applyStoredTheme);
 </script>
 
 <style>

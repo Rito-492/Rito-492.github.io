@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SocialLinks from '../components/SocialLinks.astro';
+import Icon from '../components/Icon.astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '../config';
 
@@ -50,7 +51,10 @@ const jsonLd = {
 	<!-- 最新博客 -->
 	<section class="blog-section">
 		<div class="section-header">
-			<h2>📝 最新文章</h2>
+			<h2>
+				<Icon name="newspaper" size={20} />
+				最新文章
+			</h2>
 			<a href="/blog" class="view-more">
 				查看全部
 				<svg
@@ -97,7 +101,10 @@ const jsonLd = {
 	<!-- 精选项目 -->
 	<section class="projects-section">
 		<div class="section-header">
-			<h2>🗂️ 项目作品</h2>
+			<h2>
+				<Icon name="folder" size={20} />
+				项目作品
+			</h2>
 			<a href="/projects" class="view-more">
 				查看全部
 				<svg
@@ -145,21 +152,24 @@ const jsonLd = {
 	</section>
 
 	<script>
-		// 访客计数器 - 使用 CountAPI
-		const visitCountEl = document.getElementById('visitCount');
-		const namespace = 'rito-492-github-io';
-		const key = 'home-visits';
+		// 访客计数器（View Transitions 安全：每次进入首页时刷新一次）
+		function initVisitorCounter() {
+			const visitCountEl = document.getElementById('visitCount');
+			if (!visitCountEl) return;
 
-		fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
-			.then((res) => res.json())
-			.then((data) => {
-				if (visitCountEl && data.count !== undefined) {
-					visitCountEl.textContent = Number(data.count).toLocaleString();
-				}
-			})
-			.catch(() => {
-				// 计数器服务不可用时，保持显示 "—"
-			});
+			fetch('https://api.counterapi.dev/v1/rito-492-github-io/home-visits/up')
+				.then((res) => res.json())
+				.then((data) => {
+					if (data.count !== undefined) {
+						visitCountEl.textContent = Number(data.count).toLocaleString();
+					}
+				})
+				.catch(() => {
+					// 计数器服务不可用时，保持显示 "—"
+				});
+		}
+
+		document.addEventListener('astro:page-load', initVisitorCounter);
 	</script>
 </Layout>
 
@@ -237,9 +247,16 @@ const jsonLd = {
 	}
 
 	.section-header h2 {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
 		font-size: 1.5rem;
 		font-weight: 600;
 		color: var(--color-text);
+	}
+
+	.section-header h2 :global(svg) {
+		color: var(--color-primary);
 	}
 
 	.view-more {

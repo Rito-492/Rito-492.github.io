@@ -45,32 +45,37 @@ const isActive = (href: string) =>
 </header>
 
 <script>
-	// Mobile menu toggle
-	const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-	const navLinks = document.querySelector('.nav-links');
+	// 移动端菜单（View Transitions 安全：元素级监听每次导航重绑；文档级关闭逻辑只绑一次）
+	const closeMenu = () => {
+		document.querySelector('.mobile-menu-btn')?.classList.remove('active');
+		document.querySelector('.nav-links')?.classList.remove('active');
+	};
 
-	if (mobileMenuBtn) {
-		mobileMenuBtn.addEventListener('click', () => {
-			mobileMenuBtn.classList.toggle('active');
-			navLinks.classList.toggle('active');
+	const initHeaderMenu = () => {
+		const btn = document.querySelector('.mobile-menu-btn');
+		const links = document.querySelector('.nav-links');
+		if (!btn || !links) return;
+		closeMenu();
+		btn.addEventListener('click', () => {
+			btn.classList.toggle('active');
+			links.classList.toggle('active');
 		});
+		links.querySelectorAll('a').forEach((link) => {
+			link.addEventListener('click', closeMenu);
+		});
+	};
 
-		// Close menu when clicking outside
-		document.addEventListener('click', (e) => {
-			if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-				mobileMenuBtn.classList.remove('active');
-				navLinks.classList.remove('active');
-			}
-		});
+	// Close menu when clicking outside
+	document.addEventListener('click', (e) => {
+		const btn = document.querySelector('.mobile-menu-btn');
+		const links = document.querySelector('.nav-links');
+		if (!btn || !links) return;
+		if (!links.contains(e.target as Node) && !btn.contains(e.target as Node)) {
+			closeMenu();
+		}
+	});
 
-		// Close menu when clicking a link
-		navLinks.querySelectorAll('a').forEach((link) => {
-			link.addEventListener('click', () => {
-				mobileMenuBtn.classList.remove('active');
-				navLinks.classList.remove('active');
-			});
-		});
-	}
+	document.addEventListener('astro:page-load', initHeaderMenu);
 </script>
 
 <style>

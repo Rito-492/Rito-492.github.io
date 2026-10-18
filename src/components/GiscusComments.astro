@@ -29,13 +29,15 @@ const config = { repo, repoId, category, categoryId, mapping, reactionsEnabled, 
 	<p>滚动到此处自动加载评论</p>
 </div>
 
-<script is:inline>
-	(function () {
+<script>
+	// Giscus 评论：滚入视口才加载（省内存）；View Transitions 安全，每次导航重新初始化
+	function initGiscus() {
 		const el = document.getElementById('giscus-comments');
 		const placeholder = document.getElementById('giscus-placeholder');
-		if (!el) return;
+		if (!el || el.dataset.booted === '1') return;
+		el.dataset.booted = '1';
 
-		const cfg = JSON.parse(el.dataset.config);
+		const cfg = JSON.parse(el.dataset.config ?? '{}');
 
 		// 跟随站点主题；ThemeToggle 切换时通过 themechange 事件热更新评论区主题
 		function resolvedTheme() {
@@ -43,16 +45,6 @@ const config = { repo, repoId, category, categoryId, mapping, reactionsEnabled, 
 			if (forced === 'light' || forced === 'dark') return forced;
 			return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 		}
-
-		document.addEventListener('themechange', (e) => {
-			const frame = document.querySelector('iframe.giscus-frame');
-			if (frame && frame.contentWindow) {
-				frame.contentWindow.postMessage(
-					{ giscus: { setConfig: { theme: e.detail.theme } } },
-					'https://giscus.app',
-				);
-			}
-		});
 
 		function loadGiscus() {
 			const script = document.createElement('script');
@@ -91,7 +83,18 @@ const config = { repo, repoId, category, categoryId, mapping, reactionsEnabled, 
 		} else {
 			setTimeout(loadGiscus, 2000);
 		}
-	})();
+	}
+
+	// 主题切换 → 通知已加载的评论区（文档级，只绑一次）
+	document.addEventListener('themechange', (e) => {
+		const frame = document.querySelector('iframe.giscus-frame');
+		const theme = (e as CustomEvent<{ theme: string }>).detail?.theme;
+		if (frame && frame.contentWindow && theme) {
+			frame.contentWindow.postMessage({ giscus: { setConfig: { theme } } }, 'https://giscus.app');
+		}
+	});
+
+	document.addEventListener('astro:page-load', initGiscus);
 </script>
 
 <style>

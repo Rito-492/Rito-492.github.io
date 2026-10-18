@@ -94,49 +94,48 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 		<!-- 鼠标点击特效容器 -->
 		<div id="click-effects"></div>
 
-		<script is:inline>
-			// Scroll progress bar（博客列表页没有这些元素，需判空）
-			const scrollProgress = document.getElementById('scrollProgress');
-			const backToTopBtn = document.getElementById('backToTop');
+		<script>
+			// ── 全局交互（View Transitions 安全：文档级监听只绑一次，元素每次导航后重新查询） ──
 
-			if (scrollProgress && backToTopBtn) {
-				// passive + rAF 节流：滚动回调不阻塞合成器，每帧最多算一次
-				let ticking = false;
-				window.addEventListener(
-					'scroll',
-					() => {
-						if (ticking) return;
-						ticking = true;
-						requestAnimationFrame(() => {
-							const scrollTop = window.scrollY;
-							const docHeight =
-								document.documentElement.scrollHeight -
-								document.documentElement.clientHeight;
-							const scrollPercent = (scrollTop / docHeight) * 100;
-							scrollProgress.style.width = scrollPercent + '%';
-							backToTopBtn.classList.toggle('visible', scrollTop > 300);
-							ticking = false;
-						});
-					},
-					{ passive: true },
-				);
+			// 滚动进度条 & 返回顶部
+			let ticking = false;
+			window.addEventListener(
+				'scroll',
+				() => {
+					const scrollProgress = document.getElementById('scrollProgress');
+					const backToTopBtn = document.getElementById('backToTop');
+					if (!scrollProgress || !backToTopBtn || ticking) return;
+					ticking = true;
+					requestAnimationFrame(() => {
+						const scrollTop = window.scrollY;
+						const docHeight =
+							document.documentElement.scrollHeight -
+							document.documentElement.clientHeight;
+						scrollProgress.style.width = (scrollTop / docHeight) * 100 + '%';
+						backToTopBtn.classList.toggle('visible', scrollTop > 300);
+						ticking = false;
+					});
+				},
+				{ passive: true },
+			);
 
-				backToTopBtn.addEventListener('click', () => {
-					window.scrollTo({ top: 0, behavior: 'smooth' });
-				});
-			}
-
-			// 鼠标点击特效
-			const clickEffectsContainer = document.getElementById('click-effects');
-
+			// 返回顶部（事件委托）
 			document.addEventListener('click', (e) => {
-				if (!clickEffectsContainer) return;
+				const target = e.target instanceof Element ? e.target.closest('#backToTop') : null;
+				if (target) window.scrollTo({ top: 0, behavior: 'smooth' });
+			});
+
+			// 鼠标点击特效（事件委托）
+			document.addEventListener('click', (e) => {
+				if (!(e instanceof MouseEvent)) return;
+				const container = document.getElementById('click-effects');
+				if (!container) return;
 
 				const ripple = document.createElement('div');
 				ripple.className = 'click-ripple';
 				ripple.style.left = e.clientX + 'px';
 				ripple.style.top = e.clientY + 'px';
-				clickEffectsContainer.appendChild(ripple);
+				container.appendChild(ripple);
 
 				for (let i = 0; i < 8; i++) {
 					const particle = document.createElement('div');
@@ -146,42 +145,50 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 
 					const angle = (i / 8) * Math.PI * 2;
 					const velocity = 30 + Math.random() * 30;
-					const tx = Math.cos(angle) * velocity;
-					const ty = Math.sin(angle) * velocity;
+					particle.style.setProperty('--tx', Math.cos(angle) * velocity + 'px');
+					particle.style.setProperty('--ty', Math.sin(angle) * velocity + 'px');
 
-					particle.style.setProperty('--tx', tx + 'px');
-					particle.style.setProperty('--ty', ty + 'px');
-
-					clickEffectsContainer.appendChild(particle);
+					container.appendChild(particle);
 				}
 
-				setTimeout(() => { ripple.remove(); }, 650);
+				setTimeout(() => ripple.remove(), 650);
 				setTimeout(() => {
-					clickEffectsContainer.querySelectorAll('.click-particle').forEach(p => p.remove());
+					container.querySelectorAll('.click-particle').forEach((p) => p.remove());
 				}, 550);
 			});
 
-			// 博客目录高亮
-			const tocNav = document.getElementById('tocNav');
-			if (tocNav) {
-				const tocLinks = tocNav.querySelectorAll('a');
-				const observer = new IntersectionObserver((entries) => {
-					entries.forEach(entry => {
-						if (entry.isIntersecting) {
-							tocLinks.forEach(link => {
-								link.classList.remove('active');
-								if (link.getAttribute('href') === `#${entry.target.id}`) {
-									link.classList.add('active');
-								}
-							});
-						}
-					});
-				}, { rootMargin: '-100px 0px -60% 0px' });
+			// 博客目录高亮（每次导航重建 observer，先断开旧的）
+			let tocObserver: IntersectionObserver | null = null;
+			const initTocHighlight = () => {
+				tocObserver?.disconnect();
+				tocObserver = null;
+				const tocNav = document.getElementById('tocNav');
+				if (!tocNav) return;
 
-				document.querySelectorAll('h2, h3').forEach(heading => {
-					observer.observe(heading);
-				});
-			}
+				const tocLinks = tocNav.querySelectorAll('a');
+				tocObserver = new IntersectionObserver(
+					(entries) => {
+						entries.forEach((entry) => {
+							if (entry.isIntersecting) {
+								tocLinks.forEach((link) => {
+									link.classList.remove('active');
+									if (link.getAttribute('href') === `#${entry.target.id}`) {
+										link.classList.add('active');
+									}
+								});
+							}
+						});
+					},
+					{ rootMargin: '-100px 0px -60% 0px' },
+				);
+
+				document
+					.querySelectorAll('.post-content h2, .post-content h3')
+					.forEach((heading) => {
+						tocObserver?.observe(heading);
+					});
+			};
+			document.addEventListener('astro:page-load', initTocHighlight);
 		</script>
 	</body>
 </html>

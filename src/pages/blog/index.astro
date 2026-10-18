@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
 import { getCollection } from 'astro:content';
 
 const posts = await getCollection('blog', ({ data }) => {
@@ -21,7 +22,9 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 		<main class="blog-main">
 			<header class="blog-header">
 				<div class="header-top">
-					<span class="header-icon">📝</span>
+					<span class="header-icon">
+						<Icon name="notebook-pen" size={22} />
+					</span>
 					<h1>博客</h1>
 				</div>
 				<p class="header-desc">表达一些我的想法</p>
@@ -36,7 +39,9 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 			<div class="posts-list" id="postsList">
 				{sortedPosts.length === 0 ? (
 					<div class="empty-state">
-						<span class="empty-icon">🌱</span>
+						<span class="empty-icon">
+							<Icon name="sprout" size={48} strokeWidth={1.5} />
+						</span>
 						<p class="no-posts">还没有文章，敬请期待！</p>
 					</div>
 				) : (
@@ -212,7 +217,7 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 <style>
 	.blog-layout {
 		display: grid;
-		grid-template-columns: 1fr 700px 1fr;
+		grid-template-columns: minmax(0, 1fr) 700px minmax(0, 1fr);
 		gap: 2.5rem;
 		padding: 2rem 0;
 		max-width: none;
@@ -233,7 +238,6 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 		top: 5rem;
 		width: 100%;
 		box-sizing: border-box;
-		margin-left: 2.5rem;
 		height: fit-content;
 		max-height: calc(100vh - 7rem);
 		overflow-y: auto;
@@ -299,7 +303,8 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 		margin-bottom: 0.5rem;
 	}
 	.header-icon {
-		font-size: 1.5rem;
+		display: inline-flex;
+		color: var(--color-primary);
 		animation: float 3s ease-in-out infinite;
 	}
 	@keyframes float {
@@ -453,9 +458,9 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 		padding: 4rem 2rem;
 	}
 	.empty-icon {
-		font-size: 4rem;
-		display: block;
+		display: inline-flex;
 		margin-bottom: 1rem;
+		color: var(--color-text-muted);
 	}
 	.no-posts {
 		color: var(--color-text-muted);
@@ -505,101 +510,106 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 </style>
 
 <script>
-	// ---- state ----
-	const activeTags = new Set<string>();
-	let activeSeries = 'all';
-	let sortNewest = true;
+	// 列表页交互：筛选 / 排序 / URL 参数（View Transitions 安全，每次导航重新初始化）
+	function initBlogList() {
+		const postsList = document.getElementById('postsList');
+		const resultInfo = document.getElementById('resultInfo');
+		const sortLabel = document.getElementById('sortLabel');
+		const clearTagsBtn = document.getElementById('clearTags');
+		if (!postsList || !resultInfo || !sortLabel || !clearTagsBtn) return;
 
-	// ---- DOM refs ----
-	const postsList = document.getElementById('postsList')!;
-	const resultInfo = document.getElementById('resultInfo')!;
-	const sortLabel = document.getElementById('sortLabel')!;
-	const clearTagsBtn = document.getElementById('clearTags')!;
-	const rows = Array.from(postsList.querySelectorAll('.post-card')) as HTMLElement[];
+		const rows = Array.from(postsList.querySelectorAll('.post-card')) as HTMLElement[];
 
-	function updateAll() {
-		let visible = 0;
-		rows.forEach((row) => {
-			const series = row.dataset.series ?? '';
-			const tags: string[] = JSON.parse(row.dataset.tags ?? '[]');
+		const activeTags = new Set<string>();
+		let activeSeries = 'all';
+		let sortNewest = true;
 
-			const seriesMatch = activeSeries === 'all' || series === activeSeries;
-			const tagsMatch = activeTags.size === 0 || tags.some((t) => activeTags.has(t));
+		function updateAll() {
+			let visible = 0;
+			rows.forEach((row) => {
+				const series = row.dataset.series ?? '';
+				const tags: string[] = JSON.parse(row.dataset.tags ?? '[]');
 
-			if (seriesMatch && tagsMatch) {
-				row.style.display = '';
-				visible++;
+				const seriesMatch = activeSeries === 'all' || series === activeSeries;
+				const tagsMatch = activeTags.size === 0 || tags.some((t) => activeTags.has(t));
+
+				if (seriesMatch && tagsMatch) {
+					row.style.display = '';
+					visible++;
+				} else {
+					row.style.display = 'none';
+				}
+			});
+
+			if (activeTags.size > 0 || activeSeries !== 'all') {
+				resultInfo.textContent = `筛选出 ${visible} 篇`;
 			} else {
-				row.style.display = 'none';
+				resultInfo.textContent = '';
 			}
-		});
 
-		if (activeTags.size > 0 || activeSeries !== 'all') {
-			resultInfo.textContent = `筛选出 ${visible} 篇`;
-		} else {
-			resultInfo.textContent = '';
+			clearTagsBtn.style.display = activeTags.size > 0 ? '' : 'none';
+			applySort();
 		}
 
-		clearTagsBtn.style.display = activeTags.size > 0 ? '' : 'none';
-		applySort();
-	}
+		function applySort() {
+			const visibleRows = rows.filter((r) => r.style.display !== 'none');
+			const sorted = [...visibleRows].sort((a, b) => {
+				const diff = (a.dataset.date ?? '').localeCompare(b.dataset.date ?? '');
+				return sortNewest ? -diff : diff;
+			});
+			sorted.forEach((r) => postsList.appendChild(r));
+		}
 
-	function applySort() {
-		const container = postsList;
-		const visibleRows = rows.filter((r) => r.style.display !== 'none');
-		const sorted = [...visibleRows].sort((a, b) => {
-			const diff = (a.dataset.date ?? '').localeCompare(b.dataset.date ?? '');
-			return sortNewest ? -diff : diff;
-		});
-		sorted.forEach((r) => container.appendChild(r));
-	}
-
-	// ---- series filter ----
-	document.getElementById('seriesFilter')!.addEventListener('click', (e) => {
-		const item = (e.target as HTMLElement).closest('.sidebar-item') as HTMLElement;
-		if (!item) return;
-		document
-			.querySelectorAll('#seriesFilter .sidebar-item')
-			.forEach((el) => el.classList.remove('active'));
-		item.classList.add('active');
-		activeSeries = item.dataset.series!;
-		updateAll();
-	});
-
-	// ---- tag filter ----
-	document.getElementById('tagFilter')!.addEventListener('click', (e) => {
-		const item = (e.target as HTMLElement).closest('.tag-pill') as HTMLElement;
-		if (!item) return;
-		const tag = item.dataset.tag!;
-		if (activeTags.has(tag)) {
-			activeTags.delete(tag);
-			item.classList.remove('active');
-		} else {
-			activeTags.add(tag);
+		// ---- series filter ----
+		document.getElementById('seriesFilter')?.addEventListener('click', (e) => {
+			const item = (e.target as HTMLElement).closest('.sidebar-item') as HTMLElement;
+			if (!item) return;
+			document
+				.querySelectorAll('#seriesFilter .sidebar-item')
+				.forEach((el) => el.classList.remove('active'));
 			item.classList.add('active');
+			activeSeries = item.dataset.series!;
+			updateAll();
+		});
+
+		// ---- tag filter ----
+		document.getElementById('tagFilter')?.addEventListener('click', (e) => {
+			const item = (e.target as HTMLElement).closest('.tag-pill') as HTMLElement;
+			if (!item) return;
+			const tag = item.dataset.tag!;
+			if (activeTags.has(tag)) {
+				activeTags.delete(tag);
+				item.classList.remove('active');
+			} else {
+				activeTags.add(tag);
+				item.classList.add('active');
+			}
+			updateAll();
+		});
+
+		// ---- clear tags ----
+		clearTagsBtn.addEventListener('click', () => {
+			activeTags.clear();
+			document.querySelectorAll('.tag-pill').forEach((b) => b.classList.remove('active'));
+			updateAll();
+		});
+
+		// ---- sort ----
+		document.getElementById('sortBtn')?.addEventListener('click', () => {
+			sortNewest = !sortNewest;
+			sortLabel.textContent = sortNewest ? '最新优先' : '最早优先';
+			applySort();
+		});
+
+		// ---- URL param ----
+		const urlTag = new URLSearchParams(window.location.search).get('tag');
+		if (urlTag) {
+			const tagBtn = document.querySelector(
+				`.tag-pill[data-tag="${urlTag}"]`,
+			) as HTMLElement | null;
+			if (tagBtn) tagBtn.click();
 		}
-		updateAll();
-	});
-
-	// ---- clear tags ----
-	clearTagsBtn.addEventListener('click', () => {
-		activeTags.clear();
-		document.querySelectorAll('.tag-pill').forEach((b) => b.classList.remove('active'));
-		updateAll();
-	});
-
-	// ---- sort ----
-	document.getElementById('sortBtn')!.addEventListener('click', () => {
-		sortNewest = !sortNewest;
-		sortLabel.textContent = sortNewest ? '最新优先' : '最早优先';
-		applySort();
-	});
-
-	// ---- URL param ----
-	const urlParams = new URLSearchParams(window.location.search);
-	const urlTag = urlParams.get('tag');
-	if (urlTag) {
-		const tagBtn = document.querySelector(`.tag-pill[data-tag="${urlTag}"]`) as HTMLElement;
-		if (tagBtn) tagBtn.click();
 	}
+
+	document.addEventListener('astro:page-load', initBlogList);
 </script>

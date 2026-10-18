@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import { SITE } from '../config';
 
 interface Props {
@@ -34,6 +35,8 @@ const ogImage = image.startsWith('http') ? image : `${SITE.url}${image}`;
 	})();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- 客户端路由 + 页面过渡（默认 crossfade）；页面脚本一律用 astro:page-load 重新初始化，见 AGENTS.md -->
+<ClientRouter />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <meta name="generator" content={Astro.generator} />

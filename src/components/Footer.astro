@@ -1,5 +1,30 @@
+---
+import Icon from './Icon.astro';
+import { LICENSE, SITE } from '../config';
+---
+
 <footer>
-	<p>&copy; {new Date().getFullYear()} Rito-492. All rights reserved.</p>
+	<p class="footer-line">
+		© {new Date().getFullYear()} {SITE.author} · Powered by
+		<a href="https://astro.build" target="_blank" rel="noopener noreferrer">
+			Astro
+		</a>{' '}
+		& GitHub Pages
+	</p>
+	<p class="footer-links">
+		<a href="/rss.xml">
+			<Icon name="rss" size={14} />
+			RSS 订阅
+		</a>
+		<a href={SITE.repo} target="_blank" rel="noopener noreferrer">
+			<Icon name="github" size={14} />
+			网站源码
+		</a>
+		<a href={LICENSE.deedUrl} target="_blank" rel="noopener noreferrer">
+			<Icon name="copyright" size={14} />
+			{LICENSE.name}
+		</a>
+	</p>
 </footer>
 
 <style>
@@ -8,5 +33,40 @@
 		padding: 2rem;
 		text-align: center;
 		color: var(--color-text-muted);
+		font-size: 0.8rem;
+	}
+
+	.footer-line {
+		margin-bottom: 0.6rem;
+	}
+
+	.footer-line a {
+		color: var(--color-text-muted);
+		text-decoration: none;
+	}
+
+	.footer-line a:hover {
+		color: var(--color-primary);
+	}
+
+	.footer-links {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 1.25rem;
+	}
+
+	.footer-links a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		color: var(--color-text-muted);
+		text-decoration: none;
+		transition: color 0.2s;
+	}
+
+	.footer-links a:hover {
+		color: var(--color-primary);
 	}
 </style>

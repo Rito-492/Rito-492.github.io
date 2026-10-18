@@ -228,3 +228,87 @@
 		flex-wrap: wrap;
 	}
 }
+
+/* ===== 细滚动条（文章目录 / 列表侧栏 / 移动目录面板） ===== */
+.toc-sidebar,
+.blog-sidebar,
+.mobile-toc-panel {
+	scrollbar-width: thin; /* Firefox */
+	scrollbar-color: var(--color-border) transparent;
+}
+
+.toc-sidebar::-webkit-scrollbar,
+.blog-sidebar::-webkit-scrollbar,
+.mobile-toc-panel::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+}
+
+.toc-sidebar::-webkit-scrollbar-thumb,
+.blog-sidebar::-webkit-scrollbar-thumb,
+.mobile-toc-panel::-webkit-scrollbar-thumb {
+	background: var(--color-border);
+	border-radius: 999px;
+}
+
+.toc-sidebar::-webkit-scrollbar-thumb:hover,
+.blog-sidebar::-webkit-scrollbar-thumb:hover,
+.mobile-toc-panel::-webkit-scrollbar-thumb:hover {
+	background: var(--color-text-muted);
+}
+
+.toc-sidebar::-webkit-scrollbar-track,
+.blog-sidebar::-webkit-scrollbar-track,
+.mobile-toc-panel::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+/* ===== 图片灯箱（文章页；JS 动态挂到 <body>，避免层叠上下文限制） ===== */
+.img-lightbox {
+	position: fixed;
+	inset: 0;
+	z-index: 999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4vmin;
+	background: rgba(15, 23, 42, 0.88);
+	cursor: zoom-out;
+	animation: lightbox-in 0.2s ease;
+}
+
+.img-lightbox[hidden] {
+	display: none;
+}
+
+.img-lightbox figure {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.75rem;
+	margin: 0;
+	max-width: 100%;
+}
+
+.img-lightbox img {
+	max-width: 100%;
+	max-height: 84vh;
+	border-radius: 8px;
+	box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+}
+
+.img-lightbox figcaption {
+	color: rgba(255, 255, 255, 0.75);
+	font-size: 0.85rem;
+	text-align: center;
+	overflow-wrap: anywhere;
+}
+
+@keyframes lightbox-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
