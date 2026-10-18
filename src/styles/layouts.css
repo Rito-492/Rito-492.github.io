@@ -35,6 +35,8 @@
 .post-layout {
 	display: grid;
 	grid-template-columns: 1fr 680px 1fr;
+	/* 给正文列与右侧目录之间留出呼吸感（与首页侧栏的 2.5rem 语言一致） */
+	column-gap: 2.5rem;
 	padding: 2rem 0;
 }
 
