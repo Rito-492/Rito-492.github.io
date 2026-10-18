@@ -58,6 +58,8 @@ ln -s ~/workspace/40_garden/20_blog src/content/blog
 
 # 预览前同步内容（模拟 CI 取数）
 git -C ~/workspace/40_garden pull
+# 若 SSH 拉取卡住（国内到 GitHub 不稳），改走 HTTPS（本机 credential store 已配置）：
+git -C ~/workspace/40_garden pull https://github.com/Rito-492/garden.git main
 
 # 写作在 Windows 的 Obsidian（vault）里进行，提交推送也在 vault 里。
 # 只有改网页代码才 push 本仓库
@@ -132,9 +134,11 @@ src/
 ├── config.ts                   # 站点级配置：SITE（标题/简介/头像）/ SOCIALS / GISCUS / LICENSE，改配置只动这里
 ├── content.config.ts           # Content collection schemas（日期在此层转成 Date）
 ├── lib/
-│   └── date.ts                 # parseDate / formatDate —— schema 与页面共用
+│   ├── date.ts                 # parseDate / formatDate —— schema 与页面共用
+│   └── remark-obsidian-images.js # Obsidian 插图写法 → Astro 图片管线（构建时转换）
 ├── content/
 │   ├── blog/                   # 软链接 → ~/workspace/40_garden/20_blog（仅本地；CI 构建时拉取/搬运）
+│   │   ├── assets/             # 文章插图（按文章子目录组织）
 │   │   └── *.md                # 实际文章（来自 vault 的 20_blog/）
 │   ├── projects/               # Project showcase (Markdown，保留在本仓库)
 │   │   ├── _template.md        # Frontmatter template
@@ -232,6 +236,7 @@ draft: false
 - 博客可见性：列表页/首页/`blog/[id].astro` 全部过滤 `isPublished: true`（2026-10-09 起），草稿不进产物。
 - 项目用 `draft` — 字段名和博客的 `isPublished` 不一致。
 - 额外的 frontmatter 字段（`UID`、`created`、`updated`）会被 schema 忽略；模板里有 Obsidian Templater 占位符（`<% tp... %>`），这是预期的写作流程。
+- 文章文件名可用中文（构建/链接/RSS/sitemap 均已实测；URL 分享时是标准 %XX 编码形态）。重命名文件 = 改 URL。
 
 ## 主题
 
@@ -256,6 +261,18 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - 文章采用 **CC BY-NC-SA 4.0**（2026-10 定）。文章页正文与分页之间一行小字声明（[id].astro）；`<head>` 输出机器可读的 `<link rel="license">`（SeoHead ← Layout `licenseUrl` 透传）；JSON-LD `BlogPosting.license` 同带该 URL。
 - 协议配置在 `src/config.ts` 的 `LICENSE`（显示名 / 法律文本 URL / 中文 deed URL）——换协议只改这里。
 
+## 文章插图
+
+- 图片放 `20_blog/assets/` 内（可平铺、可 `assets/<文章名>/` 子目录，插件按文件名递归查找）；Obsidian 附件设置建议「当前文件夹下子文件夹 → assets」
+- `src/lib/remark-obsidian-images.js`（挂在 `astro.config.mjs` 的 `markdown.remarkPlugins`）构建时统一三种写法后交给 Astro 图片管线（sharp 自动优化：压缩/哈希/懒加载/写死宽高防抖动）：
+    - `![[图.jpg]]` → 按文件名在内容目录内递归查找（忽略大小写）
+    - `![](20_blog/assets/…)` → 去掉 vault 根前缀、换算成相对文章的路径
+    - 标准相对路径 `![](assets/…)` → 原样放行
+    - `##标题` 锚点 → 改写为 `#标题`
+- `![[图.jpg|400]]` 的数字宽度参数暂不支持；找不到图片时构建告警并原样保留文字
+- CI 零改动（sparse-checkout 递归含 assets）；RSS 仅摘要不受影响；本地 dev 实测可用（无需 fs.allow）
+- 大图注意：原图进 git 历史（Astro 只优化产物、不减仓库），建议插图前压缩（长边 ~2000px）
+
 ## 易错点 / CSS Gotchas
 
 - **UI/样式改动必须按「UI 改动工作流」截图核验后交付**，禁止盲改。
@@ -270,7 +287,6 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 ## 待办 / TODO
 
 - **字体自托管**：当前 JetBrains Mono 走 Google Fonts、霞鹜文楷走 jsdelivr（`SeoHead.astro`）——国内访问不稳。方案：自托管 unicode-range 分片子集（如 `lxgw-wenkai-webfont`）+ `@fontsource/jetbrains-mono`，替换 CDN 引用。
-- **文章内图片发布通道（方案 A 已定，待用户建好 assets 目录后实施）**：vault 侧建 `20_blog/assets/`、Obsidian 附件目录指过去；站点侧加 remark 插件把 `![[img]]` 转成标准图片引用（含 alt、URL 编码），交给 Astro 图片管线（sharp 已可用、自动优化）；CI 零改动（sparse-checkout 递归）；RSS 仅摘要不受影响；本地软链接下 dev 可能需补 `vite fs.allow`（实施时实测）。
 - **UI 待办（C 组·首页）**：hero 区加行动引导按钮；访客计数（counterapi.dev 第三方依赖）换更稳服务或去掉。
 - **UI 待办（D 组·质感）**：`:focus-visible` 键盘焦点样式；View Transitions 页面切换过渡（需回归测试 Giscus/脚本）；正文外链视觉标识（↗）；per-post OG 分享卡（satori 按标题生成）。
 

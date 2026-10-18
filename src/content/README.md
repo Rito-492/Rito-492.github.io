@@ -49,6 +49,18 @@ tags: ['React', '前端']
 ## 正文开始
 ```
 
+### 图片
+
+图片放在文章库的 `20_blog/assets/` 内（站点侧对应 `blog/assets/`），推荐按文章建子目录，例如 `20_blog/assets/<文章名>/图一.jpg`。
+
+以下写法构建时都能识别并自动优化（压缩、哈希化、懒加载）：
+
+- `![[图一.jpg]]` —— Obsidian 默认嵌入（按文件名查找，忽略大小写）
+- `![说明](20_blog/assets/<文章名>/图一.jpg)` —— Obsidian vault 绝对路径写法
+- `![说明](assets/<文章名>/图一.jpg)` —— 标准 markdown 相对路径
+
+提示：大图先压缩（长边约 2000px 以内）；`![[图|宽度]]` 的宽度参数暂不支持。
+
 ---
 
 ## 项目作品 (`projects/`)
@@ -86,6 +98,6 @@ draft: false
 
 ## 工作流程
 
-1. **博客**：在 Obsidian（garden）里从 `01_template/20_blog.md` 模板新建 → 写作 → `isPublished: true` → push garden 仓库 → CI 自动部署（或到 Actions 手动 Run workflow）
+1. **博客**：在 Obsidian（garden）里从 `01_template/20_blog.md` 模板新建 → 写作（插图见上「图片」）→ `isPublished: true` → push garden 仓库 → 最多 2 小时后定时构建自动上线（急用：本仓库 Actions 页手动 Run workflow）
 2. **项目**：复制 `projects/_template.md` → 填 Frontmatter → 写正文 → push 本仓库
 3. **本地预览**：`git -C ~/workspace/40_garden pull && npm run dev`
