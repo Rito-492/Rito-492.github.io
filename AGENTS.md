@@ -271,7 +271,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
     - 标准相对路径 `![](assets/…)` → 原样放行
     - `##标题` 锚点 → 改写为 `#标题`
 - `![[图.jpg|400]]` 的数字宽度参数暂不支持；找不到图片时构建告警并原样保留文字
-- CI 零改动（sparse-checkout 递归含 assets）；RSS 仅摘要不受影响；本地 dev 实测可用（无需 fs.allow）
+- CI 零改动（sparse-checkout 递归含 assets）；本地 dev 实测可用（无需 fs.allow）
 - 大图注意：原图进 git 历史（Astro 只优化产物、不减仓库），建议插图前压缩（长边 ~2000px）
 
 ## 页面前端（View Transitions / 交互）
@@ -284,6 +284,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - **Footer**：© / Powered by Astro · GitHub Pages / RSS 订阅 / 网站源码 / CC 许可；数据都在 `config.ts`
 - 图标：全站统一用 `Icon.astro`（lucide 内联路径），不要再用 emoji
 - 侧栏细滚动条：`components.css`（`.toc-sidebar` / `.blog-sidebar` / `.mobile-toc-panel`）
+- **RSS 全文输出**：`rss.xml.ts` 用 `experimental_AstroContainer` 渲染每篇文章，站内 `src/href` 绝对化后以转义形式放入 `<content:encoded>`；`description` 仍作摘要兜底
 
 ## 易错点 / CSS Gotchas
 

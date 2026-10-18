@@ -12,17 +12,26 @@ import { LICENSE, SITE } from '../config';
 		& GitHub Pages
 	</p>
 	<p class="footer-links">
-		<a href="/rss.xml">
-			<Icon name="rss" size={14} />
-			RSS 订阅
+		<a href="/rss.xml" title="RSS 订阅" aria-label="RSS 订阅">
+			<Icon name="rss" size={16} />
 		</a>
-		<a href={SITE.repo} target="_blank" rel="noopener noreferrer">
-			<Icon name="github" size={14} />
-			网站源码
+		<a
+			href={SITE.repo}
+			target="_blank"
+			rel="noopener noreferrer"
+			title="网站源码"
+			aria-label="网站源码"
+		>
+			<Icon name="github" size={16} />
 		</a>
-		<a href={LICENSE.deedUrl} target="_blank" rel="noopener noreferrer">
-			<Icon name="copyright" size={14} />
-			{LICENSE.name}
+		<a
+			href={LICENSE.deedUrl}
+			target="_blank"
+			rel="noopener noreferrer"
+			title={LICENSE.name}
+			aria-label={LICENSE.name}
+		>
+			<Icon name="copyright" size={16} />
 		</a>
 	</p>
 </footer>
@@ -60,7 +69,8 @@ import { LICENSE, SITE } from '../config';
 	.footer-links a {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.35rem;
+		justify-content: center;
+		padding: 0.25rem;
 		color: var(--color-text-muted);
 		text-decoration: none;
 		transition: color 0.2s;
