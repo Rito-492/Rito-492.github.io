@@ -18,6 +18,7 @@ export interface Props {
 	image?: string;
 	type?: 'website' | 'article';
 	jsonLd?: Record<string, unknown>;
+	licenseUrl?: string;
 	showToc?: boolean;
 	tocHeadings?: Array<{ depth: number; text: string; id: string }>;
 	series?: string;
@@ -31,6 +32,7 @@ const {
 	image = '/og-image.png',
 	type = 'website',
 	jsonLd,
+	licenseUrl,
 	showToc = false,
 	tocHeadings = [],
 	series = '',
@@ -51,6 +53,7 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 			image={image}
 			type={type}
 			jsonLd={jsonLd}
+			licenseUrl={licenseUrl}
 		/>
 	</head>
 	<body>

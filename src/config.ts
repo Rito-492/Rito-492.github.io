@@ -25,3 +25,10 @@ export const GISCUS = {
 	category: 'Blog Comments',
 	categoryId: 'DIC_kwDOSEWSAs4C8fbP',
 } as const;
+
+// 文章版权许可（文章页底部声明 + <link rel="license">；换协议只改这里）
+export const LICENSE = {
+	name: 'CC BY-NC-SA 4.0',
+	url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+	deedUrl: 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-Hans',
+} as const;

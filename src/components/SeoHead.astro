@@ -7,6 +7,7 @@ interface Props {
 	image?: string;
 	type?: 'website' | 'article';
 	jsonLd?: Record<string, unknown>;
+	licenseUrl?: string;
 }
 
 const {
@@ -15,6 +16,7 @@ const {
 	image = '/og-image.png',
 	type = 'website',
 	jsonLd,
+	licenseUrl,
 } = Astro.props;
 const ogImage = image.startsWith('http') ? image : `${SITE.url}${image}`;
 ---
@@ -52,6 +54,7 @@ const ogImage = image.startsWith('http') ? image : `${SITE.url}${image}`;
 <meta name="description" content={description} />
 <meta name="author" content={SITE.author} />
 <link rel="canonical" href={SITE.url + Astro.url.pathname} />
+{licenseUrl && <link rel="license" href={licenseUrl} />}
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={type} />

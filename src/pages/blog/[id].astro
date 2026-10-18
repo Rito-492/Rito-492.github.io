@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import GiscusComments from '../../components/GiscusComments.astro';
 import { formatDate } from '../../lib/date';
-import { GISCUS, SITE } from '../../config';
+import { GISCUS, LICENSE, SITE } from '../../config';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog', ({ data }) => data.isPublished);
@@ -37,6 +37,7 @@ const jsonLd = {
 	author: { '@type': 'Person', name: SITE.author, url: SITE.url },
 	mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE.url}/blog/${post.id}` },
 	keywords: (post.data.tags ?? []).join(', '),
+	license: LICENSE.url,
 };
 ---
 
@@ -48,6 +49,7 @@ const jsonLd = {
 	postTitle={post.data.title}
 	tags={post.data.tags ?? []}
 	jsonLd={jsonLd}
+	licenseUrl={LICENSE.url}
 >
 	<div class="post-page">
 		<article class="post">
@@ -73,6 +75,14 @@ const jsonLd = {
 			<div class="post-content">
 				<Content />
 			</div>
+
+			<p class="post-license">
+				本文采用{' '}
+				<a rel="license" href={LICENSE.deedUrl}>
+					{LICENSE.name}
+				</a>{' '}
+				国际许可协议，转载请注明作者及原文链接。
+			</p>
 
 			<nav class="post-nav">
 				{olderPost ? (
@@ -224,6 +234,25 @@ const jsonLd = {
 		height: auto;
 		border-radius: 8px;
 		margin: 1rem 0;
+	}
+
+	/* 版权声明：正文与分页之间的安静声明行 */
+	.post-license {
+		margin: 2.5rem 0 0;
+		color: var(--color-text-muted);
+		font-size: 0.8rem;
+		line-height: 1.7;
+	}
+
+	.post-license a {
+		color: var(--color-text-muted);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		transition: color 0.2s;
+	}
+
+	.post-license a:hover {
+		color: var(--color-primary);
 	}
 
 	/* 面包屑：博客 › 当前篇名 */

@@ -129,7 +129,7 @@ steps:
 
 ```
 src/
-├── config.ts                   # 站点级配置：SITE（标题/简介/头像）/ SOCIALS / GISCUS，改配置只动这里
+├── config.ts                   # 站点级配置：SITE（标题/简介/头像）/ SOCIALS / GISCUS / LICENSE，改配置只动这里
 ├── content.config.ts           # Content collection schemas（日期在此层转成 Date）
 ├── lib/
 │   └── date.ts                 # parseDate / formatDate —— schema 与页面共用
@@ -251,6 +251,11 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 
 暗色模式（2026-10 起）：**三态主题选择器**（Header 导航菜单左侧按钮循环：跟随系统 → 浅色 → 深色，`localStorage['theme']` 持久化）。CSS 语义：`html[data-theme='dark']` 强制深色、`html[data-theme='light']` 强制浅色、无属性跟随系统（`prefers-color-scheme`，无 JS 也可用）；防闪烁预置脚本在 `SeoHead.astro`。Giscus 评论区通过 `themechange` 事件 + postMessage 联动切换。暗色调色板在 `variables.css`（`--color-primary` 提亮为 `#22a3c7` 保证对比度）。
 
+## 版权声明
+
+- 文章采用 **CC BY-NC-SA 4.0**（2026-10 定）。文章页正文与分页之间一行小字声明（[id].astro）；`<head>` 输出机器可读的 `<link rel="license">`（SeoHead ← Layout `licenseUrl` 透传）；JSON-LD `BlogPosting.license` 同带该 URL。
+- 协议配置在 `src/config.ts` 的 `LICENSE`（显示名 / 法律文本 URL / 中文 deed URL）——换协议只改这里。
+
 ## 易错点 / CSS Gotchas
 
 - **UI/样式改动必须按「UI 改动工作流」截图核验后交付**，禁止盲改。
@@ -265,7 +270,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 ## 待办 / TODO
 
 - **字体自托管**：当前 JetBrains Mono 走 Google Fonts、霞鹜文楷走 jsdelivr（`SeoHead.astro`）——国内访问不稳。方案：自托管 unicode-range 分片子集（如 `lxgw-wenkai-webfont`）+ `@fontsource/jetbrains-mono`，替换 CDN 引用。
-- **文章内图片发布通道**：`20_blog/` 目前无图片所以无感；一旦文章插图（Obsidian `![[img]]` 或相对路径），构建不会带图。方案：vault 侧 `20_blog/assets/` + CI sparse-checkout 一并搬运 + markdown 用相对路径，另需处理本地软链接下的解析。
+- **文章内图片发布通道（方案 A 已定，待用户建好 assets 目录后实施）**：vault 侧建 `20_blog/assets/`、Obsidian 附件目录指过去；站点侧加 remark 插件把 `![[img]]` 转成标准图片引用（含 alt、URL 编码），交给 Astro 图片管线（sharp 已可用、自动优化）；CI 零改动（sparse-checkout 递归）；RSS 仅摘要不受影响；本地软链接下 dev 可能需补 `vite fs.allow`（实施时实测）。
 - **UI 待办（C 组·首页）**：hero 区加行动引导按钮；访客计数（counterapi.dev 第三方依赖）换更稳服务或去掉。
 - **UI 待办（D 组·质感）**：`:focus-visible` 键盘焦点样式；View Transitions 页面切换过渡（需回归测试 Giscus/脚本）；正文外链视觉标识（↗）；per-post OG 分享卡（satori 按标题生成）。
 
