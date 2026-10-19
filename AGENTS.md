@@ -185,7 +185,7 @@ src/
 - `variables.css` — 设计令牌。`--content-width` 是全站中栏宽度，首页/文章页/列表页共用。
 - `base.css` — 无类语义的通用件：`a` / `.btn` / `.card` / `.section-header` / `.view-more` / `.empty-state` / `.float-icon` / `:focus-visible`。
 - `components.css` — 具名组件：`.post-card` / `.project-card` / `.tech-tag` / 点击特效 / 细滚动条 / 灯箱。
-- `layouts.css` — 全站统一三栏外壳 `.page-shell`（左身份 / 中内容 / 右上下文），断点 1200px；单列媒体查询里要重置 `grid-column`（见「易错点」）。
+- `layouts.css` — 全站统一三栏外壳 `.page-shell`（左身份 / 中内容 / 右上下文），断点 1320px；单列媒体查询里要重置 `grid-column`（见「易错点」）。
 - `sidebar.css` — 文章页 TOC 与列表页筛选栏共用的侧栏原语（两者视觉语言一致，差异只在内容）。
 
 **卡片悬停语言**（全站统一，`components.css` 定义）：上浮 `translateY(-2px)` + 主色描边
@@ -202,18 +202,19 @@ src/
 **所有页面共用同一套 `.page-shell`**（404 除外）：
 
 - 栅格：`minmax(0,1fr) var(--content-width) minmax(0,1fr)` + `column-gap: 2.5rem`
-- **左栏** `.page-left` — 固定为身份与联系（`ProfileCard`），全站一致
+- **左栏** `.page-left` — 固定为身份与联系（`ProfileCard`），宽度 `--rail-width`（240px），桌面端头像与文字共用一条垂直中心线
 - **中栏** `.main-content` — 页面主体，宽度固定 `--content-width`
-- **右栏** — 页面上下文，由页面通过 `<Fragment slot="right">` 提供：
+- **右栏** `.side-panel` — 页面上下文，同样宽 `--rail-width`，由页面通过 `<Fragment slot="right">` 提供：
     - 首页：系列 / 标签入口 → `/blog?series=`、`/blog?tag=`
     - 文章页：`TocSidebar`（系列 / 标签 / 目录）
     - 列表页：系列 / 标签 / 排序筛选
-    - About：这个网站（技术栈 + 链接）
+    - About：本页目录（关于我 / 工具箱 / 这个网站）
     - Projects：按技术栈筛选
+- 左右栏各带一条 `border-right` / `border-left` 发丝线，与中栏各隔 2.5rem——两栏等宽等留白，中栏在视觉上保持居中
 - **404** 是错误态，保持单列（`ContentShell fullWidth`），不套三栏
-- 断点 **1200px**：左右栏收起；左栏身份卡变为正文上方的紧凑横条，右栏落到正文下方；文章页目录改用 `MobileToc` 浮钮
+- 断点 **1320px**：左右栏收起；左栏身份卡变为正文上方的紧凑横条，右栏落到正文下方；文章页目录改用 `MobileToc` 浮钮
 
-> 2026-10 统一前：首页 720 / 文章页 680 / 列表页 700 三套中栏宽度，About/Projects 又是 900px 单列，切页时内容列会横向跳约 100px。现在五类页面中栏位置与宽度完全一致。
+> 2026-10 统一前：首页 720 / 文章页 680 / 列表页 700 三套中栏宽度，About/Projects 又是 900px 单列，切页时内容列会横向跳约 100px。现在五类页面中栏位置与宽度完全一致。三栏总宽 `700 + 2×240 + 2×40 = 1260px`，断点取 1320px 留出呼吸空间。
 
 ### Blog list sidebar vs Blog post sidebar
 
@@ -286,6 +287,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 | `--font-body`           | `'JetBrains Mono', 'LXGW WenKai'…` | Body text                     |
 | `--font-mono`           | `'JetBrains Mono', monospace`      | Code                          |
 | `--content-width`       | `700px`                            | 三页共用的中栏宽度            |
+| `--rail-width`          | `240px`                            | 左右栏统一宽度                |
 
 暗色模式（2026-10 起）：**三态主题选择器**（Header 导航菜单左侧按钮循环：跟随系统 → 浅色 → 深色，`localStorage['theme']` 持久化）。CSS 语义：`html[data-theme='dark']` 强制深色、`html[data-theme='light']` 强制浅色、无属性跟随系统（`prefers-color-scheme`，无 JS 也可用）；防闪烁预置脚本在 `SeoHead.astro`。Giscus 评论区通过 `themechange` 事件 + postMessage 联动切换。暗色调色板在 `variables.css`（`--color-primary` 提亮为 `#22a3c7` 保证对比度）。
 

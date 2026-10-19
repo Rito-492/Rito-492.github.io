@@ -3,14 +3,15 @@
 
 .side-panel {
 	grid-column: 3;
-	width: 100%;
+	justify-self: start;
+	width: var(--rail-width);
 	box-sizing: border-box;
 	position: sticky;
 	top: 5rem;
 	height: fit-content;
 	max-height: calc(100vh - 7rem);
 	overflow-y: auto;
-	padding: 1.25rem 0 1.25rem 1.25rem;
+	padding: 1.25rem 0.75rem 1.25rem 1.25rem;
 	border-left: 1px solid var(--color-border);
 }
 
@@ -39,33 +40,6 @@
 
 .side-panel-section:last-child {
 	margin-bottom: 0;
-}
-
-/* 说明文字与链接列（About 的「这个网站」等） */
-.side-panel-text {
-	color: var(--color-text-muted);
-	font-size: 0.82rem;
-	line-height: 1.75;
-	margin: 0 0 0.75rem;
-	padding-left: 0.5rem;
-}
-
-.side-panel-links {
-	display: flex;
-	flex-direction: column;
-	gap: 0.4rem;
-	padding-left: 0.5rem;
-}
-
-.side-panel-links a {
-	color: var(--color-primary);
-	font-size: 0.82rem;
-	text-decoration: none;
-}
-
-.side-panel-links a:hover {
-	text-decoration: underline;
-	text-underline-offset: 3px;
 }
 
 /* 导航项：左侧 2px 指示条 */
@@ -117,9 +91,11 @@
 	font-weight: 500;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1320px) {
 	.side-panel {
 		grid-column: 1;
+		justify-self: stretch;
+		width: auto;
 		position: static;
 		max-height: none;
 		border-left: none;

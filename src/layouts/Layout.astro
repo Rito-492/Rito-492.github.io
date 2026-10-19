@@ -143,38 +143,50 @@ const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 				}, 550);
 			});
 
-			// 博客目录高亮（每次导航重建 observer，先断开旧的）
-			let tocObserver: IntersectionObserver | null = null;
-			const initTocHighlight = () => {
-				tocObserver?.disconnect();
-				tocObserver = null;
+			// 博客 / About 目录高亮（文档级滚动监听只绑一次；每次实时查询 DOM）
+			// 取「已滚过顶部 120px 的最后一个标题」为当前项；触底时强制落到最后一项
+			const syncTocHighlight = () => {
 				const tocNav = document.getElementById('tocNav');
 				if (!tocNav) return;
-
-				const tocLinks = tocNav.querySelectorAll('a');
-				tocObserver = new IntersectionObserver(
-					(entries) => {
-						entries.forEach((entry) => {
-							if (entry.isIntersecting) {
-								tocLinks.forEach((link) => {
-									link.classList.remove('active');
-									if (link.getAttribute('href') === `#${entry.target.id}`) {
-										link.classList.add('active');
-									}
-								});
-							}
-						});
-					},
-					{ rootMargin: '-100px 0px -60% 0px' },
+				const headings = Array.from(
+					document.querySelectorAll<HTMLElement>(
+						'.post-content h2[id], .post-content h3[id], .about-content h2[id], .about-content h3[id]',
+					),
 				);
+				if (headings.length === 0) return;
 
-				document
-					.querySelectorAll('.post-content h2, .post-content h3')
-					.forEach((heading) => {
-						tocObserver?.observe(heading);
-					});
+				let current = headings[0];
+				for (const heading of headings) {
+					if (heading.getBoundingClientRect().top <= 120) current = heading;
+					else break;
+				}
+				const atBottom =
+					window.innerHeight + window.scrollY >=
+					document.documentElement.scrollHeight - 2;
+				if (atBottom) current = headings[headings.length - 1];
+
+				tocNav.querySelectorAll('a').forEach((link) => {
+					link.classList.toggle(
+						'active',
+						link.getAttribute('href') === `#${current.id}`,
+					);
+				});
 			};
-			document.addEventListener('astro:page-load', initTocHighlight);
+
+			let tocTicking = false;
+			window.addEventListener(
+				'scroll',
+				() => {
+					if (tocTicking) return;
+					tocTicking = true;
+					requestAnimationFrame(() => {
+						syncTocHighlight();
+						tocTicking = false;
+					});
+				},
+				{ passive: true },
+			);
+			document.addEventListener('astro:page-load', syncTocHighlight);
 
 			// GoatCounter 统计：load 之后动态注入脚本（绝不拖延 load 事件与 astro:page-load），
 			// SPA 模式（no_onload）由本脚本在每次 astro:page-load 手动上报

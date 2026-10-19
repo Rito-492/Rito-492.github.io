@@ -98,13 +98,10 @@ const jsonLd = {
 		</div>
 	</section>
 
-	<!-- 站点总浏览量（GoatCounter） -->
-	<section class="visitor-counter-section">
-		<span class="counter-label">总浏览：</span>
-		<span class="counter-number" id="visitCount">
-			—
-		</span>
-	</section>
+	<!-- 站点总浏览量（GoatCounter）：沉底小字，不单独占一条分隔栏 -->
+	<p class="site-visits">
+		总浏览 <span id="visitCount">—</span>
+	</p>
 
 	<!-- 右栏：写作主题入口 -->
 	<Fragment slot="right">
@@ -207,21 +204,17 @@ const jsonLd = {
 		border-top: 1px solid var(--color-border);
 	}
 
-	.visitor-counter-section {
-		padding: 2rem 0;
-		border-top: 1px solid var(--color-border);
+	.site-visits {
+		margin: 2.5rem 0 0;
 		text-align: center;
-	}
-
-	.counter-label {
+		font-size: 0.78rem;
+		letter-spacing: 0.02em;
 		color: var(--color-text-muted);
-		font-size: 0.9rem;
-		margin-right: 0.5rem;
 	}
 
-	.counter-number {
+	.site-visits span {
+		margin-left: 0.35rem;
 		font-family: var(--font-mono);
-		font-size: 1.25rem;
 		font-weight: 700;
 		color: var(--color-primary);
 	}

@@ -10,20 +10,21 @@ import SocialLinks from './SocialLinks.astro';
 	<div class="profile-text">
 		<h2 class="name">{SITE.author}</h2>
 		<p class="bio">{SITE.bio}</p>
-		<SocialLinks variant="stack" />
+		<SocialLinks variant="stack" center />
 	</div>
 </div>
 
 <style>
+	/* 桌面左栏：头像与文字共用同一条垂直中心线 */
 	.profile-card {
 		padding: 0;
-		text-align: left;
+		text-align: center;
 	}
 
 	.avatar {
 		width: 64px;
 		height: 64px;
-		margin: 0 0 1rem;
+		margin: 0 auto 1rem;
 		border-radius: 50%;
 		overflow: hidden;
 		flex-shrink: 0;
@@ -51,10 +52,11 @@ import SocialLinks from './SocialLinks.astro';
 	}
 
 	/* 窄屏：左栏落回正文上方，身份卡变为紧凑横排 */
-	@media (max-width: 1200px) {
+	@media (max-width: 1320px) {
 		.profile-card {
 			display: flex;
 			align-items: center;
+			text-align: left;
 			gap: 1rem;
 		}
 

@@ -5,16 +5,17 @@ import { SOCIALS, type SocialId } from '../config';
 interface Props {
 	variant?: 'stack' | 'row';
 	ids?: readonly SocialId[];
+	center?: boolean;
 }
 
-const { variant = 'stack', ids } = Astro.props;
+const { variant = 'stack', ids, center = false } = Astro.props;
 const links = (ids ?? SOCIALS.map((s) => s.id))
 	.map((id) => SOCIALS.find((s) => s.id === id))
 	.filter((s): s is (typeof SOCIALS)[number] => Boolean(s));
 const isExternal = (href: string) => href.startsWith('http');
 ---
 
-<div class:list={['social-links', variant]}>
+<div class:list={['social-links', variant, { center }]}>
 	{links.map((s) => (
 		<a
 			href={s.href}
@@ -66,6 +67,14 @@ const isExternal = (href: string) => href.startsWith('http');
 		align-items: flex-start;
 	}
 
+	.social-links.center.stack {
+		align-items: center;
+	}
+
+	.social-links.center.row {
+		justify-content: center;
+	}
+
 	.social-links.row {
 		flex-wrap: wrap;
 		gap: 0.5rem;
@@ -104,7 +113,7 @@ const isExternal = (href: string) => href.startsWith('http');
 	}
 
 	/* 窄屏身份条：竖排改为可换行的横排 */
-	@media (max-width: 1200px) {
+	@media (max-width: 1320px) {
 		.social-links.stack {
 			flex-direction: row;
 			flex-wrap: wrap;

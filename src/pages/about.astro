@@ -1,7 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SocialLinks from '../components/SocialLinks.astro';
+import TocSidebar from '../components/TocSidebar.astro';
 import { LICENSE, SITE } from '../config';
+
+const tocHeadings = [
+	{ depth: 2, text: '关于我', id: 'about-me' },
+	{ depth: 2, text: '工具箱', id: 'toolbox' },
+	{ depth: 2, text: '这个网站', id: 'site' },
+];
 ---
 
 <Layout title="About - Rito-492">
@@ -13,7 +20,7 @@ import { LICENSE, SITE } from '../config';
 
 		<div class="about-content">
 			<div class="card intro">
-				<h2>关于我</h2>
+				<h2 id="about-me">关于我</h2>
 				<p>你好，我是 Rito-492，吉林大学 2023 级本科生，软件工程专业。</p>
 				<p>
 					平时主要写 Python 和 C++，折腾深度学习、Linux
@@ -29,7 +36,7 @@ import { LICENSE, SITE } from '../config';
 			</div>
 
 			<div class="card toolbox">
-				<h2>
+				<h2 id="toolbox">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						width="20"
@@ -74,18 +81,13 @@ import { LICENSE, SITE } from '../config';
 					</div>
 				</div>
 			</div>
-		</div>
-	</section>
 
-	<!-- 右栏：站点信息 -->
-	<Fragment slot="right">
-		<aside class="side-panel">
-			<div class="side-panel-section">
-				<div class="side-panel-title">
+			<div class="card site-info">
+				<h2 id="site">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
+						width="20"
+						height="20"
 						viewBox="0 0 24 24"
 						fill="none"
 						stroke="currentColor"
@@ -97,13 +99,13 @@ import { LICENSE, SITE } from '../config';
 						<line x1="8" x2="16" y1="21" y2="21" />
 						<line x1="12" x2="12" y1="17" y2="21" />
 					</svg>
-					<span>这个网站</span>
-				</div>
-				<p class="side-panel-text">
+					这个网站
+				</h2>
+				<p class="site-desc">
 					本站基于 Astro 构建，以静态方式部署于 GitHub Pages。评论由 Giscus
 					提供，访问统计使用 GoatCounter，文章内容采用 {LICENSE.name} 许可协议。
 				</p>
-				<nav class="side-panel-links">
+				<div class="site-links">
 					<a href={SITE.repo} target="_blank" rel="noopener noreferrer">
 						网站源码
 					</a>
@@ -111,9 +113,14 @@ import { LICENSE, SITE } from '../config';
 					<a href={LICENSE.deedUrl} target="_blank" rel="noopener noreferrer">
 						{LICENSE.name}
 					</a>
-				</nav>
+				</div>
 			</div>
-		</aside>
+		</div>
+	</section>
+
+	<!-- 右栏：本页目录 -->
+	<Fragment slot="right">
+		<TocSidebar postTitle="本页目录" tocHeadings={tocHeadings} />
 	</Fragment>
 </Layout>
 
@@ -140,6 +147,10 @@ import { LICENSE, SITE } from '../config';
 		display: flex;
 		flex-direction: column;
 		gap: 1.25rem;
+	}
+
+	.about-content h2 {
+		scroll-margin-top: 5rem;
 	}
 
 	.card h2 {
@@ -206,6 +217,29 @@ import { LICENSE, SITE } from '../config';
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.4rem;
+	}
+
+	.site-desc {
+		color: var(--color-text-muted);
+		line-height: 1.8;
+		margin: 0 0 1rem;
+	}
+
+	.site-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1.25rem;
+	}
+
+	.site-links a {
+		color: var(--color-primary);
+		font-size: 0.88rem;
+		text-decoration: none;
+	}
+
+	.site-links a:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
 	}
 
 	@media (max-width: 640px) {
