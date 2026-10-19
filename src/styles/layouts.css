@@ -4,7 +4,8 @@
 /* 首页布局：左侧 Sidebar + 中间内容 */
 .home-layout {
 	display: grid;
-	grid-template-columns: 1fr 720px 1fr;
+	grid-template-columns: minmax(0, 1fr) var(--content-width) minmax(0, 1fr);
+	column-gap: 2.5rem;
 	padding: 2rem 0;
 	position: relative;
 }
@@ -12,19 +13,20 @@
 .sidebar-column {
 	grid-column: 1;
 	justify-self: end;
-	margin-right: 2.5rem;
 	width: 200px;
 	position: sticky;
 	top: 5rem;
 	height: fit-content;
 }
 
-/* 通用内容区 */
+/* 内容主栏：所有页面共用同一宽度基准，避免各页各写一套 */
 .main-content {
 	grid-column: 2;
 	min-width: 0;
+	padding: 0;
 }
 
+/* 单列内容页（About / Projects / 404）：居中定宽 */
 .full-width {
 	max-width: 900px;
 	margin: 0 auto;
@@ -34,38 +36,27 @@
 /* 博客文章页布局：文章 + 右侧目录 */
 .post-layout {
 	display: grid;
-	grid-template-columns: 1fr 680px 1fr;
-	/* 给正文列与右侧目录之间留出呼吸感（与首页侧栏的 2.5rem 语言一致） */
+	grid-template-columns: minmax(0, 1fr) var(--content-width) minmax(0, 1fr);
 	column-gap: 2.5rem;
 	padding: 2rem 0;
 }
 
 .post-layout.full-width {
+	max-width: none;
+	margin: 0;
 	padding: 2rem 0;
-	max-width: none !important;
-	margin: 0 !important;
-}
-
-.post-layout .main-content {
-	grid-column: 2;
-	min-width: 0;
-	padding: 0;
 }
 
 /* 响应式 */
 @media (max-width: 1150px) {
-	.home-layout {
+	.home-layout,
+	.post-layout {
 		grid-template-columns: 1fr;
 		padding: 2rem 1rem;
 	}
 
 	.sidebar-column {
 		display: none;
-	}
-
-	.post-layout {
-		grid-template-columns: 1fr;
-		padding: 2rem 1rem;
 	}
 
 	/* 单列后重置显式列定位：否则会生成幽灵第二列，叠加 column-gap 会把内容挤偏 */

@@ -7,38 +7,33 @@ body {
 	min-height: 100vh;
 	background: var(--color-bg);
 	color: var(--color-text);
-	font-family:
-		'JetBrains Mono',
-		'LXGW WenKai',
-		system-ui,
-		-apple-system,
-		sans-serif;
+	font-family: var(--font-body);
 	scroll-behavior: smooth;
 }
 
+/* 内容主栏：宽度与内边距由布局容器决定（layouts.css 的 .main-content / .full-width） */
 main {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 2rem;
 	position: relative;
+	min-width: 0;
 }
 
 /* 通用链接样式 */
 a {
 	color: inherit;
-	transition: color 0.2s;
+	transition: color var(--transition-fast);
 }
 
 a:hover {
 	color: var(--color-primary);
 }
 
-/* 通用按钮样式 */
+/* 通用按钮 */
 .btn {
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	gap: 0.5rem;
-	padding: 0.75rem 1.25rem;
+	padding: 0.75rem 1.5rem;
 	border-radius: var(--radius-md);
 	text-decoration: none;
 	font-weight: 500;
@@ -46,22 +41,32 @@ a:hover {
 }
 
 .btn:hover {
-	transform: translateY(-1px);
+	transform: translateY(-2px);
 	text-decoration: none;
 }
 
 .btn.primary {
 	background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
 	color: #ffffff;
-	box-shadow: 0 4px 15px rgba(8, 145, 178, 0.3);
+	box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
 }
 
 .btn.primary:hover {
-	transform: translateY(-3px);
-	box-shadow: 0 8px 25px rgba(8, 145, 178, 0.4);
+	box-shadow: 0 6px 20px rgba(var(--color-primary-rgb), 0.4);
 }
 
-/* 通用卡片样式 */
+.btn.secondary {
+	background: var(--color-card);
+	color: var(--color-text);
+	border: 1px solid var(--color-border);
+	box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.btn.secondary:hover {
+	border-color: var(--color-primary);
+}
+
+/* 通用卡片 */
 .card {
 	background: var(--color-card);
 	border: 1px solid var(--color-border);
@@ -72,11 +77,10 @@ a:hover {
 
 .card:hover {
 	border-color: var(--color-primary);
-	transform: translateY(-2px);
-	box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
+	box-shadow: 0 4px 16px rgba(var(--color-primary-rgb), 0.1);
 }
 
-/* 通用区块标题样式 */
+/* 区块标题 + 查看全部 */
 .section-header {
 	display: flex;
 	justify-content: space-between;
@@ -85,9 +89,17 @@ a:hover {
 }
 
 .section-header h2 {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
 	font-size: 1.5rem;
 	font-weight: 600;
 	color: var(--color-text);
+}
+
+.section-header h2 svg {
+	color: var(--color-primary);
+	flex-shrink: 0;
 }
 
 .view-more {
@@ -100,13 +112,13 @@ a:hover {
 	font-size: 0.9rem;
 	padding: 0.5rem 1rem;
 	border-radius: var(--radius-md);
-	border: 1px solid rgba(8, 145, 178, 0.3);
-	background: rgba(8, 145, 178, 0.05);
+	border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+	background: rgba(var(--color-primary-rgb), 0.05);
 	transition: all var(--transition-normal);
 }
 
 .view-more:hover {
-	background: rgba(8, 145, 178, 0.1);
+	background: rgba(var(--color-primary-rgb), 0.1);
 	border-color: var(--color-primary);
 }
 
@@ -118,12 +130,44 @@ a:hover {
 	transform: translateX(3px);
 }
 
+/* 空状态（列表页 / 项目页共用） */
+.empty-state {
+	grid-column: 1 / -1;
+	text-align: center;
+	padding: 4rem 2rem;
+}
+
+.empty-icon {
+	display: inline-flex;
+	margin-bottom: 1rem;
+	color: var(--color-text-muted);
+}
+
+.no-posts,
+.no-projects {
+	color: var(--color-text-muted);
+	font-size: 1.1rem;
+}
+
+/* 页头图标的轻微浮动（列表页 / 项目页共用） */
+.float-icon {
+	display: inline-flex;
+	color: var(--color-primary);
+	animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-6px);
+	}
+}
+
 /* 响应式 */
 @media (max-width: 768px) {
-	main {
-		padding: 1rem;
-	}
-
 	.section-header {
 		flex-direction: column;
 		align-items: flex-start;

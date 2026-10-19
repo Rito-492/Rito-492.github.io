@@ -152,10 +152,6 @@ const jsonLd = {
 		padding: 2rem 0;
 	}
 
-	.post {
-		padding: 0;
-	}
-
 	.post-header {
 		margin-bottom: 2rem;
 		padding-bottom: 2rem;
@@ -219,14 +215,15 @@ const jsonLd = {
 	}
 
 	.post-content :global(code) {
-		background: rgba(8, 145, 178, 0.08);
+		background: rgba(var(--color-primary-rgb), 0.08);
 		padding: 0.2em 0.4em;
 		border-radius: 4px;
-		font-family: 'JetBrains Mono', monospace;
+		font-family: var(--font-mono);
 		font-size: 0.9em;
 	}
 
 	.post-content :global(pre) {
+		position: relative;
 		background: #1e1e1e;
 		color: #d4d4d4;
 		padding: 1rem;
@@ -239,9 +236,7 @@ const jsonLd = {
 		background: none;
 		padding: 0;
 		color: inherit;
-	}
-
-	.post-content :global(blockquote) {
+	}	.post-content :global(blockquote) {
 		border-left: 4px solid var(--color-primary);
 		padding-left: 1rem;
 		color: var(--color-text-muted);
@@ -385,10 +380,6 @@ const jsonLd = {
 	}
 
 	/* 代码块复制按钮 */
-	.post-content :global(pre) {
-		position: relative;
-	}
-
 	.post-content :global(.copy-btn) {
 		position: absolute;
 		top: 0.5rem;
@@ -404,7 +395,7 @@ const jsonLd = {
 	}
 
 	.post-content :global(.copy-btn:hover) {
-		background: rgba(8, 145, 178, 0.6);
+		background: rgba(var(--color-primary-rgb), 0.6);
 		border-color: transparent;
 		color: #ffffff;
 	}

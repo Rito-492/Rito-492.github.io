@@ -10,6 +10,7 @@ import { SITE } from '../config';
 import '../styles/variables.css';
 import '../styles/base.css';
 import '../styles/components.css';
+import '../styles/sidebar.css';
 import '../styles/layouts.css';
 
 export interface Props {
@@ -60,7 +61,7 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 		<Header title={SITE.title} />
 
 		{isHomePage ? (
-			<div class="layout-container home-layout">
+			<div class="home-layout">
 				<aside class="sidebar-column">
 					<ProfileCard />
 				</aside>

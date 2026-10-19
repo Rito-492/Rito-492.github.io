@@ -4,6 +4,9 @@
 	--color-text: #1e293b;
 	--color-text-muted: #64748b;
 	--color-primary: #0891b2;
+	/* 主色的 RGB 分量：所有半透明主色底色统一写 rgba(var(--color-primary-rgb), α)，
+	   暗色模式自动跟随提亮后的主色，避免硬编码 rgba(8,145,178,…) 造成偏色 */
+	--color-primary-rgb: 8, 145, 178;
 	--color-primary-hover: #0e7490;
 	--color-border: #e0ded6;
 	--color-card: #ffffff;
@@ -22,6 +25,7 @@
 		--color-text: #e2e6ec;
 		--color-text-muted: #94a0af;
 		--color-primary: #22a3c7;
+		--color-primary-rgb: 34, 163, 199;
 		--color-primary-hover: #3ab5d6;
 		--color-border: #2b3038;
 		--color-card: #1d2026;
@@ -35,6 +39,7 @@
 	--color-text: #e2e6ec;
 	--color-text-muted: #94a0af;
 	--color-primary: #22a3c7;
+	--color-primary-rgb: 34, 163, 199;
 	--color-primary-hover: #3ab5d6;
 	--color-border: #2b3038;
 	--color-card: #1d2026;
@@ -42,32 +47,26 @@
 	--color-shadow: rgba(0, 0, 0, 0.45);
 }
 
-/* 字体变量 */
+/* 字体：正文用等宽西文 + 文楷中文，代码块用等宽 */
 :root {
+	--font-body: 'JetBrains Mono', 'LXGW WenKai', system-ui, -apple-system, sans-serif;
 	--font-mono: 'JetBrains Mono', monospace;
-	--font-sans: 'LXGW WenKai', system-ui, -apple-system, sans-serif;
 }
 
-/* 间距变量 */
+/* 圆角 */
 :root {
-	--spacing-xs: 0.25rem;
-	--spacing-sm: 0.5rem;
-	--spacing-md: 1rem;
-	--spacing-lg: 1.5rem;
-	--spacing-xl: 2rem;
-	--spacing-2xl: 3rem;
-}
-
-/* 圆角变量 */
-:root {
-	--radius-sm: 6px;
 	--radius-md: 8px;
 	--radius-lg: 12px;
 	--radius-full: 9999px;
 }
 
-/* 过渡变量 */
+/* 过渡 */
 :root {
 	--transition-fast: 0.2s;
 	--transition-normal: 0.3s;
+}
+
+/* 布局：首页 / 文章页 / 列表页共用的中栏宽度（改这一处，三页同步） */
+:root {
+	--content-width: 700px;
 }

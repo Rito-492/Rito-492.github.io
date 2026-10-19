@@ -57,20 +57,7 @@ const jsonLd = {
 			</h2>
 			<a href="/blog" class="view-more">
 				查看全部
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="16"
-					height="16"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<path d="M5 12h14" />
-					<path d="m12 5 7 7-7 7" />
-				</svg>
+				<Icon name="arrow-right" size={16} />
 			</a>
 		</div>
 		<div class="posts-list">
@@ -105,20 +92,7 @@ const jsonLd = {
 			</h2>
 			<a href="/projects" class="view-more">
 				查看全部
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="16"
-					height="16"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<path d="M5 12h14" />
-					<path d="m12 5 7 7-7 7" />
-				</svg>
+				<Icon name="arrow-right" size={16} />
 			</a>
 		</div>
 		<div class="projects-grid">
@@ -148,31 +122,31 @@ const jsonLd = {
 			—
 		</span>
 	</section>
-
-	<script>
-		import { GOATCOUNTER } from '../config';
-
-		// 站点总浏览量（GoatCounter TOTAL；服务端最长缓存 4 小时）
-		function initVisitorCounter() {
-			const visitCountEl = document.getElementById('visitCount');
-			if (!visitCountEl) return;
-
-			fetch(`https://${GOATCOUNTER.code}.goatcounter.com/counter/TOTAL.json`)
-				.then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
-				.then((data) => {
-					if (typeof data.count === 'string') visitCountEl.textContent = data.count;
-				})
-				.catch(() => {
-					// 统计服务不可用时保持显示 "—"
-				});
-		}
-
-		document.addEventListener('astro:page-load', initVisitorCounter);
-	</script>
 </Layout>
 
+<script>
+	import { GOATCOUNTER } from '../config';
+
+	// 站点总浏览量（GoatCounter TOTAL；服务端最长缓存 4 小时）
+	function initVisitorCounter() {
+		const visitCountEl = document.getElementById('visitCount');
+		if (!visitCountEl) return;
+
+		fetch(`https://${GOATCOUNTER.code}.goatcounter.com/counter/TOTAL.json`)
+			.then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+			.then((data) => {
+				if (typeof data.count === 'string') visitCountEl.textContent = data.count;
+			})
+			.catch(() => {
+				// 统计服务不可用时保持显示 "—"
+			});
+	}
+
+	document.addEventListener('astro:page-load', initVisitorCounter);
+</script>
+
 <style>
-	/* 首页介绍区域 */
+	/* 首页独有：hero + 移动端身份卡 + 区块间距（卡片/网格/按钮等共用样式在全局 CSS） */
 	.hero-section {
 		padding: 4rem 0 3rem;
 	}
@@ -197,7 +171,6 @@ const jsonLd = {
 		margin-bottom: 1.5rem;
 	}
 
-	/* 移动端身份信息（桌面端隐藏，个人卡片在左侧栏） */
 	.hero-profile {
 		display: none;
 	}
@@ -220,182 +193,12 @@ const jsonLd = {
 		margin-bottom: 0.5rem;
 	}
 
-	@media (max-width: 1150px) {
-		.hero-profile {
-			display: flex;
-			align-items: center;
-			gap: 1rem;
-			margin-top: 0.5rem;
-			padding-top: 1.5rem;
-			border-top: 1px solid var(--color-border);
-		}
-	}
-
-	/* 项目区域 */
+	.blog-section,
 	.projects-section {
 		padding: 3rem 0;
 		border-top: 1px solid var(--color-border);
 	}
 
-	.section-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 2rem;
-	}
-
-	.section-header h2 {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		font-size: 1.5rem;
-		font-weight: 600;
-		color: var(--color-text);
-	}
-
-	.section-header h2 :global(svg) {
-		color: var(--color-primary);
-	}
-
-	.view-more {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		color: var(--color-primary);
-		text-decoration: none;
-		font-weight: 500;
-		font-size: 0.9rem;
-		padding: 0.5rem 1rem;
-		border-radius: 8px;
-		border: 1px solid rgba(8, 145, 178, 0.3);
-		background: rgba(8, 145, 178, 0.05);
-		transition: all 0.3s;
-	}
-
-	.view-more:hover {
-		background: rgba(8, 145, 178, 0.1);
-		border-color: var(--color-primary);
-	}
-
-	.view-more svg {
-		transition: transform 0.3s;
-	}
-
-	.view-more:hover svg {
-		transform: translateX(3px);
-	}
-
-	.projects-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-		gap: 1.5rem;
-	}
-
-	.project-card {
-		background: var(--color-card);
-		border: 1px solid var(--color-border);
-		border-radius: 12px;
-		padding: 1.5rem;
-		transition: all 0.2s;
-		text-decoration: none;
-	}
-
-	.project-card:hover {
-		border-color: var(--color-primary);
-		transform: translateY(-2px);
-		box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
-	}
-
-	.project-card h3 {
-		font-size: 1.1rem;
-		font-weight: 600;
-		color: var(--color-text);
-		margin-bottom: 0.75rem;
-	}
-
-	.project-card p {
-		color: var(--color-text-muted);
-		line-height: 1.6;
-		font-size: 0.9rem;
-		margin-bottom: 1rem;
-	}
-
-	.tech-stack {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-	}
-
-	.tech-tag {
-		background: rgba(8, 145, 178, 0.08);
-		color: var(--color-primary);
-		padding: 0.25rem 0.7rem;
-		border-radius: 9999px;
-		font-size: 0.75rem;
-		font-weight: 500;
-	}
-
-	/* 博客区域 */
-	.blog-section {
-		padding: 3rem 0;
-		border-top: 1px solid var(--color-border);
-	}
-
-	.posts-list {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-	}
-
-	.no-posts {
-		text-align: center;
-		color: var(--color-text-muted);
-		padding: 2rem;
-	}
-
-	.post-card {
-		display: block;
-		background: var(--color-card);
-		border: 1px solid var(--color-border);
-		border-radius: 12px;
-		padding: 1.5rem;
-		transition: all 0.2s;
-		text-decoration: none;
-		color: inherit;
-	}
-
-	.post-card:hover {
-		border-color: var(--color-primary);
-		transform: translateY(-2px);
-		box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
-	}
-
-	.post-meta {
-		font-size: 0.85rem;
-		color: var(--color-text-muted);
-		margin-bottom: 0.5rem;
-	}
-
-	.post-card h3 {
-		font-size: 1.15rem;
-		font-weight: 600;
-		color: var(--color-text);
-		margin-bottom: 0.5rem;
-		transition: color 0.2s;
-	}
-
-	.post-card:hover h3 {
-		color: var(--color-primary);
-	}
-
-	.post-card .excerpt {
-		color: var(--color-text-muted);
-		line-height: 1.6;
-		font-size: 0.9rem;
-		margin-bottom: 0;
-	}
-
-	/* 访客计数器 */
 	.visitor-counter-section {
 		padding: 2rem 0;
 		border-top: 1px solid var(--color-border);
@@ -409,13 +212,23 @@ const jsonLd = {
 	}
 
 	.counter-number {
-		font-family: 'SF Mono', 'Fira Code', monospace;
+		font-family: var(--font-mono);
 		font-size: 1.25rem;
 		font-weight: 700;
 		color: var(--color-primary);
 	}
 
-	/* 响应式 */
+	@media (max-width: 1150px) {
+		.hero-profile {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			margin-top: 0.5rem;
+			padding-top: 1.5rem;
+			border-top: 1px solid var(--color-border);
+		}
+	}
+
 	@media (max-width: 768px) {
 		.hero-content h1 {
 			font-size: 2rem;
@@ -423,16 +236,6 @@ const jsonLd = {
 
 		.hero-content .lead {
 			font-size: 1.1rem;
-		}
-
-		.section-header {
-			flex-direction: column;
-			align-items: flex-start;
-			gap: 0.5rem;
-		}
-
-		.projects-grid {
-			grid-template-columns: 1fr;
 		}
 	}
 </style>

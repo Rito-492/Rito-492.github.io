@@ -15,7 +15,7 @@ const sortedProjects = projects.sort((a, b) => {
 <Layout title="Projects - Rito-492">
 	<section class="projects-header">
 		<div class="header-content">
-			<span class="header-icon">
+			<span class="float-icon">
 				<Icon name="rocket" size={48} strokeWidth={1.5} />
 			</span>
 			<h1>项目作品</h1>
@@ -56,6 +56,7 @@ const sortedProjects = projects.sort((a, b) => {
 </Layout>
 
 <style>
+	/* 项目页独有：页头 + 卡片图标块 + 顶部渐变条（卡片本体样式在全局 CSS） */
 	.projects-header {
 		text-align: center;
 		padding: 3rem 0 4rem;
@@ -66,22 +67,6 @@ const sortedProjects = projects.sort((a, b) => {
 		flex-direction: column;
 		align-items: center;
 		gap: 0.75rem;
-	}
-
-	.header-icon {
-		display: inline-flex;
-		color: var(--color-primary);
-		animation: float 3s ease-in-out infinite;
-	}
-
-	@keyframes float {
-		0%,
-		100% {
-			transform: translateY(0);
-		}
-		50% {
-			transform: translateY(-10px);
-		}
 	}
 
 	.projects-header h1 {
@@ -106,42 +91,17 @@ const sortedProjects = projects.sort((a, b) => {
 	}
 
 	.projects-grid {
-		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-		gap: 1.5rem;
 		max-width: 1000px;
 		margin: 0 auto;
 	}
 
-	.empty-state {
-		grid-column: 1 / -1;
-		text-align: center;
-		padding: 4rem 2rem;
-	}
-
-	.empty-icon {
-		display: inline-flex;
-		margin-bottom: 1rem;
-		color: var(--color-text-muted);
-	}
-
-	.no-projects {
-		color: var(--color-text-muted);
-		font-size: 1.1rem;
-	}
-
+	/* 顶部渐变条：卡片专属装饰 */
 	.project-card {
-		background: var(--color-card);
-		border: 1px solid var(--color-border);
-		border-radius: 16px;
-		padding: 1.5rem;
-		transition: all 0.3s;
-		box-shadow: 0 2px 8px var(--color-shadow);
 		position: relative;
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
-		text-decoration: none;
 	}
 
 	.project-card::before {
@@ -154,63 +114,30 @@ const sortedProjects = projects.sort((a, b) => {
 		background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
 		transform: scaleX(0);
 		transform-origin: left;
-		transition: transform 0.3s;
+		transition: transform var(--transition-normal);
 	}
 
 	.project-card:hover::before {
 		transform: scaleX(1);
 	}
 
-	.project-card:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
-		border-color: var(--color-primary);
+	.project-card p {
+		flex: 1;
 	}
 
 	.card-icon {
 		width: 48px;
 		height: 48px;
 		border-radius: 12px;
-		background: linear-gradient(135deg, rgba(8, 145, 178, 0.1), rgba(14, 116, 144, 0.15));
+		background: linear-gradient(
+			135deg,
+			rgba(var(--color-primary-rgb), 0.1),
+			rgba(var(--color-primary-rgb), 0.15)
+		);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		color: var(--color-primary);
 		margin-bottom: 1rem;
-	}
-
-	.project-card h3 {
-		margin-bottom: 0.75rem;
-		color: var(--color-text);
-		font-size: 1.25rem;
-	}
-
-	.project-card p {
-		color: var(--color-text-muted);
-		line-height: 1.6;
-		margin-bottom: 1rem;
-		flex: 1;
-	}
-
-	.tech-stack {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		margin-bottom: 1.25rem;
-	}
-
-	.tech-tag {
-		background: rgba(8, 145, 178, 0.1);
-		color: var(--color-primary);
-		padding: 0.35rem 0.85rem;
-		border-radius: 9999px;
-		font-size: 0.85rem;
-		font-weight: 500;
-		transition: all 0.2s;
-	}
-
-	.tech-tag:hover {
-		background: rgba(8, 145, 178, 0.2);
-		transform: translateY(-1px);
 	}
 </style>

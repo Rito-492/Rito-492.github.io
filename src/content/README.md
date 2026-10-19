@@ -5,8 +5,8 @@
 ```
 src/content/
 ├── blog/       # 软链接 → 私有 garden 仓库的 20_blog/（不要提交进本仓库）
-│   ├── _template.md
-│   └── 你的文章.md
+│   ├── assets/ # 文章插图（按文章子目录组织）
+│   └── *.md    # 文章（模板在 vault 的 01_template/20_blog.md，不随仓库走）
 └── projects/   # 项目作品（真实目录，随网站代码维护）
     ├── _template.md
     └── 你的项目.md

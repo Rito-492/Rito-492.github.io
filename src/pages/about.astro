@@ -1,13 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SocialLinks from '../components/SocialLinks.astro';
+import { SITE } from '../config';
 ---
 
 <Layout title="About - Rito-492">
 	<section class="about-section">
 		<header class="about-header">
 			<div class="avatar">
-				<img src="/avatar.jpg" alt="avatar" width="80" height="80" decoding="async" />
+				<img src={SITE.avatar} alt="avatar" width="80" height="80" decoding="async" />
 			</div>
 			<h1>Rito-492</h1>
 			<p class="subtitle">世界很大，开心第一。</p>
@@ -44,27 +45,27 @@ import SocialLinks from '../components/SocialLinks.astro';
 					<div class="tool-group">
 						<span class="tool-label">主力语言</span>
 						<div class="tool-tags">
-							<span class="tool-tag">Python</span>
-							<span class="tool-tag">C++</span>
-							<span class="tool-tag">Java</span>
+							<span class="tech-tag">Python</span>
+							<span class="tech-tag">C++</span>
+							<span class="tech-tag">Java</span>
 						</div>
 					</div>
 					<div class="tool-group">
 						<span class="tool-label">深度学习</span>
 						<div class="tool-tags">
-							<span class="tool-tag">PyTorch</span>
-							<span class="tool-tag">KAN</span>
-							<span class="tool-tag">Diffusion</span>
+							<span class="tech-tag">PyTorch</span>
+							<span class="tech-tag">KAN</span>
+							<span class="tech-tag">Diffusion</span>
 						</div>
 					</div>
 					<div class="tool-group">
 						<span class="tool-label">工具</span>
 						<div class="tool-tags">
-							<span class="tool-tag">Linux</span>
-							<span class="tool-tag">WSL2</span>
-							<span class="tool-tag">Arch</span>
-							<span class="tool-tag">Git</span>
-							<span class="tool-tag">Docker</span>
+							<span class="tech-tag">Linux</span>
+							<span class="tech-tag">WSL2</span>
+							<span class="tech-tag">Arch</span>
+							<span class="tech-tag">Git</span>
+							<span class="tech-tag">Docker</span>
 						</div>
 					</div>
 				</div>
@@ -95,13 +96,7 @@ import SocialLinks from '../components/SocialLinks.astro';
 </Layout>
 
 <style>
-	.about-section {
-		max-width: none;
-		margin: 0;
-		padding: 2rem;
-	}
-
-	/* Header */
+	/* About 独有：居中头像页头 + 卡片内部排版（卡片壳与标签样式在全局 CSS） */
 	.about-header {
 		text-align: center;
 		margin-bottom: 2.5rem;
@@ -120,12 +115,6 @@ import SocialLinks from '../components/SocialLinks.astro';
 		height: 100%;
 		object-fit: cover;
 		display: block;
-		image-rendering: -webkit-optimize-contrast;
-	}
-
-	main.full-width {
-		max-width: none !important;
-		padding: 0 !important;
 	}
 
 	.about-header h1 {
@@ -140,26 +129,12 @@ import SocialLinks from '../components/SocialLinks.astro';
 		margin: 0;
 	}
 
-	/* Content */
 	.about-content {
 		display: flex;
 		flex-direction: column;
 		gap: 1.25rem;
 		max-width: 780px;
 		margin: 0 auto;
-	}
-
-	.card {
-		background: var(--color-card);
-		border: 1px solid var(--color-border);
-		border-radius: 12px;
-		padding: 1.5rem;
-		transition: all 0.2s;
-	}
-
-	.card:hover {
-		border-color: rgba(8, 145, 178, 0.3);
-		box-shadow: 0 4px 16px rgba(8, 145, 178, 0.08);
 	}
 
 	.card h2 {
@@ -187,7 +162,6 @@ import SocialLinks from '../components/SocialLinks.astro';
 		margin-bottom: 0;
 	}
 
-	/* Toolbox */
 	.tools-grid {
 		display: flex;
 		flex-direction: column;
@@ -214,29 +188,7 @@ import SocialLinks from '../components/SocialLinks.astro';
 		gap: 0.4rem;
 	}
 
-	.tool-tag {
-		background: rgba(8, 145, 178, 0.08);
-		color: var(--color-primary);
-		padding: 0.25rem 0.65rem;
-		border-radius: 9999px;
-		font-size: 0.78rem;
-		font-weight: 500;
-		transition: all 0.2s;
-		border: 1px solid transparent;
-	}
-
-	.tool-tag:hover {
-		background: rgba(8, 145, 178, 0.15);
-		border-color: var(--color-primary);
-		transform: translateY(-1px);
-	}
-
-	/* Responsive */
 	@media (max-width: 640px) {
-		.about-section {
-			padding: 2rem 1rem;
-		}
-
 		.about-header h1 {
 			font-size: 1.5rem;
 		}

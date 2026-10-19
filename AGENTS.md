@@ -168,31 +168,53 @@ src/
 │   ├── MobileToc.astro         # 移动端目录浮钮 + 上拉面板（<1150px 替代 TocSidebar）
 │   └── GiscusComments.astro    # Giscus comments，滚入视口才加载（省内存）
 └── styles/
-    ├── variables.css           # CSS 自定义属性（含 prefers-color-scheme 暗色调色板）
-    ├── base.css                # Reset + base element styles
-    ├── components.css          # Reusable component styles (buttons, cards, etc.)
+    ├── variables.css           # CSS 自定义属性（颜色/字体/圆角/过渡/--content-width + 暗色调色板）
+    ├── base.css                # Reset + 链接/按钮/卡片/区块标题/空状态等通用件
+    ├── components.css          # 文章卡/项目卡/点击特效/细滚动条/灯箱
+    ├── sidebar.css             # 右侧栏共享原语：.side-panel / .side-panel-title / .side-panel-item / .tag-pill
     └── layouts.css             # 页面结构布局（全局）：home/post 三栏网格、.full-width
 ```
 
 ## 关键设计决策
 
+### 样式分层（2026-10 精简后）
+
+**唯一真源原则**：通用件只定义一次，页面 `<style>` 只放该页独有样式。曾经踩过的坑是
+`index.astro` 把 `components.css` 整份复制了一遍（约 200 行），导致改样式时改的那份不生效。
+
+- `variables.css` — 设计令牌。`--content-width` 是全站中栏宽度，首页/文章页/列表页共用。
+- `base.css` — 无类语义的通用件：`a` / `.btn` / `.card` / `.section-header` / `.view-more` / `.empty-state` / `.float-icon` / `:focus-visible`。
+- `components.css` — 具名组件：`.post-card` / `.project-card` / `.tech-tag` / 点击特效 / 细滚动条 / 灯箱。
+- `sidebar.css` — 文章页 TOC 与列表页筛选栏共用的侧栏原语（两者视觉语言一致，差异只在内容）。
+- `layouts.css` — 页面级网格。**单列媒体查询里必须重置 `grid-column`**，否则会生成幽灵列（见「易错点」）。
+
+**卡片悬停语言**（全站统一，`components.css` 定义）：上浮 `translateY(-2px)` + 主色描边
+
+- `0 4px 16px rgba(var(--color-primary-rgb), 0.1)` 淡阴影。新增卡片请复用或沿用同一套值。
+
+**半透明主色**：一律 `rgba(var(--color-primary-rgb), α)`，不要硬编码 `rgba(8, 145, 178, α)`
+——暗色模式主色提亮为 `#22a3c7`，硬编码会导致暗色下偏色。
+
 ### Layout system
 
 `Layout.astro` 是纯组装层（2026-10 重构）：`SeoHead`（head）+ `Header` + 四种页面形态分支 + `Footer` + 全局交互脚本。结构布局样式在 `styles/layouts.css`（全局），组件样式跟随各自组件。
 
-- **Home page**: 3-column grid — `1fr 720px 1fr`. Left sidebar (profile card), center content, empty right column.
-- **Blog post**: 3-column grid — `1fr 680px 1fr`. Center article, right TOC sidebar with `border-left`.
-- **Blog list**: 3-column grid — `25% 50% 25%`. Center timeline, right sidebar with series/tag filters.
+- **Home page**: 3-column grid — `1fr var(--content-width) 1fr`. Left sidebar (profile card), center content, empty right column.
+- **Blog post**: 3-column grid — `1fr var(--content-width) 1fr`. Center article, right TOC sidebar with `border-left`.
+- **Blog list**: 3-column grid — `1fr var(--content-width) 1fr`. Center timeline, right sidebar with series/tag filters.
 - **Other pages** (about, projects): single column with `max-width: 900px` via `.full-width` class.
+
+> 三页中栏宽度统一为 `--content-width`（700px）。此前首页 720 / 文章页 680 / 列表页 700 三套值，
+> 且首页还被 `base.css` 的 `main { padding: 2rem }` 挤成 656px 实际宽度。
 
 ### Blog list sidebar vs Blog post sidebar
 
-Both sidebars share the same visual language:
+Both sidebars share the same visual language，**共用 `styles/sidebar.css` 的原语**：
 
-- `border-left: 1px solid var(--color-border)`
-- Section titles: `1rem / font-weight: 600 / color: var(--color-primary)` with icon
-- Items: `0.85rem / color: var(--color-text-muted)` with `border-left: 2px solid transparent` → `var(--color-primary)` on hover/active
-- Tags: plain text (no border/background), `0.78rem`, `padding-left: 0.5rem`
+- `.side-panel` — `border-left: 1px solid var(--color-border)` + sticky + 独立滚动
+- `.side-panel-title` — `1rem / font-weight: 600 / color: var(--color-primary)` + 图标
+- `.side-panel-item` — `0.85rem / color: var(--color-text-muted)`，`border-left: 2px solid transparent` → 主色（hover/active）
+- `.tag-pill` — 纯文字（无边框底色），`0.78rem`
 
 ### Blog list timeline
 
@@ -230,7 +252,7 @@ draft: false
 ---
 ```
 
-补充（以 `src/content.config.ts` + 各集合 `_template.md` 为准，`README.md` / `src/content/README.md` 的字段说明已过时）：
+补充（以 `src/content.config.ts` + 各集合 `_template.md` 为准，`src/content/README.md` 是面向写作的字段说明）：
 
 - `blog` 集合的 `base` 是 `./src/content/blog`（经软链接解析到 `~/workspace/40_garden/20_blog`，CI 里是搬运后的同名目录）；`projects` 是 `./src/content/projects`。
 - `blog` 和 `projects` 都用 `glob('**/*.md')` 加载器。**下划线开头的文件不会被忽略** — `_template.md` 会真实构建出 `/blog/_template` 页面（只是因为其 frontmatter 是 `isPublished: false` 才不出现在列表里）。
@@ -243,17 +265,19 @@ draft: false
 
 CSS 自定义属性定义在 `src/styles/variables.css`：
 
-| Variable                | Value                         | Usage                         |
-| :---------------------- | :---------------------------- | :---------------------------- |
-| `--color-primary`       | `#0891b2`                     | Links, accents, active states |
-| `--color-primary-hover` | `#0e7490`                     | Hover states                  |
-| `--color-bg`            | `#F8F8F6`                     | Page background               |
-| `--color-card`          | `#ffffff`                     | Card backgrounds              |
-| `--color-text`          | `#1e293b`                     | Body text                     |
-| `--color-text-muted`    | `#64748b`                     | Secondary text                |
-| `--color-border`        | `#e0ded6`                     | Borders, dividers             |
-| `--font-mono`           | `'JetBrains Mono', monospace` | Code                          |
-| `--font-sans`           | `'LXGW WenKai', ...`          | Body text                     |
+| Variable                | Value                              | Usage                         |
+| :---------------------- | :--------------------------------- | :---------------------------- |
+| `--color-primary`       | `#0891b2`                          | Links, accents, active states |
+| `--color-primary-rgb`   | `8, 145, 178`                      | 半透明主色底色（`rgba(...)`） |
+| `--color-primary-hover` | `#0e7490`                          | Hover states                  |
+| `--color-bg`            | `#F8F8F6`                          | Page background               |
+| `--color-card`          | `#ffffff`                          | Card backgrounds              |
+| `--color-text`          | `#1e293b`                          | Body text                     |
+| `--color-text-muted`    | `#64748b`                          | Secondary text                |
+| `--color-border`        | `#e0ded6`                          | Borders, dividers             |
+| `--font-body`           | `'JetBrains Mono', 'LXGW WenKai'…` | Body text                     |
+| `--font-mono`           | `'JetBrains Mono', monospace`      | Code                          |
+| `--content-width`       | `700px`                            | 三页共用的中栏宽度            |
 
 暗色模式（2026-10 起）：**三态主题选择器**（Header 导航菜单左侧按钮循环：跟随系统 → 浅色 → 深色，`localStorage['theme']` 持久化）。CSS 语义：`html[data-theme='dark']` 强制深色、`html[data-theme='light']` 强制浅色、无属性跟随系统（`prefers-color-scheme`，无 JS 也可用）；防闪烁预置脚本在 `SeoHead.astro`。Giscus 评论区通过 `themechange` 事件 + postMessage 联动切换。暗色调色板在 `variables.css`（`--color-primary` 提亮为 `#22a3c7` 保证对比度）。
 
@@ -293,18 +317,21 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - **UI/样式改动必须按「UI 改动工作流」截图核验后交付**，禁止盲改。
 - **格式化交给 `npm run format`**，别手调缩进/引号，`prettier --check .` 不干净 CI 体验会差。
 - Astro scoped 样式覆盖不到 markdown 渲染出的内容，需要用 `:global()`。
-- `base.css` 给 `main` 应用了 `max-width: 1200px; padding: 2rem`；自定义布局的页面要么覆盖它（`!important`），要么用 `.full-width` 类。
+- **通用件只在 `src/styles/` 定义一次**。页面 `<style>` 只放该页独有样式——曾经 `index.astro` 把 `components.css` 整份复制（~200 行），改样式时改的那份不生效。
+- `base.css` 的 `main` **不再有** `max-width` / `padding`（2026-10 精简时移除）。内容宽度由 `layouts.css` 的 `.main-content` / `.full-width` 决定，页面不要再靠 `!important` 覆盖 `main`。
 - **博客列表页排序依赖 `data-date` 属性的字符串比较**（`localeCompare`）— 必须输出 ISO 字符串这类定长可排序格式，改日期输出时勿破坏。
+- **改类名要同步 JS 选择器**：筛选/排序脚本用 `closest('.side-panel-item')` 等类名查询 DOM，重命名 CSS 类而漏改脚本会让功能静默失效（踩过：`.sidebar-item` → `.side-panel-item`）。
 - `.astro` 的三元/表达式分支里**不能写 HTML 注释**（Astro 编译器容忍但 prettier 的 astro 解析器会崩）；`.css` 文件写纯 CSS，别套 `<style>` 标签。
 - Giscus 评论配置（repo/category ID）在 `src/config.ts` 的 `GISCUS`，不在页面里。
 - `.astro/` 和 `dist/` 是生成产物 — 永远不要直接编辑。
 - **View Transitions 已启用**：脚本必须遵守「页面前端」一节的三原则（page-load 重 init / 文档级监听只绑一次 / 主题 after-swap 重放），否则会出现重复绑定、元素引用失效等诡异 bug。
 - **固定定位的全屏遮罩别放页面容器内**：祖先若形成 stacking context，遮罩会被压在顶栏下面——挂到 `<body>` 下 + 全局样式（参考灯箱做法）。
 - **单列媒体查询要重置显式的 `grid-column`**：布局塌成单列后，子元素残留的 `grid-column: 2` 会生成幽灵第二列——若网格带 `column-gap`，内容会被整体推偏（踩过：移动端文章页右偏 40px、两边不对称）。
+- **半透明主色不要硬编码**：写 `rgba(var(--color-primary-rgb), α)`。硬编码 `rgba(8, 145, 178, α)` 在暗色模式下会与提亮后的主色 `#22a3c7` 偏色。
 
 ## 待办 / TODO
 
-- **字体自托管**：当前 JetBrains Mono 走 Google Fonts、霞鹜文楷走 jsdelivr（`SeoHead.astro`）——国内访问不稳。方案：自托管 unicode-range 分片子集（如 `lxgw-wenkai-webfont`）+ `@fontsource/jetbrains-mono`，替换 CDN 引用。
+- **字体自托管**：当前 JetBrains Mono 走 Google Fonts、霞鹜文楷走 jsdelivr（`SeoHead.astro`）——国内访问不稳，实测 jsdelivr 慢时十几个 woff2 分片会把页面 `load` 事件拖到 10s+。方案：自托管 unicode-range 分片子集（如 `lxgw-wenkai-webfont`）+ `@fontsource/jetbrains-mono`，替换 CDN 引用。
 - **UI 待办（C 组·首页，用户暂缓）**：hero 区加行动引导按钮。（访客计数已迁移 GoatCounter，2026-10-19。）
 - **per-post OG 分享卡（D 组唯一遗留）**：satori 按标题生成。先决问题：CJK 字库方案（~10MB 字体入库或构建期下载），待拍板。
 

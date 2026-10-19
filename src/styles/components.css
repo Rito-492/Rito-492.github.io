@@ -1,29 +1,67 @@
-/* 通用组件样式 */
+/* 可复用组件样式：卡片 / 项目网格 / 点击特效 / 细滚动条 / 图片灯箱
+   页面里不要再重复定义这些类，需要变体时用修饰类（如 .post-card--compact） */
 
-/* ===== Project Card ===== */
+/* ===== 卡片：全站统一的悬停语言（上浮 2px + 主色描边 + 淡阴影） ===== */
+.post-card,
+.project-card {
+	display: block;
+	background: var(--color-card);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: 1.5rem;
+	text-decoration: none;
+	color: inherit;
+	transition: all var(--transition-fast);
+}
+
+.post-card:hover,
+.project-card:hover {
+	border-color: var(--color-primary);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 16px rgba(var(--color-primary-rgb), 0.1);
+}
+
+/* ===== 文章卡片内容 ===== */
+.posts-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+}
+
+.post-card .post-meta {
+	font-size: 0.85rem;
+	color: var(--color-text-muted);
+	margin-bottom: 0.5rem;
+}
+
+.post-card h3 {
+	font-size: 1.15rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin-bottom: 0.5rem;
+	transition: color var(--transition-fast);
+}
+
+.post-card:hover h3 {
+	color: var(--color-primary);
+}
+
+.post-card .excerpt {
+	color: var(--color-text-muted);
+	line-height: 1.6;
+	font-size: 0.9rem;
+	margin-bottom: 0;
+}
+
+/* ===== 项目网格与卡片 ===== */
 .projects-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 	gap: 1.5rem;
 }
 
-.project-card {
-	background: var(--color-card);
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-lg);
-	padding: 1.5rem;
-	transition: all var(--transition-fast);
-	text-decoration: none;
-}
-
-.project-card:hover {
-	border-color: var(--color-primary);
-	transform: translateY(-2px);
-	box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
-}
-
 .project-card h3 {
-	font-size: 1.1rem;
+	font-size: 1.15rem;
 	font-weight: 600;
 	color: var(--color-text);
 	margin-bottom: 0.75rem;
@@ -36,121 +74,22 @@
 	margin-bottom: 1rem;
 }
 
-.project-card .tech-stack {
+.tech-stack {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.5rem;
 }
 
-/* ===== Blog Card ===== */
-.posts-list {
-	display: flex;
-	flex-direction: column;
-	gap: 1.5rem;
-}
-
-.no-posts {
-	text-align: center;
-	color: var(--color-text-muted);
-	padding: 2rem;
-}
-
-.post-card {
-	background: var(--color-card);
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-lg);
-	padding: 1.5rem;
-	transition: all var(--transition-fast);
-}
-
-.post-card:hover {
-	border-color: var(--color-primary);
-	transform: translateY(-2px);
-	box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
-}
-
-.post-meta {
-	font-size: 0.85rem;
-	color: var(--color-text-muted);
-	margin-bottom: 0.5rem;
-}
-
-.post-card h3 {
-	font-size: 1.15rem;
-	font-weight: 600;
-	color: var(--color-text);
-	margin-bottom: 0.5rem;
-}
-
-.post-card h3 a {
-	color: inherit;
-	text-decoration: none;
-}
-
-.post-card h3 a:hover {
+.tech-tag {
+	background: rgba(var(--color-primary-rgb), 0.08);
 	color: var(--color-primary);
+	padding: 0.25rem 0.7rem;
+	border-radius: var(--radius-full);
+	font-size: 0.78rem;
+	font-weight: 500;
 }
 
-.post-card .excerpt {
-	color: var(--color-text-muted);
-	line-height: 1.6;
-	font-size: 0.9rem;
-	margin-bottom: 0;
-}
-
-/* ===== Visitor Counter ===== */
-.visitor-counter-section {
-	padding: 2rem 0;
-	border-top: 1px solid var(--color-border);
-	text-align: center;
-}
-
-.counter-label {
-	color: var(--color-text-muted);
-	font-size: 0.9rem;
-	margin-right: 0.5rem;
-}
-
-.counter-number {
-	font-family: var(--font-mono);
-	font-size: 1.25rem;
-	font-weight: 700;
-	color: var(--color-primary);
-}
-
-/* ===== Hero Section ===== */
-.hero-section {
-	padding: 4rem 0 3rem;
-}
-
-.hero-content h1 {
-	font-size: 3rem;
-	font-weight: 700;
-	color: var(--color-text);
-	margin-bottom: 0.5rem;
-	letter-spacing: -0.02em;
-}
-
-.hero-content .lead {
-	font-size: 1.25rem;
-	color: var(--color-text);
-	margin-bottom: 0.5rem;
-}
-
-.hero-content .tagline {
-	font-size: 1.1rem;
-	color: var(--color-text-muted);
-	margin-bottom: 1.5rem;
-}
-
-/* ===== Section Spacing ===== */
-.projects-section,
-.blog-section {
-	padding: 3rem 0;
-	border-top: 1px solid var(--color-border);
-}
-
-/* ===== Click Effects ===== */
+/* ===== 点击特效（Layout 全局委托触发） ===== */
 #click-effects {
 	position: fixed;
 	top: 0;
@@ -167,7 +106,7 @@
 	width: 20px;
 	height: 20px;
 	border-radius: 50%;
-	background: radial-gradient(circle, rgba(8, 145, 178, 0.4) 0%, transparent 70%);
+	background: radial-gradient(circle, rgba(var(--color-primary-rgb), 0.4) 0%, transparent 70%);
 	transform: translate(-50%, -50%);
 	animation: ripple-expand 0.6s ease-out forwards;
 	pointer-events: none;
@@ -197,7 +136,7 @@
 	transform: translate(-50%, -50%);
 	animation: particle-fly 0.5s ease-out forwards;
 	pointer-events: none;
-	box-shadow: 0 0 10px rgba(8, 145, 178, 0.5);
+	box-shadow: 0 0 10px rgba(var(--color-primary-rgb), 0.5);
 }
 
 @keyframes particle-fly {
@@ -208,25 +147,6 @@
 	100% {
 		opacity: 0;
 		transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0);
-	}
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-	.hero-content h1 {
-		font-size: 2rem;
-	}
-
-	.hero-content .lead {
-		font-size: 1.1rem;
-	}
-
-	.projects-grid {
-		grid-template-columns: 1fr;
-	}
-
-	.social-links {
-		flex-wrap: wrap;
 	}
 }
 
@@ -311,5 +231,12 @@
 	}
 	to {
 		opacity: 1;
+	}
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+	.projects-grid {
+		grid-template-columns: 1fr;
 	}
 }

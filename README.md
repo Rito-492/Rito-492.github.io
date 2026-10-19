@@ -1,506 +1,186 @@
-# Rito-492.github.io - 个人网站开发指南
+# Rito-492.github.io
 
-个人网站 - 基于 Astro 构建的静态网站
+个人博客站点，基于 [Astro](https://astro.build) 6 构建，部署到 GitHub Pages。
 
-## 📖 目录
-
-1. [快速开始](#-快速开始)
-2. [项目结构详解](#-项目结构详解)
-3. [修改网站内容](#-修改网站内容)
-4. [前端开发基础](#-前端开发基础)
-5. [常见问题](#-常见问题)
+> 工程细节、架构决策、踩坑记录见 **[AGENTS.md](./AGENTS.md)**（开发时的权威参考）。
+> 本文档面向「我想改点东西」的场景，只讲怎么改。
 
 ---
 
-## 🚀 快速开始
-
-### 环境要求
-
-- Node.js 22.12+（与 `package.json` 的 `engines` 一致）
-- npm 或 pnpm
-
-### 安装依赖
+## 快速开始
 
 ```bash
-npm install
+npm install      # 安装依赖（Node >= 22.12）
+npm run dev      # 开发服务器 http://localhost:4321
+npm run build    # 构建到 ./dist
+npm run preview  # 预览生产构建
+npm run format   # Prettier 格式化
 ```
 
-### 开发模式
+**本地预览前先同步文章**（文章在私有仓库）：
 
 ```bash
-npm run dev
-```
-
-启动本地开发服务器，访问 **http://localhost:4321**
-
-> 💡 开发模式下，修改代码后页面会自动刷新
-
-### 构建生产版本
-
-```bash
-npm run build
-```
-
-构建到 `./dist/` 目录
-
-### 本地预览
-
-```bash
-npm run preview
+git -C ~/workspace/40_garden pull
 ```
 
 ---
 
-## 📁 项目结构详解
+## 项目结构
 
 ```
 src/
-├── content/                    # 内容集合 (Markdown 文件)
-│   ├── blog/                   # 博客文章
-│   │   ├── _template.md        # 博客模板
-│   │   └── *.md                # 具体文章
-│   └── projects/               # 项目作品
-│       ├── _template.md        # 项目模板
-│       └── *.md                # 具体项目
-│
-├── layouts/                    # 布局组件
-│   └── Layout.astro            # 主布局 (导航栏 + 页脚 + 页面框架)
-│
-├── pages/                      # 页面路由
-│   ├── index.astro             # 首页
-│   ├── about.astro             # 关于页面
-│   ├── projects.astro          # 项目列表页
-│   ├── 404.astro               # 自定义 404 页面
+├── config.ts               # ★ 站点配置：标题/简介/头像/社交链接/Giscus/许可/统计
+├── content.config.ts       # 内容集合 schema
+├── lib/
+│   ├── date.ts             # 日期解析与格式化
+│   └── remark-obsidian-images.js  # Obsidian 插图写法兼容插件
+├── content/
+│   ├── blog/               # 软链接 → 私有 vault 的 20_blog/（不入库）
+│   ├── projects/           # 项目作品（Markdown，随本站维护）
+│   └── README.md           # 内容字段说明（Frontmatter 权威文档）
+├── layouts/
+│   └── Layout.astro        # 页面组装层：head + 导航 + 四种页面形态 + 全局脚本
+├── pages/
+│   ├── index.astro         # 首页（hero + 最新文章 + 精选项目 + 总浏览）
+│   ├── about.astro         # 关于
+│   ├── projects.astro      # 项目列表
+│   ├── 404.astro           # 404
+│   ├── rss.xml.ts          # RSS 全文输出
 │   └── blog/
-│       ├── index.astro         # 博客列表页
-│       └── [id].astro          # 文章详情页
-│
-├── components/                 # 可复用组件
-│   ├── Header.astro            # 导航栏
-│   ├── Footer.astro            # 页脚
-│   ├── BlogCard.astro          # 博客卡片
-│   └── ProjectCard.astro       # 项目卡片
-│
-├── styles/                     # 全局样式
-│   ├── variables.css           # CSS 变量 (颜色、字体等)
-│   ├── base.css                # 基础样式
-│   └── components.css          # 组件样式
-│
-└── content.config.ts           # 内容集合配置 (Schema 定义)
+│       ├── index.astro     # 博客列表（时间线 + 系列/标签筛选 + 排序）
+│       └── [id].astro      # 文章页（目录 / 灯箱 / 评论 / 许可声明）
+├── components/             # 见下表
+└── styles/
+    ├── variables.css       # ★ 颜色/字体/圆角/过渡/内容宽度
+    ├── base.css            # 重置 + 链接/按钮/卡片/区块标题/空状态等通用件
+    ├── components.css      # 文章卡/项目卡/点击特效/细滚动条/灯箱
+    ├── sidebar.css         # 右侧栏共享原语（目录 + 列表筛选栏）
+    └── layouts.css         # 页面级网格：首页 / 文章页 / 单列页
 ```
 
-### 关键文件说明
+### 组件一览
 
-| 文件                          | 作用         | 修改内容                           |
-| ----------------------------- | ------------ | ---------------------------------- |
-| `src/layouts/Layout.astro`    | 整体页面布局 | 首页侧边栏、右侧目录结构、页面框架 |
-| `src/components/Header.astro` | 导航栏       | 导航菜单、Logo、下拉菜单           |
-| `src/components/Footer.astro` | 页脚         | 版权信息                           |
-| `src/pages/index.astro`       | 首页         | 博客列表、项目列表的展示           |
-| `src/content.config.ts`       | 内容配置     | 博客/项目的字段定义                |
+| 组件                   | 作用                                                 |
+| ---------------------- | ---------------------------------------------------- |
+| `Header.astro`         | 吸顶导航（含移动端汉堡菜单）                         |
+| `Footer.astro`         | 页脚（©/Powered + RSS/源码/许可 图标）               |
+| `SeoHead.astro`        | `<head>` 全部内容：meta/OG/字体/RSS/JSON-LD/主题预置 |
+| `ProfileCard.astro`    | 首页左侧个人卡片                                     |
+| `SocialLinks.astro`    | 社交链接（数据来自 `config.ts` 的 `SOCIALS`）        |
+| `Icon.astro`           | 全站统一线性图标（lucide 内联路径）                  |
+| `TocSidebar.astro`     | 文章页右栏：系列 / 标签 / 目录                       |
+| `MobileToc.astro`      | 移动端目录浮钮 + 上拉面板（<1150px 替代 TocSidebar） |
+| `ContentShell.astro`   | 内容主栏容器：滚动进度条 + 返回顶部                  |
+| `ThemeToggle.astro`    | 三态主题切换（跟随系统 / 浅色 / 深色）               |
+| `GiscusComments.astro` | 评论区（滚入视口才加载）                             |
 
 ---
 
-## ✏️ 修改网站内容
+## 常见修改
 
-### 1. 修改个人信息（首页侧边栏）
+### 站点信息 / 社交链接 / 评论 / 许可
 
-**文件**: `src/config.ts`（站点级配置集中在这里）
+只改 **`src/config.ts`**：`SITE`（标题、简介、头像、仓库）、`SOCIALS`（社交链接数组）、
+`GISCUS`、`LICENSE`、`GOATCOUNTER`。
+
+改头像：替换 `public/avatar.jpg`。
+
+### 配色 / 字体 / 内容宽度
+
+改 **`src/styles/variables.css`**：
+
+- `--color-primary` / `--color-primary-rgb` —— 主色。**两者要一起改**（`-rgb` 是给
+  `rgba()` 用的分量，暗色模式会各自覆盖）。
+- `--content-width` —— 首页 / 文章页 / 列表页共用的中栏宽度，改一处三页同步。
+- 暗色调色板在同一个文件里的两处（`prefers-color-scheme` 与 `[data-theme='dark']`），
+  修改时两边要保持一致。
+
+### 导航栏
+
+`src/components/Header.astro` 顶部的 `navItems` 数组，加一项即出现新链接：
 
 ```ts
-export const SITE = {
-	title: "Rito-492's Blog",
-	description: 'Rito-492 的个人网站',
-	url: 'https://rito-492.github.io',
-	author: 'Rito-492', // 名字
-	bio: '世界很大，开心第一。', // 个人简介
-	avatar: '/avatar.jpg', // 头像
-} as const;
+const navItems = [
+	{ href: '/', label: 'Home' },
+	{ href: '/blog', label: 'Blog' },
+	// 新增：{ href: '/新页面', label: '新菜单' },
+];
 ```
 
-页面结构在 `src/components/ProfileCard.astro`，社交链接在 `src/components/SocialLinks.astro`（数据来自 `config.ts` 的 `SOCIALS`）。
+### 发布文章
 
-**修改头像**:
+文章在**私有 Obsidian 库**里写，不在本仓库：
 
-- 将新头像图片命名为 `avatar.jpg`
-- 放到 `public/` 目录下
-- 刷新页面即可
+1. 在 Obsidian（garden 仓库）的 `20_blog/` 下新建 `.md`
+2. Frontmatter 见 [`src/content/README.md`](./src/content/README.md)（字段权威说明）
+3. 设为 `isPublished: true`，推送 garden 仓库
+4. 站点最多 2 小时后自动重建上线；急用去本仓库 Actions 页点 **Run workflow**
 
----
+### 添加项目
 
-### 2. 修改导航栏
-
-**文件**: `src/components/Header.astro` — 搜索 `nav-links` 定位
-
-```astro
-<nav>
-	<a href="/" class="logo">
-		{title}
-	</a>{' '}
-	<!-- Logo 文字 -->
-	<ul class="nav-links">
-		<li>
-			<a href="/">Home</a>
-		</li>
-		<li>
-			<a href="/blog">Blog</a>
-		</li>
-		<!-- 导航链接 -->
-		<li>
-			<a href="/projects">Projects</a>
-		</li>
-		<li>
-			<a href="/about">About</a>
-		</li>
-	</ul>
-</nav>
-```
-
-**添加新导航项**:
-
-```astro
-<li>
-	<a href="/新页面">新菜单文字</a>
-</li>
-```
-
----
-
-### 3. 发布博客文章
-
-博客内容与网站代码**已解耦**：文章存放在私有 Obsidian 库（garden 仓库）的 `20_blog/` 目录，本地通过软链接 `src/content/blog` 接入，CI 构建时自动拉取。
-
-**写作位置**: 在 Obsidian 里编辑 `20_blog/*.md`，推送 garden 仓库即可（详见 `AGENTS.md`「博客内容解耦」）
-
-**文件命名**: 建议使用英文或数字，如 `my-first-post.md`
-
-**文章模板** (`_template.md`):
-
-```markdown
----
-title: '文章标题'
-description: '文章描述，显示在列表页'
-abstract: '文章摘要，显示在文章标题下方'
-pubDate: '2026_04_27_12_00' # 发布时间（也兼容 202604271200 数字写法）
-modDate: '2026_04_27_18_30' # 最后编辑时间（可选）
-series: '学习笔记' # 系列名称（可选）
-isPublished: true # true=发布，false=草稿（不会构建出页面）
-tags: ['标签1', '标签2'] # 必填，至少一个
----
-
-## 章节标题
-
-正文内容...
-```
-
-**字段说明**:
-
-| 字段          | 必填 | 说明                                             | 显示位置           |
-| ------------- | ---- | ------------------------------------------------ | ------------------ |
-| `title`       | ✅   | 文章标题                                         | 文章顶部、列表页   |
-| `description` | ✅   | 文章描述                                         | 列表页卡片         |
-| `abstract`    | ❌   | 文章摘要                                         | 文章标题下方       |
-| `pubDate`     | ✅   | 发布时间（`YYYY_MM_DD_HH_mm` 或 `YYYYMMDDHHmm`） | 文章元信息         |
-| `modDate`     | ❌   | 最后编辑时间                                     | 文章元信息         |
-| `series`      | ❌   | 系列名称                                         | 右侧栏顶部         |
-| `tags`        | ✅   | 文章标签                                         | 右侧栏、列表页筛选 |
-| `isPublished` | ❌   | 是否发布（默认不发布）                           | -                  |
-
-**写作技巧**:
-
-- 使用 `## 标题` 和 `### 标题` 创建章节（会自动生成右侧目录）
-- 支持 Markdown 语法：列表、代码块、引用等
-
----
-
-### 4. 添加项目作品
-
-**文件位置**: `src/content/projects/` 目录下创建 `.md` 文件
-
-**项目模板**:
+在 `src/content/projects/` 新建 `.md`，参照 `_template.md`：
 
 ```markdown
 ---
 title: '项目名称'
-description: '项目简介'
-tech: ['React', 'TypeScript'] # 技术栈
-github: 'https://github.com/你的用户名/仓库' # GitHub 链接（可选）
-link: 'https://项目网址' # 在线演示链接（可选）
-draft: false
+description: '一句话简介'
+tech: ['Python', 'PyTorch']
+github: 'https://github.com/Rito-492/仓库' # 可选
+link: 'https://演示地址' # 可选
+draft: false # true = 不显示
 ---
-
-## 项目详情
-
-详细介绍项目的功能、技术选型等...
 ```
 
-**字段说明**:
+> ⚠️ 项目用 `draft`（true = 隐藏），文章用 `isPublished`（true = 发布），语义相反。
 
-| 字段          | 必填 | 说明            |
-| ------------- | ---- | --------------- |
-| `title`       | ✅   | 项目名称        |
-| `description` | ✅   | 项目简介        |
-| `tech`        | ✅   | 技术栈数组      |
-| `github`      | ❌   | GitHub 仓库链接 |
-| `link`        | ❌   | 在线演示链接    |
-| `draft`       | ❌   | 是否隐藏        |
+### 新增页面
 
----
-
-### 5. 修改关于页面
-
-**文件**: `src/pages/about.astro`
-
-直接编辑文件内容，修改自我介绍文字。
-
----
-
-### 6. 修改颜色主题
-
-**文件**: `src/styles/variables.css`
-
-```css
-:root {
-	--color-primary: #0891b2; /* 主色调 */
-	--color-primary-hover: #0e7490; /* 悬停颜色 */
-	--color-text: #1e293b; /* 正文颜色 */
-	--color-text-muted: #64748b; /* 次要文字颜色 */
-	--color-border: #e0ded6; /* 边框颜色 */
-	--color-card: #ffffff; /* 卡片背景 */
-	--color-bg: #f8f8f6; /* 页面背景 */
-}
-```
-
-修改颜色值后，全站会自动应用新主题色。
-
----
-
-### 7. 添加社交链接（左侧栏）
-
-**数据**: `src/config.ts` 的 `SOCIALS` 数组 — 加一项即可出现在首页侧栏和 About 页：
-
-```ts
-export const SOCIALS: ReadonlyArray<{ id: SocialId; label: string; href: string }> = [
-	{ id: 'email', label: 'Email', href: 'mailto:your-email@gmail.com' },
-	// 添加新链接：
-	// { id: 'twitter', label: 'Twitter', href: 'https://twitter.com/你的id' },
-];
-```
-
-**图标**: `src/components/SocialLinks.astro` — 为新 `id` 加一个 `<svg>` 分支（图标代码见下文）。如需控制某页面的显示顺序，用 `ids` 属性（见 About 页用法）。
-
-#### 完整示例：添加 Twitter/X 链接
-
-```astro
-<a
-	href="https://twitter.com/你的用户名"
-	target="_blank"
-	rel="noopener noreferrer"
-	class="social-link"
->
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		width="16"
-		height="16"
-		viewBox="0 0 24 24"
-		fill="currentColor"
-	>
-		<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-	</svg>
-	Twitter
-</a>
-```
-
-#### 属性说明
-
-| 属性                        | 说明       | 是否必须                   |
-| --------------------------- | ---------- | -------------------------- |
-| `href`                      | 链接地址   | ✅ 必填                    |
-| `target="_blank"`           | 新窗口打开 | 推荐（外链时）             |
-| `rel="noopener noreferrer"` | 安全属性   | 推荐（配合 `_blank` 使用） |
-| `class="social-link"`       | 样式类名   | ✅ 必填                    |
-
-#### 常用社交平台 SVG 图标
-
-**GitHub**:
-
-```xml
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-</svg>
-```
-
-**Steam**:
-
-```xml
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M11.979 0C5.666 0 .538 5.144.538 11.474c0 1.982.507 3.903 1.477 5.613l1.015 1.856 4.256-3.092c1.438.66 3.032 1.033 4.713 1.033 6.313 0 11.442-5.145 11.442-11.475S18.292 0 11.979 0zm0 20.803c-1.315 0-2.59-.293-3.748-.836l-.356-.168-2.877 2.089-.68-1.255c-.803-1.413-1.228-3.019-1.228-4.659 0-5.151 4.188-9.34 9.34-9.34s9.34 4.189 9.34 9.34c0 5.151-4.189 9.34-9.34 9.34z"/>
-    <path d="M11.979 6.39c-2.776 0-5.036 2.259-5.036 5.035s2.26 5.035 5.036 5.035 5.035-2.259 5.035-5.035-2.26-5.035-5.035-5.035zm0 8.062c-1.67 0-3.027-1.358-3.027-3.027 0-1.67 1.357-3.027 3.027-3.027 1.669 0 3.027 1.358 3.027 3.027 0 1.67-1.36 3.027-3.027 3.027z"/>
-</svg>
-```
-
-**Twitter/X**:
-
-```xml
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-</svg>
-```
-
-**Bilibili**:
-
-```xml
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M19.295 8.461c.752-.236 1.299-.368 1.641-.398.69-.061 1.592-.005 1.592 1.962 0 1.856-.855 1.982-1.898 1.982-.608 0-1.115-.156-1.561-.343l-.855 1.441c.561.266 1.22.464 1.952.464 1.909 0 3.496-.772 3.496-3.543 0-1.551-.608-2.675-2.302-3.214l-2.065-.353zm-7.54 2.797c-.732 0-1.33-.597-1.33-1.329s.598-1.329 1.33-1.329 1.329.597 1.329 1.329-.597 1.329-1.329 1.329zm-4.474 0c-.732 0-1.329-.597-1.329-1.329s.597-1.329 1.329-1.329 1.33.597 1.33 1.329-.598 1.329-1.33 1.329zm12.03-3.338c-.126-.021-.251-.041-.377-.061V3.584c0-1.952-1.483-2.817-3.224-2.817H8.29C6.285.767 4.66 1.76 4.66 3.885v4.093c-.166.031-.332.062-.498.093C1.77 8.492 0 10.178 0 12.908c0 3.692 2.914 5.934 6.606 5.934 2.066 0 3.818-.773 5.018-1.993 1.19 1.13 2.942 1.833 4.947 1.833 3.692 0 6.606-2.162 6.606-5.854 0-2.619-1.671-4.388-3.862-5.006zm-3.17 8.787c-1.631 0-2.851-.752-3.48-1.661v2.589H9.18v-4.484h2.014c.629-.021 1.157.207 1.157.896v.353c.514-1.064 1.713-1.713 3.195-1.713 2.193 0 3.592 1.413 3.592 3.573 0 2.354-1.579 3.847-3.958 3.847z"/>
-</svg>
-```
-
-**知乎**:
-
-```xml
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M13.846 0c-.692 0-1.322.37-1.636.96l-4.396 8.186a.246.246 0 0 0 .218.361h3.169v2.033c0 3.605 2.34 6.753 5.738 7.796a.25.25 0 0 0 .32-.166l.865-2.852a.25.25 0 0 0-.152-.304c-1.244-.438-2.148-1.59-2.148-2.944v-3.563h3.476a.25.25 0 0 0 .218-.361L15.482.96a1.852 1.852 0 0 0-1.636-.96z"/>
-</svg>
-```
-
-#### 如何获取其他 SVG 图标
-
-1. 访问 [Simple Icons](https://simpleicons.org/) 或 [IconPark](https://iconpark.oceanengine.com/)
-2. 搜索品牌名称（如 "Discord", "Telegram"）
-3. 点击图标，复制 SVG 代码
-4. 粘贴到 `<svg>` 标签内，替换 `<path>` 部分
-
----
-
-## 🎨 前端开发基础
-
-### Astro 基础概念
-
-**什么是 Astro？**
-
-- 一个现代静态网站生成器
-- 支持 Markdown、组件化开发
-- 构建时生成纯 HTML，无需服务器
-
-**`.astro` 文件结构**:
+在 `src/pages/` 建 `.astro` 文件，用 `Layout` 包一层：
 
 ```astro
 ---
-// Frontmatter 区域（两个 --- 之间）
-// 这里是 JavaScript/TypeScript 代码
-import Component from '../components/Component.astro';
-const title = '页面标题';
+import Layout from '../layouts/Layout.astro';
 ---
 
-<!-- 模板区域 -->
-<html>
-	<body>
-		<h1>{title}</h1>
-		<!-- 使用花括号输出变量 -->
-		<Component /> <!-- 使用组件 -->
-	</body>
-</html>
-
-<style>
-	/* CSS 样式 */
-	h1 {
-		color: red;
-	}
-</style>
+<Layout title="页面标题">
+	<p>内容</p>
+</Layout>
 ```
 
-### 常用修改场景
-
-#### 修改文字内容
-
-直接找到对应文件，修改引号内的文字即可。
-
-#### 修改链接
-
-找到 `<a href="旧链接">`，替换 `href` 属性值。
-
-#### 添加新页面
-
-1. 在 `src/pages/` 目录创建 `新页面名.astro`
-2. 复制现有页面的结构
-3. 在导航栏添加链接
-
-#### 修改样式
-
-- 小改动：直接在组件的 `<style>` 标签内修改
-- 全局改动：修改 `src/styles/variables.css`
+单列内容页会自动套用 `.full-width`（900px 居中）；需要三栏结构时参考
+`src/pages/blog/index.astro`。
 
 ---
 
-## ❓ 常见问题
+## 样式约定
 
-### Q1: 修改后没有生效？
+改样式前先看这条，能避免大部分「改了没生效 / 越改越乱」：
 
-1. 确保开发服务器在运行 (`npm run dev`)
-2. 硬刷新浏览器：`Ctrl+Shift+R` (Windows) 或 `Cmd+Shift+R` (Mac)
-3. 清除浏览器缓存
-
-### Q2: 如何部署到 GitHub Pages？
-
-网站已配置自动部署：
-
-1. 推送代码到 `main` 分支
-2. GitHub Actions 会自动构建并部署
-3. 访问 `https://你的用户名.github.io/仓库名`
-
-### Q3: 博客文章不显示？
-
-检查 `isPublished` 字段是否为 `true`：
-
-```markdown
-isPublished: true <!-- 必须是 true 才会显示 -->
-```
-
-### Q4: 如何添加新的配色方案？
-
-在 `src/styles/variables.css` 中添加：
-
-```css
-[data-theme='dark'] {
-	--color-primary: #0891b2;
-	--color-bg: #1a1a1a;
-	/* ... */
-}
-```
-
-### Q5: 如何修改字体？
-
-在 `src/layouts/Layout.astro` 的 `<head>` 部分添加 Google Fonts 链接：
-
-```html
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet" />
-```
-
-然后在 CSS 中使用：
-
-```css
-body {
-	font-family: 'Noto Serif SC', serif;
-}
-```
+1. **卡片、按钮、区块标题、空状态等通用件在 `src/styles/` 里，不要在页面里重写。**
+   页面 `<style>` 只放该页独有的东西（如 hero、页头）。
+2. **卡片悬停语言全站统一**：上浮 2px + 主色描边 + 淡阴影（`components.css` 里定义）。
+   加新卡片请复用 `.post-card` / `.project-card` 或沿用同一套 hover 值。
+3. **半透明主色一律写 `rgba(var(--color-primary-rgb), α)`**，不要硬编码
+   `rgba(8, 145, 178, α)`——否则暗色模式下会偏色。
+4. Astro scoped 样式**管不到 Markdown 渲染出的内容**，这类选择器要套 `:global()`。
+5. 改完跑 `npm run format`，再 `npm run build` 确认。
 
 ---
 
-## 📚 学习资源
+## 部署
 
-- [Astro 官方文档](https://docs.astro.build/zh-cn/)
-- [Markdown 语法指南](https://commonmark.org/help/)
-- [CSS 教程](https://developer.mozilla.org/zh-CN/docs/Web/CSS)
+推送 `main` → GitHub Actions 构建 → GitHub Pages。
 
----
-
-## 🛠️ 技术栈
-
-- **框架**: [Astro](https://astro.build) 6.x
-- **语言**: TypeScript
-- **样式**: CSS (CSS Variables)
-- **部署**: GitHub Pages + GitHub Actions
+构建时从私有 vault 仓库拉取 `20_blog/`（sparse-checkout），需要 `BLOG_REPO_TOKEN`。
+另有每 2 小时定时重建，用于把 vault 的新文章带上线。
 
 ---
 
-最后更新：2026-05-06
+## 技术栈
+
+- **框架**：Astro 6（静态输出）
+- **样式**：原生 CSS + 自定义属性（无预处理器）
+- **字体**：JetBrains Mono + 霞鹜文楷（当前走 CDN，自托管在待办中）
+- **评论**：Giscus（GitHub Discussions）
+- **统计**：GoatCounter
+- **部署**：GitHub Pages + GitHub Actions
