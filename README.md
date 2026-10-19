@@ -39,7 +39,7 @@ src/
 │   ├── projects/           # 项目作品（Markdown，随本站维护）
 │   └── README.md           # 内容字段说明（Frontmatter 权威文档）
 ├── layouts/
-│   └── Layout.astro        # 页面组装层：head + 导航 + 四种页面形态 + 全局脚本
+│   └── Layout.astro        # 页面组装层：head + 导航 + 统一三栏外壳 + 全局脚本
 ├── pages/
 │   ├── index.astro         # 首页（hero + 最新文章 + 精选项目 + 总浏览）
 │   ├── about.astro         # 关于

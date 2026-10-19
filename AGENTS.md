@@ -172,7 +172,7 @@ src/
     ├── base.css                # Reset + 链接/按钮/卡片/区块标题/空状态等通用件
     ├── components.css          # 文章卡/项目卡/点击特效/细滚动条/灯箱
     ├── sidebar.css             # 右侧栏共享原语：.side-panel / .side-panel-title / .side-panel-item / .tag-pill
-    └── layouts.css             # 页面结构布局（全局）：home/post 三栏网格、.full-width
+    └── layouts.css             # 全站统一三栏外壳 .page-shell（左身份 / 中内容 / 右上下文）
 ```
 
 ## 关键设计决策
@@ -185,8 +185,8 @@ src/
 - `variables.css` — 设计令牌。`--content-width` 是全站中栏宽度，首页/文章页/列表页共用。
 - `base.css` — 无类语义的通用件：`a` / `.btn` / `.card` / `.section-header` / `.view-more` / `.empty-state` / `.float-icon` / `:focus-visible`。
 - `components.css` — 具名组件：`.post-card` / `.project-card` / `.tech-tag` / 点击特效 / 细滚动条 / 灯箱。
+- `layouts.css` — 全站统一三栏外壳 `.page-shell`（左身份 / 中内容 / 右上下文），断点 1200px；单列媒体查询里要重置 `grid-column`（见「易错点」）。
 - `sidebar.css` — 文章页 TOC 与列表页筛选栏共用的侧栏原语（两者视觉语言一致，差异只在内容）。
-- `layouts.css` — 页面级网格。**单列媒体查询里必须重置 `grid-column`**，否则会生成幽灵列（见「易错点」）。
 
 **卡片悬停语言**（全站统一，`components.css` 定义）：上浮 `translateY(-2px)` + 主色描边
 
@@ -197,15 +197,23 @@ src/
 
 ### Layout system
 
-`Layout.astro` 是纯组装层（2026-10 重构）：`SeoHead`（head）+ `Header` + 四种页面形态分支 + `Footer` + 全局交互脚本。结构布局样式在 `styles/layouts.css`（全局），组件样式跟随各自组件。
+`Layout.astro` 是纯组装层：`SeoHead`（head）+ `Header` + **全站统一三栏外壳** + `Footer` + 全局交互脚本。结构布局样式在 `styles/layouts.css`（全局），组件样式跟随各自组件。
 
-- **Home page**: 3-column grid — `1fr var(--content-width) 1fr`. Left sidebar (profile card), center content, empty right column.
-- **Blog post**: 3-column grid — `1fr var(--content-width) 1fr`. Center article, right TOC sidebar with `border-left`.
-- **Blog list**: 3-column grid — `1fr var(--content-width) 1fr`. Center timeline, right sidebar with series/tag filters.
-- **Other pages** (about, projects): single column with `max-width: 900px` via `.full-width` class.
+**所有页面共用同一套 `.page-shell`**（404 除外）：
 
-> 三页中栏宽度统一为 `--content-width`（700px）。此前首页 720 / 文章页 680 / 列表页 700 三套值，
-> 且首页还被 `base.css` 的 `main { padding: 2rem }` 挤成 656px 实际宽度。
+- 栅格：`minmax(0,1fr) var(--content-width) minmax(0,1fr)` + `column-gap: 2.5rem`
+- **左栏** `.page-left` — 固定为身份与联系（`ProfileCard`），全站一致
+- **中栏** `.main-content` — 页面主体，宽度固定 `--content-width`
+- **右栏** — 页面上下文，由页面通过 `<Fragment slot="right">` 提供：
+    - 首页：系列 / 标签入口 → `/blog?series=`、`/blog?tag=`
+    - 文章页：`TocSidebar`（系列 / 标签 / 目录）
+    - 列表页：系列 / 标签 / 排序筛选
+    - About：这个网站（技术栈 + 链接）
+    - Projects：按技术栈筛选
+- **404** 是错误态，保持单列（`ContentShell fullWidth`），不套三栏
+- 断点 **1200px**：左右栏收起；左栏身份卡变为正文上方的紧凑横条，右栏落到正文下方；文章页目录改用 `MobileToc` 浮钮
+
+> 2026-10 统一前：首页 720 / 文章页 680 / 列表页 700 三套中栏宽度，About/Projects 又是 900px 单列，切页时内容列会横向跳约 100px。现在五类页面中栏位置与宽度完全一致。
 
 ### Blog list sidebar vs Blog post sidebar
 

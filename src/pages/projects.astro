@@ -10,6 +10,8 @@ const projects = await getCollection('projects', ({ data }) => {
 const sortedProjects = projects.sort((a, b) => {
 	return a.id.localeCompare(b.id);
 });
+
+const allTechs = [...new Set(sortedProjects.flatMap((p) => p.data.tech))].sort();
 ---
 
 <Layout title="Projects - Rito-492">
@@ -38,6 +40,7 @@ const sortedProjects = projects.sort((a, b) => {
 					target="_blank"
 					rel="noopener noreferrer"
 					class="project-card"
+					data-tech={JSON.stringify(project.data.tech)}
 				>
 					<div class="card-icon">
 						<Icon name="folder" size={28} strokeWidth={1.5} />
@@ -53,13 +56,74 @@ const sortedProjects = projects.sort((a, b) => {
 			))
 		)}
 	</section>
+
+	<!-- 右栏：按技术栈筛选 -->
+	<Fragment slot="right">
+		<aside class="side-panel">
+			<div class="side-panel-section">
+				<div class="side-panel-title">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="16"
+						height="16"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+						<line x1="7" y1="7" x2="7.01" y2="7" />
+					</svg>
+					<span>技术栈</span>
+				</div>
+				<nav id="techFilter">
+					<a class="side-panel-item active" data-tech="all">
+						全部
+					</a>
+					{allTechs.map((tech) => (
+						<a class="side-panel-item" data-tech={tech}>
+							{tech}
+						</a>
+					))}
+				</nav>
+			</div>
+		</aside>
+	</Fragment>
 </Layout>
+
+<script>
+	// 按技术栈筛选项目（View Transitions 安全：每次导航重新初始化）
+	function initProjectFilter() {
+		const nav = document.getElementById('techFilter');
+		const grid = document.querySelector('.projects-grid');
+		if (!nav || !grid) return;
+
+		const cards = Array.from(grid.querySelectorAll<HTMLElement>('.project-card'));
+
+		nav.addEventListener('click', (e) => {
+			const item = (e.target as HTMLElement).closest('.side-panel-item') as HTMLElement;
+			if (!item) return;
+			nav.querySelectorAll('.side-panel-item').forEach((el) => el.classList.remove('active'));
+			item.classList.add('active');
+
+			const tech = item.dataset.tech;
+			cards.forEach((card) => {
+				const techs: string[] = JSON.parse(card.dataset.tech ?? '[]');
+				card.style.display = tech === 'all' || techs.includes(tech!) ? '' : 'none';
+			});
+		});
+	}
+
+	document.addEventListener('astro:page-load', initProjectFilter);
+</script>
 
 <style>
 	/* 项目页独有：页头 + 卡片图标块 + 顶部渐变条（卡片本体样式在全局 CSS） */
 	.projects-header {
 		text-align: center;
-		padding: 3rem 0 4rem;
+		padding: 2rem 0 3rem;
 	}
 
 	.header-content {
@@ -92,8 +156,6 @@ const sortedProjects = projects.sort((a, b) => {
 
 	.projects-grid {
 		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-		max-width: 1000px;
-		margin: 0 auto;
 	}
 
 	/* 顶部渐变条：卡片专属装饰 */

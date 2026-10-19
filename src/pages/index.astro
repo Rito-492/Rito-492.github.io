@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import SocialLinks from '../components/SocialLinks.astro';
 import Icon from '../components/Icon.astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '../config';
@@ -13,6 +12,11 @@ const latestPosts = posts
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 3);
 
+const allSeries = [
+	...new Set(posts.filter((p) => p.data.series).map((p) => p.data.series!)),
+].sort();
+const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.data.tags!))].sort();
+
 const jsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'WebSite',
@@ -24,43 +28,6 @@ const jsonLd = {
 ---
 
 <Layout title={SITE.title} jsonLd={jsonLd}>
-	<!-- 首页介绍 -->
-	<section class="hero-section">
-		<div class="hero-content">
-			<h1>Rito-492</h1>
-			<p class="tagline">这里是代码与思考的自留地</p>
-			<div class="hero-actions">
-				<a href="/blog" class="btn primary">
-					读文章
-					<Icon name="arrow-right" size={16} />
-				</a>
-				<a href="/rss.xml" class="hero-rss">
-					<Icon name="rss" size={15} />
-					RSS 订阅
-				</a>
-			</div>
-			<p class="hero-visits">
-				总浏览
-				<span id="visitCount">—</span>
-			</p>
-			<!-- 移动端身份信息：桌面端个人卡片在左侧栏，窄屏栏隐藏后用这里补位 -->
-			<div class="hero-profile">
-				<img
-					class="hero-avatar"
-					src={SITE.avatar}
-					alt="avatar"
-					width="56"
-					height="56"
-					decoding="async"
-				/>
-				<div class="hero-profile-text">
-					<p class="hero-bio">{SITE.bio}</p>
-					<SocialLinks variant="row" />
-				</div>
-			</div>
-		</div>
-	</section>
-
 	<!-- 最新博客 -->
 	<section class="blog-section">
 		<div class="section-header">
@@ -130,6 +97,82 @@ const jsonLd = {
 			))}
 		</div>
 	</section>
+
+	<!-- 站点总浏览量（GoatCounter） -->
+	<section class="visitor-counter-section">
+		<span class="counter-label">总浏览：</span>
+		<span class="counter-number" id="visitCount">
+			—
+		</span>
+	</section>
+
+	<!-- 右栏：写作主题入口 -->
+	<Fragment slot="right">
+		<aside class="side-panel">
+			{allSeries.length > 0 && (
+				<div class="side-panel-section">
+					<div class="side-panel-title">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+						</svg>
+						<span>系列</span>
+					</div>
+					<nav>
+						<a class="side-panel-item" href="/blog">
+							全部文章
+						</a>
+						{allSeries.map((series) => (
+							<a
+								class="side-panel-item"
+								href={`/blog?series=${encodeURIComponent(series)}`}
+							>
+								{series}
+							</a>
+						))}
+					</nav>
+				</div>
+			)}
+
+			{allTags.length > 0 && (
+				<div class="side-panel-section">
+					<div class="side-panel-title">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+							<line x1="7" y1="7" x2="7.01" y2="7" />
+						</svg>
+						<span>标签</span>
+					</div>
+					<nav class="tag-cloud">
+						{allTags.map((tag) => (
+							<a class="tag-pill" href={`/blog?tag=${encodeURIComponent(tag)}`}>
+								{tag}
+							</a>
+						))}
+					</nav>
+				</div>
+			)}
+		</aside>
+	</Fragment>
 </Layout>
 
 <script>
@@ -154,109 +197,32 @@ const jsonLd = {
 </script>
 
 <style>
-	/* 首页独有：hero + 移动端身份卡 + 区块间距（卡片/网格/按钮等共用样式在全局 CSS） */
-	.hero-section {
-		padding: 2.5rem 0 2rem;
+	/* 首页独有：区块间距与底部计数（卡片/网格/按钮等在全局 CSS） */
+	.blog-section {
+		padding: 0 0 3rem;
 	}
 
-	.hero-content h1 {
-		font-size: 2.25rem;
-		font-weight: 700;
-		color: var(--color-text);
-		margin-bottom: 0.75rem;
-		letter-spacing: -0.02em;
-		line-height: 1.25;
-	}
-
-	.hero-content .tagline {
-		font-size: 1.05rem;
-		color: var(--color-text-muted);
-		margin-bottom: 1.75rem;
-	}
-
-	.hero-actions {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		flex-wrap: wrap;
-	}
-
-	.hero-rss {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4rem;
-		padding: 0.5rem 0.25rem;
-		color: var(--color-text-muted);
-		font-size: 0.88rem;
-		text-decoration: none;
-		transition: color var(--transition-fast);
-	}
-
-	.hero-rss:hover {
-		color: var(--color-primary);
-	}
-
-	.hero-visits {
-		margin-top: 1.5rem;
-		font-size: 0.78rem;
-		letter-spacing: 0.02em;
-		color: var(--color-text-muted);
-	}
-
-	.hero-visits span {
-		margin-left: 0.35rem;
-		font-family: var(--font-mono);
-		font-weight: 700;
-		color: var(--color-primary);
-	}
-
-	/* 移动端身份卡（桌面端隐藏，身份信息在左侧栏） */
-	.hero-profile {
-		display: none;
-	}
-
-	.hero-avatar {
-		width: 56px;
-		height: 56px;
-		border-radius: 50%;
-		object-fit: cover;
-		flex-shrink: 0;
-	}
-
-	.hero-profile-text {
-		min-width: 0;
-	}
-
-	.hero-bio {
-		color: var(--color-text-muted);
-		font-size: 0.88rem;
-		margin-bottom: 0.5rem;
-	}
-
-	.blog-section,
 	.projects-section {
 		padding: 3rem 0;
 		border-top: 1px solid var(--color-border);
 	}
 
-	@media (max-width: 1150px) {
-		.hero-profile {
-			display: flex;
-			align-items: center;
-			gap: 1rem;
-			margin-top: 1.5rem;
-			padding-top: 1.5rem;
-			border-top: 1px solid var(--color-border);
-		}
+	.visitor-counter-section {
+		padding: 2rem 0;
+		border-top: 1px solid var(--color-border);
+		text-align: center;
 	}
 
-	@media (max-width: 768px) {
-		.hero-section {
-			padding: 1.5rem 0 1rem;
-		}
+	.counter-label {
+		color: var(--color-text-muted);
+		font-size: 0.9rem;
+		margin-right: 0.5rem;
+	}
 
-		.hero-content h1 {
-			font-size: 1.75rem;
-		}
+	.counter-number {
+		font-family: var(--font-mono);
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--color-primary);
 	}
 </style>

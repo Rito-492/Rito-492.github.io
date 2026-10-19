@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import GiscusComments from '../../components/GiscusComments.astro';
+import TocSidebar from '../../components/TocSidebar.astro';
 import { formatDate } from '../../lib/date';
 import { GISCUS, LICENSE, SITE } from '../../config';
 
@@ -45,9 +46,6 @@ const jsonLd = {
 	title={post.data.title}
 	showToc={true}
 	tocHeadings={tocHeadings}
-	series={post.data.series}
-	postTitle={post.data.title}
-	tags={post.data.tags ?? []}
 	jsonLd={jsonLd}
 	licenseUrl={LICENSE.url}
 >
@@ -145,11 +143,21 @@ const jsonLd = {
 			<GiscusComments {...GISCUS} />
 		</article>
 	</div>
+
+	<!-- 右栏：系列 / 标签 / 目录 -->
+	<Fragment slot="right">
+		<TocSidebar
+			series={post.data.series ?? ''}
+			postTitle={post.data.title}
+			tags={post.data.tags ?? []}
+			tocHeadings={tocHeadings}
+		/>
+	</Fragment>
 </Layout>
 
 <style>
 	.post-page {
-		padding: 2rem 0;
+		padding: 0;
 	}
 
 	.post-header {
@@ -403,10 +411,6 @@ const jsonLd = {
 	/* 图片灯箱样式在 components.css（元素由 JS 动态挂到 body，避免层叠上下文限制） */
 
 	@media (max-width: 640px) {
-		.post-page {
-			padding: 1.5rem 1rem;
-		}
-
 		.post-header h1 {
 			font-size: 1.5rem;
 		}

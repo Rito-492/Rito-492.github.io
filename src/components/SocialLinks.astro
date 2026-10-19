@@ -102,4 +102,12 @@ const isExternal = (href: string) => href.startsWith('http');
 		color: var(--color-primary);
 		background: rgba(var(--color-primary-rgb), 0.06);
 	}
+
+	/* 窄屏身份条：竖排改为可换行的横排 */
+	@media (max-width: 1200px) {
+		.social-links.stack {
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+	}
 </style>

@@ -3,7 +3,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SeoHead from '../components/SeoHead.astro';
 import ProfileCard from '../components/ProfileCard.astro';
-import TocSidebar from '../components/TocSidebar.astro';
 import MobileToc from '../components/MobileToc.astro';
 import ContentShell from '../components/ContentShell.astro';
 import { SITE } from '../config';
@@ -22,9 +21,6 @@ export interface Props {
 	licenseUrl?: string;
 	showToc?: boolean;
 	tocHeadings?: Array<{ depth: number; text: string; id: string }>;
-	series?: string;
-	postTitle?: string;
-	tags?: string[];
 }
 
 const {
@@ -36,13 +32,9 @@ const {
 	licenseUrl,
 	showToc = false,
 	tocHeadings = [],
-	series = '',
-	postTitle = '',
-	tags = [],
 } = Astro.props;
 
-const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
-const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
+const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 ---
 
 <!doctype html>
@@ -60,34 +52,25 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 	<body>
 		<Header title={SITE.title} />
 
-		{isHomePage ? (
-			<div class="home-layout">
-				<aside class="sidebar-column">
-					<ProfileCard />
-				</aside>
-				<ContentShell>
-					<slot />
-				</ContentShell>
-			</div>
-		) : showToc && tocHeadings.length > 0 ? (
-			<div class="post-layout full-width">
-				<ContentShell>
-					<slot />
-				</ContentShell>
-				<TocSidebar
-					series={series}
-					postTitle={postTitle}
-					tags={tags}
-					tocHeadings={tocHeadings}
-				/>
-				<MobileToc tocHeadings={tocHeadings} />
-			</div>
-		) : isBlogListPage ? (
-			<slot />
-		) : (
+		{is404Page ? (
 			<ContentShell fullWidth={true}>
 				<slot />
 			</ContentShell>
+		) : (
+			<div class="page-shell">
+				<aside class="page-left">
+					<ProfileCard />
+				</aside>
+
+				<ContentShell>
+					<slot />
+				</ContentShell>
+
+				<!-- 右栏：页面上下文（目录 / 筛选 / 站点信息），由页面按需提供 -->
+				<slot name="right" />
+
+				{showToc && tocHeadings.length > 0 && <MobileToc tocHeadings={tocHeadings} />}
+			</div>
 		)}
 
 		<Footer />

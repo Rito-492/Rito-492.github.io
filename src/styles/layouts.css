@@ -1,8 +1,8 @@
-/* 页面结构布局（全局样式）：首页三栏 / 文章页三栏 / 通用内容区
-   这些类由 Layout 及其子组件共同参与，故为全局样式而非 scoped */
+/* 全站统一三栏外壳：左身份 / 中内容 / 右页面上下文
+   所有页面共用同一栅格，内容列的水平位置与宽度不再随页面跳变。
+   右栏内容由各页面的 <Fragment slot="right"> 提供，允许为空。 */
 
-/* 首页布局：左侧 Sidebar + 中间内容 */
-.home-layout {
+.page-shell {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) var(--content-width) minmax(0, 1fr);
 	column-gap: 2.5rem;
@@ -10,7 +10,8 @@
 	position: relative;
 }
 
-.sidebar-column {
+/* 左栏：身份与联系（全站固定，内容由 ProfileCard 提供） */
+.page-left {
 	grid-column: 1;
 	justify-self: end;
 	width: 200px;
@@ -19,49 +20,36 @@
 	height: fit-content;
 }
 
-/* 内容主栏：所有页面共用同一宽度基准，避免各页各写一套 */
+/* 中栏：页面主体 */
 .main-content {
 	grid-column: 2;
 	min-width: 0;
 	padding: 0;
 }
 
-/* 单列内容页（About / Projects / 404）：居中定宽 */
+/* 单列内容页（目前仅 404）：居中定宽 */
 .full-width {
 	max-width: 900px;
 	margin: 0 auto;
 	padding: 2rem;
 }
 
-/* 博客文章页布局：文章 + 右侧目录 */
-.post-layout {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr) var(--content-width) minmax(0, 1fr);
-	column-gap: 2.5rem;
-	padding: 2rem 0;
-}
-
-.post-layout.full-width {
-	max-width: none;
-	margin: 0;
-	padding: 2rem 0;
-}
-
-/* 响应式 */
-@media (max-width: 1150px) {
-	.home-layout,
-	.post-layout {
+@media (max-width: 1200px) {
+	.page-shell {
 		grid-template-columns: 1fr;
-		padding: 2rem 1rem;
+		padding: 1.5rem 1rem;
 	}
 
-	.sidebar-column {
-		display: none;
+	/* 左栏落回正文上方，变成一条紧凑的身份条 */
+	.page-left {
+		grid-column: 1;
+		justify-self: stretch;
+		width: auto;
+		position: static;
+		margin-bottom: 1.25rem;
 	}
 
-	/* 单列后重置显式列定位：否则会生成幽灵第二列，叠加 column-gap 会把内容挤偏 */
-	.home-layout .main-content,
-	.post-layout .main-content {
+	.main-content {
 		grid-column: 1;
 	}
 

@@ -7,9 +7,11 @@ import SocialLinks from './SocialLinks.astro';
 	<div class="avatar">
 		<img src={SITE.avatar} alt="avatar" width="64" height="64" decoding="async" />
 	</div>
-	<h2 class="name">{SITE.author}</h2>
-	<p class="bio">{SITE.bio}</p>
-	<SocialLinks variant="stack" />
+	<div class="profile-text">
+		<h2 class="name">{SITE.author}</h2>
+		<p class="bio">{SITE.bio}</p>
+		<SocialLinks variant="stack" />
+	</div>
 </div>
 
 <style>
@@ -24,15 +26,14 @@ import SocialLinks from './SocialLinks.astro';
 		margin: 0 0 1rem;
 		border-radius: 50%;
 		overflow: hidden;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		flex-shrink: 0;
 	}
 
 	.avatar img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
+		display: block;
 	}
 
 	.name {
@@ -45,7 +46,32 @@ import SocialLinks from './SocialLinks.astro';
 	.bio {
 		color: var(--color-text-muted);
 		font-size: 0.85rem;
-		margin-bottom: 1.5rem;
+		margin-bottom: 1.25rem;
 		line-height: 1.6;
+	}
+
+	/* 窄屏：左栏落回正文上方，身份卡变为紧凑横排 */
+	@media (max-width: 1200px) {
+		.profile-card {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+		}
+
+		.avatar {
+			width: 48px;
+			height: 48px;
+			margin: 0;
+		}
+
+		.name {
+			font-size: 1.05rem;
+			margin-bottom: 0.15rem;
+		}
+
+		.bio {
+			font-size: 0.82rem;
+			margin-bottom: 0.4rem;
+		}
 	}
 </style>

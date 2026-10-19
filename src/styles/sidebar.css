@@ -32,6 +32,42 @@
 	height: 16px;
 }
 
+/* 分区容器 */
+.side-panel-section {
+	margin-bottom: 1.5rem;
+}
+
+.side-panel-section:last-child {
+	margin-bottom: 0;
+}
+
+/* 说明文字与链接列（About 的「这个网站」等） */
+.side-panel-text {
+	color: var(--color-text-muted);
+	font-size: 0.82rem;
+	line-height: 1.75;
+	margin: 0 0 0.75rem;
+	padding-left: 0.5rem;
+}
+
+.side-panel-links {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	padding-left: 0.5rem;
+}
+
+.side-panel-links a {
+	color: var(--color-primary);
+	font-size: 0.82rem;
+	text-decoration: none;
+}
+
+.side-panel-links a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
 /* 导航项：左侧 2px 指示条 */
 .side-panel-item {
 	display: block;
@@ -81,7 +117,7 @@
 	font-weight: 500;
 }
 
-@media (max-width: 1150px) {
+@media (max-width: 1200px) {
 	.side-panel {
 		grid-column: 1;
 		position: static;
