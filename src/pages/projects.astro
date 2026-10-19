@@ -20,7 +20,7 @@ const allTechs = [...new Set(sortedProjects.flatMap((p) => p.data.tech))].sort()
 			<span class="float-icon">
 				<Icon name="rocket" size={48} strokeWidth={1.5} />
 			</span>
-			<h1>项目作品</h1>
+			<h1>Projects</h1>
 			<p>这里展示了我的一些个人项目和作品</p>
 		</div>
 	</section>
@@ -31,7 +31,7 @@ const allTechs = [...new Set(sortedProjects.flatMap((p) => p.data.tech))].sort()
 				<span class="empty-icon">
 					<Icon name="sprout" size={48} strokeWidth={1.5} />
 				</span>
-				<p class="no-projects">还没有项目，敬请期待！</p>
+				<p class="no-projects">No projects yet.</p>
 			</div>
 		) : (
 			sortedProjects.map((project) => (
@@ -76,11 +76,11 @@ const allTechs = [...new Set(sortedProjects.flatMap((p) => p.data.tech))].sort()
 						<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
 						<line x1="7" y1="7" x2="7.01" y2="7" />
 					</svg>
-					<span>技术栈</span>
+					<span>Tech Stack</span>
 				</div>
 				<nav id="techFilter">
 					<a class="side-panel-item active" data-tech="all">
-						全部
+						All
 					</a>
 					{allTechs.map((tech) => (
 						<a class="side-panel-item" data-tech={tech}>

@@ -33,16 +33,16 @@ const jsonLd = {
 		<div class="section-header">
 			<h2>
 				<Icon name="newspaper" size={20} />
-				最新文章
+				Latest Posts
 			</h2>
 			<a href="/blog" class="view-more">
-				查看全部
+				View All
 				<Icon name="arrow-right" size={16} />
 			</a>
 		</div>
 		<div class="posts-list">
 			{latestPosts.length === 0 ? (
-				<p class="no-posts">暂无文章，敬请期待！</p>
+				<p class="no-posts">No posts yet.</p>
 			) : (
 				latestPosts.map((post) => (
 					<a href={`/blog/${post.id}`} class="post-card">
@@ -68,10 +68,10 @@ const jsonLd = {
 		<div class="section-header">
 			<h2>
 				<Icon name="folder" size={20} />
-				项目作品
+				Projects
 			</h2>
 			<a href="/projects" class="view-more">
-				查看全部
+				View All
 				<Icon name="arrow-right" size={16} />
 			</a>
 		</div>
@@ -100,7 +100,7 @@ const jsonLd = {
 
 	<!-- 站点总浏览量（GoatCounter）：沉底小字，不单独占一条分隔栏 -->
 	<p class="site-visits">
-		总浏览 <span id="visitCount">—</span>
+		Total views <span id="visitCount">—</span>
 	</p>
 
 	<!-- 右栏：写作主题入口 -->
@@ -122,11 +122,11 @@ const jsonLd = {
 						>
 							<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
 						</svg>
-						<span>系列</span>
+						<span>Series</span>
 					</div>
 					<nav>
 						<a class="side-panel-item" href="/blog">
-							全部文章
+							All Posts
 						</a>
 						{allSeries.map((series) => (
 							<a
@@ -157,7 +157,7 @@ const jsonLd = {
 							<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
 							<line x1="7" y1="7" x2="7.01" y2="7" />
 						</svg>
-						<span>标签</span>
+						<span>Tags</span>
 					</div>
 					<nav class="tag-cloud">
 						{allTags.map((tag) => (

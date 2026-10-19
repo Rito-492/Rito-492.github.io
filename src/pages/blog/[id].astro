@@ -52,7 +52,7 @@ const jsonLd = {
 	<div class="post-page">
 		<article class="post">
 			<nav class="breadcrumb" aria-label="面包屑">
-				<a href="/blog">博客</a>
+				<a href="/blog">Blog</a>
 				<span class="sep">›</span>
 				<span class="here">{post.data.title}</span>
 			</nav>
@@ -69,7 +69,7 @@ const jsonLd = {
 								·
 							</span>
 							<span class="last-updated">
-								最后编辑：{formatDate(post.data.modDate)}
+								Updated: {formatDate(post.data.modDate)}
 							</span>
 						</>
 					)}
@@ -106,7 +106,7 @@ const jsonLd = {
 								<path d="m12 19-7-7 7-7" />
 								<path d="M19 12H5" />
 							</svg>
-							上一篇
+							Previous
 						</span>
 						<span class="post-nav-title">{olderPost.data.title}</span>
 					</a>
@@ -116,7 +116,7 @@ const jsonLd = {
 				{newerPost ? (
 					<a href={`/blog/${newerPost.id}`} class="next">
 						<span class="post-nav-label">
-							下一篇
+							Next
 							<svg
 								class="arrow right"
 								xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +148,7 @@ const jsonLd = {
 	<Fragment slot="right">
 		<TocSidebar
 			series={post.data.series ?? ''}
-			postTitle="目录"
+			postTitle="Contents"
 			tags={post.data.tags ?? []}
 			tocHeadings={tocHeadings}
 		/>
@@ -455,16 +455,16 @@ const jsonLd = {
 			const btn = document.createElement('button');
 			btn.className = 'copy-btn';
 			btn.type = 'button';
-			btn.textContent = '复制';
+			btn.textContent = 'Copy';
 			btn.addEventListener('click', async () => {
 				const code = pre.querySelector('code');
 				try {
 					await navigator.clipboard.writeText((code ?? pre).textContent ?? '');
-					btn.textContent = '已复制';
+					btn.textContent = 'Copied';
 				} catch {
-					btn.textContent = '复制失败';
+					btn.textContent = 'Failed';
 				}
-				setTimeout(() => (btn.textContent = '复制'), 1500);
+				setTimeout(() => (btn.textContent = 'Copy'), 1500);
 			});
 			pre.appendChild(btn);
 		});

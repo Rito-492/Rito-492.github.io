@@ -5,22 +5,22 @@ import TocSidebar from '../components/TocSidebar.astro';
 import { LICENSE, SITE } from '../config';
 
 const tocHeadings = [
-	{ depth: 2, text: '关于我', id: 'about-me' },
-	{ depth: 2, text: '工具箱', id: 'toolbox' },
-	{ depth: 2, text: '这个网站', id: 'site' },
+	{ depth: 2, text: 'About Me', id: 'about-me' },
+	{ depth: 2, text: 'Toolbox', id: 'toolbox' },
+	{ depth: 2, text: 'About This Site', id: 'site' },
 ];
 ---
 
 <Layout title="About - Rito-492">
 	<section class="about-section">
 		<header class="about-header">
-			<h1>关于</h1>
-			<p class="subtitle">关于我、这个网站，以及联系方式。</p>
+			<h1>About</h1>
+			<p class="subtitle">A bit about me, this site, and how to reach me.</p>
 		</header>
 
 		<div class="about-content">
 			<div class="card intro">
-				<h2 id="about-me">关于我</h2>
+				<h2 id="about-me">About Me</h2>
 				<p>你好，我是 Rito-492，吉林大学 2023 级本科生，软件工程专业。</p>
 				<p>
 					平时主要写 Python 和 C++，折腾深度学习、Linux
@@ -30,7 +30,7 @@ const tocHeadings = [
 					这个博客是代码与思考的自留地——把学过的东西写清楚，把没想明白的事情慢慢想明白。
 				</p>
 				<div class="intro-contact">
-					<span class="contact-label">找到我</span>
+					<span class="contact-label">Contact</span>
 					<SocialLinks variant="row" ids={['github', 'email', 'steam']} />
 				</div>
 			</div>
@@ -50,11 +50,11 @@ const tocHeadings = [
 					>
 						<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
 					</svg>
-					工具箱
+					Toolbox
 				</h2>
 				<div class="tools-grid">
 					<div class="tool-group">
-						<span class="tool-label">主力语言</span>
+						<span class="tool-label">Languages</span>
 						<div class="tool-tags">
 							<span class="tech-tag">Python</span>
 							<span class="tech-tag">C++</span>
@@ -62,7 +62,7 @@ const tocHeadings = [
 						</div>
 					</div>
 					<div class="tool-group">
-						<span class="tool-label">深度学习</span>
+						<span class="tool-label">Deep Learning</span>
 						<div class="tool-tags">
 							<span class="tech-tag">PyTorch</span>
 							<span class="tech-tag">KAN</span>
@@ -70,7 +70,7 @@ const tocHeadings = [
 						</div>
 					</div>
 					<div class="tool-group">
-						<span class="tool-label">工具</span>
+						<span class="tool-label">Tools</span>
 						<div class="tool-tags">
 							<span class="tech-tag">Linux</span>
 							<span class="tech-tag">WSL2</span>
@@ -99,7 +99,7 @@ const tocHeadings = [
 						<line x1="8" x2="16" y1="21" y2="21" />
 						<line x1="12" x2="12" y1="17" y2="21" />
 					</svg>
-					这个网站
+					About This Site
 				</h2>
 				<p class="site-desc">
 					本站基于 Astro 构建，以静态方式部署于 GitHub Pages。评论由 Giscus
@@ -107,9 +107,9 @@ const tocHeadings = [
 				</p>
 				<div class="site-links">
 					<a href={SITE.repo} target="_blank" rel="noopener noreferrer">
-						网站源码
+						Source Code
 					</a>
-					<a href="/rss.xml">RSS 订阅</a>
+					<a href="/rss.xml">RSS</a>
 					<a href={LICENSE.deedUrl} target="_blank" rel="noopener noreferrer">
 						{LICENSE.name}
 					</a>
@@ -120,7 +120,7 @@ const tocHeadings = [
 
 	<!-- 右栏：本页目录 -->
 	<Fragment slot="right">
-		<TocSidebar postTitle="本页目录" tocHeadings={tocHeadings} />
+		<TocSidebar postTitle="Contents" tocHeadings={tocHeadings} />
 	</Fragment>
 </Layout>
 

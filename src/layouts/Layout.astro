@@ -188,6 +188,19 @@ const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 			);
 			document.addEventListener('astro:page-load', syncTocHighlight);
 
+			// 右栏溢出检测：仅真正溢出时启用底部渐隐（悬停显示滚动条）
+			const markOverflowingPanels = () => {
+				document.querySelectorAll<HTMLElement>('.side-panel').forEach((panel) => {
+					panel.classList.toggle(
+						'is-overflowing',
+						panel.scrollHeight > panel.clientHeight + 2,
+					);
+				});
+			};
+			document.addEventListener('astro:page-load', markOverflowingPanels);
+			window.addEventListener('resize', markOverflowingPanels, { passive: true });
+			if (document.fonts) document.fonts.ready.then(markOverflowingPanels);
+
 			// GoatCounter 统计：load 之后动态注入脚本（绝不拖延 load 事件与 astro:page-load），
 			// SPA 模式（no_onload）由本脚本在每次 astro:page-load 手动上报
 			(window as any).goatcounter = { no_onload: true };

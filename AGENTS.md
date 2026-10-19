@@ -186,7 +186,7 @@ src/
 - `base.css` — 无类语义的通用件：`a` / `.btn` / `.card` / `.section-header` / `.view-more` / `.empty-state` / `.float-icon` / `:focus-visible`。
 - `components.css` — 具名组件：`.post-card` / `.project-card` / `.tech-tag` / 点击特效 / 细滚动条 / 灯箱。
 - `layouts.css` — 全站统一三栏外壳 `.page-shell`（左身份 / 中内容 / 右上下文），断点 1320px；单列媒体查询里要重置 `grid-column`（见「易错点」）。
-- `sidebar.css` — 文章页 TOC 与列表页筛选栏共用的侧栏原语（两者视觉语言一致，差异只在内容）。
+- `sidebar.css` — 文章页 TOC 与列表页筛选栏共用的侧栏原语（两者视觉语言一致，差异只在内容）；含溢出渐隐与悬停滚动条。
 
 **卡片悬停语言**（全站统一，`components.css` 定义）：上浮 `translateY(-2px)` + 主色描边
 
@@ -194,6 +194,15 @@ src/
 
 **半透明主色**：一律 `rgba(var(--color-primary-rgb), α)`，不要硬编码 `rgba(8, 145, 178, α)`
 ——暗色模式主色提亮为 `#22a3c7`，硬编码会导致暗色下偏色。
+
+### 文案语言约定（2026-10 定）
+
+**结构/导航/工具标签用英文，正文与口吻保持中文。**
+
+- 英文：导航、侧栏分区标题（Series / Tags / Sort / Contents / Tech Stack）、页面标题、按钮（View All / Home / Blog）、筛选与排序项（All / Newest / Oldest / Clear filters）、元信息标签（Updated / Previous / Next）、状态文案（No posts yet.）
+- 中文：文章标题与描述、About 正文、系列名与标签值、版权声明、Footer
+- `aria-label` 等无障碍标签跟随 `<html lang="zh-CN">`，保持中文
+- 理由：英文标签与等宽字体、既有英文导航一致，视觉更紧凑；长文本与个人口吻保留中文，避免整站变成模板感
 
 ### Layout system
 
@@ -208,9 +217,10 @@ src/
     - 首页：系列 / 标签入口 → `/blog?series=`、`/blog?tag=`
     - 文章页：`TocSidebar`（系列 / 标签 / 目录）
     - 列表页：系列 / 标签 / 排序筛选
-    - About：本页目录（关于我 / 工具箱 / 这个网站）
+    - About：本页目录（About Me / Toolbox / About This Site）
     - Projects：按技术栈筛选
-- 左右栏各带一条 `border-right` / `border-left` 发丝线，与中栏各隔 2.5rem——两栏等宽等留白，中栏在视觉上保持居中
+- 左右栏等宽、无分隔线，靠留白区分；中栏在视觉上保持居中
+- 右栏内容溢出时：底部渐隐提示，悬停时取消渐隐并显示细滚动条（`is-overflowing` 由 Layout 脚本检测）
 - **404** 是错误态，保持单列（`ContentShell fullWidth`），不套三栏
 - 断点 **1320px**：左右栏收起；左栏身份卡变为正文上方的紧凑横条，右栏落到正文下方；文章页目录改用 `MobileToc` 浮钮
 

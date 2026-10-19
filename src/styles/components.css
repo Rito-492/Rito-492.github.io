@@ -178,36 +178,26 @@
 	}
 }
 
-/* ===== 细滚动条（文章目录 / 列表侧栏 / 移动目录面板） ===== */
-.toc-sidebar,
-.blog-sidebar,
+/* ===== 细滚动条（移动目录面板；右侧栏的按需滚动条见 sidebar.css） ===== */
 .mobile-toc-panel {
 	scrollbar-width: thin; /* Firefox */
 	scrollbar-color: var(--color-border) transparent;
 }
 
-.toc-sidebar::-webkit-scrollbar,
-.blog-sidebar::-webkit-scrollbar,
 .mobile-toc-panel::-webkit-scrollbar {
 	width: 6px;
 	height: 6px;
 }
 
-.toc-sidebar::-webkit-scrollbar-thumb,
-.blog-sidebar::-webkit-scrollbar-thumb,
 .mobile-toc-panel::-webkit-scrollbar-thumb {
 	background: var(--color-border);
 	border-radius: 999px;
 }
 
-.toc-sidebar::-webkit-scrollbar-thumb:hover,
-.blog-sidebar::-webkit-scrollbar-thumb:hover,
 .mobile-toc-panel::-webkit-scrollbar-thumb:hover {
 	background: var(--color-text-muted);
 }
 
-.toc-sidebar::-webkit-scrollbar-track,
-.blog-sidebar::-webkit-scrollbar-track,
 .mobile-toc-panel::-webkit-scrollbar-track {
 	background: transparent;
 }

@@ -45,7 +45,7 @@ const { series = '', postTitle = '', tags = [], tocHeadings = [] } = Astro.props
 					<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
 					<line x1="7" y1="7" x2="7.01" y2="7" />
 				</svg>
-				<span>标签</span>
+				<span>Tags</span>
 			</div>
 			<nav class="toc-tags">
 				{tags.map((tag) => (
@@ -71,7 +71,7 @@ const { series = '', postTitle = '', tags = [], tocHeadings = [] } = Astro.props
 			<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
 			<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
 		</svg>
-		{postTitle || '目录'}
+		{postTitle || 'Contents'}
 	</h3>
 	<nav class="toc-nav" id="tocNav">
 		<ul>

@@ -17,20 +17,20 @@ const allSeries = [
 const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.data.tags!))].sort();
 ---
 
-<Layout title="博客 - Rito">
+<Layout title="Blog - Rito-492">
 	<!-- 标题行 -->
 	<header class="blog-header">
 		<div class="header-top">
 			<span class="float-icon">
 				<Icon name="notebook-pen" size={22} />
 			</span>
-			<h1>博客</h1>
+			<h1>Blog</h1>
 		</div>
 		<p class="header-desc">表达一些我的想法</p>
 		<div class="header-stats">
 			<span class="stat-item">
 				{' '}
-				共 <strong>{posts.length}</strong> 篇{' '}
+				<strong>{posts.length}</strong> {posts.length === 1 ? 'post' : 'posts'}
 			</span>
 			<span class="stat-item result-info" id="resultInfo"></span>
 		</div>
@@ -137,12 +137,12 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 						>
 							<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
 						</svg>
-						<span>系列</span>
+						<span>Series</span>
 					</div>
 					<nav id="seriesFilter">
 						<a class="side-panel-item active" data-series="all">
 							{' '}
-							全部{' '}
+							All{' '}
 						</a>
 						{allSeries.map((series) => (
 							<a class="side-panel-item" data-series={series}>
@@ -170,7 +170,7 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 							<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
 							<line x1="7" y1="7" x2="7.01" y2="7" />
 						</svg>
-						<span>标签</span>
+						<span>Tags</span>
 					</div>
 					<nav id="tagFilter" class="tag-cloud">
 						{allTags.map((tag) => (
@@ -180,7 +180,7 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 						))}
 					</nav>
 					<a class="side-panel-item clear-item" id="clearTags" style="display:none">
-						清除筛选
+						Clear filters
 					</a>
 				</div>
 			)}
@@ -203,11 +203,11 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 						<path d="M21 8l-4-4-4 4" />
 						<path d="M17 4v16" />
 					</svg>
-					<span>排序</span>
+					<span>Sort</span>
 				</div>
 				<nav>
 					<a class="side-panel-item" id="sortBtn">
-						<span id="sortLabel">最新优先</span>
+						<span id="sortLabel">Newest</span>
 					</a>
 				</nav>
 			</div>
@@ -375,7 +375,7 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 			});
 
 			if (activeTags.size > 0 || activeSeries !== 'all') {
-				resultInfo.textContent = `筛选出 ${visible} 篇`;
+				resultInfo.textContent = `${visible} ${visible === 1 ? 'post' : 'posts'} found`;
 			} else {
 				resultInfo.textContent = '';
 			}
@@ -430,7 +430,7 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 		// ---- sort ----
 		document.getElementById('sortBtn')?.addEventListener('click', () => {
 			sortNewest = !sortNewest;
-			sortLabel.textContent = sortNewest ? '最新优先' : '最早优先';
+			sortLabel.textContent = sortNewest ? 'Newest' : 'Oldest';
 			applySort();
 		});
 
