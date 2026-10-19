@@ -332,7 +332,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 ## 待办 / TODO
 
 - **字体自托管**：当前 JetBrains Mono 走 Google Fonts、霞鹜文楷走 jsdelivr（`SeoHead.astro`）——国内访问不稳，实测 jsdelivr 慢时十几个 woff2 分片会把页面 `load` 事件拖到 10s+。方案：自托管 unicode-range 分片子集（如 `lxgw-wenkai-webfont`）+ `@fontsource/jetbrains-mono`，替换 CDN 引用。
-- **UI 待办（C 组·首页，用户暂缓）**：hero 区加行动引导按钮。（访客计数已迁移 GoatCounter，2026-10-19。）
+- **UI 待办（C 组·首页）**：hero 行动引导（读文章 / RSS）已于 2026-10 完成；总浏览计数并入 hero。
 - **per-post OG 分享卡（D 组唯一遗留）**：satori 按标题生成。先决问题：CJK 字库方案（~10MB 字体入库或构建期下载），待拍板。
 
 ## UI 改动工作流：先截图，再交付

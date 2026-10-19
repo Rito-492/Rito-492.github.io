@@ -28,8 +28,21 @@ const jsonLd = {
 	<section class="hero-section">
 		<div class="hero-content">
 			<h1>Rito-492</h1>
-			<p class="lead">你好，我是 Rito-492</p>
 			<p class="tagline">这里是代码与思考的自留地</p>
+			<div class="hero-actions">
+				<a href="/blog" class="btn primary">
+					读文章
+					<Icon name="arrow-right" size={16} />
+				</a>
+				<a href="/rss.xml" class="hero-rss">
+					<Icon name="rss" size={15} />
+					RSS 订阅
+				</a>
+			</div>
+			<p class="hero-visits">
+				总浏览
+				<span id="visitCount">—</span>
+			</p>
 			<!-- 移动端身份信息：桌面端个人卡片在左侧栏，窄屏栏隐藏后用这里补位 -->
 			<div class="hero-profile">
 				<img
@@ -103,6 +116,9 @@ const jsonLd = {
 					rel="noopener noreferrer"
 					class="project-card"
 				>
+					<div class="card-icon">
+						<Icon name="folder" size={28} strokeWidth={1.5} />
+					</div>
 					<h3>{project.data.title}</h3>
 					<p>{project.data.description}</p>
 					<div class="tech-stack">
@@ -113,14 +129,6 @@ const jsonLd = {
 				</a>
 			))}
 		</div>
-	</section>
-
-	<!-- 站点总浏览量（GoatCounter） -->
-	<section class="visitor-counter-section">
-		<span class="counter-label">总浏览：</span>
-		<span class="counter-number" id="visitCount">
-			—
-		</span>
 	</section>
 </Layout>
 
@@ -148,29 +156,61 @@ const jsonLd = {
 <style>
 	/* 首页独有：hero + 移动端身份卡 + 区块间距（卡片/网格/按钮等共用样式在全局 CSS） */
 	.hero-section {
-		padding: 4rem 0 3rem;
+		padding: 2.5rem 0 2rem;
 	}
 
 	.hero-content h1 {
-		font-size: 3rem;
+		font-size: 2.25rem;
 		font-weight: 700;
 		color: var(--color-text);
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.75rem;
 		letter-spacing: -0.02em;
-	}
-
-	.hero-content .lead {
-		font-size: 1.25rem;
-		color: var(--color-text);
-		margin-bottom: 0.5rem;
+		line-height: 1.25;
 	}
 
 	.hero-content .tagline {
-		font-size: 1.1rem;
+		font-size: 1.05rem;
 		color: var(--color-text-muted);
-		margin-bottom: 1.5rem;
+		margin-bottom: 1.75rem;
 	}
 
+	.hero-actions {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.hero-rss {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.5rem 0.25rem;
+		color: var(--color-text-muted);
+		font-size: 0.88rem;
+		text-decoration: none;
+		transition: color var(--transition-fast);
+	}
+
+	.hero-rss:hover {
+		color: var(--color-primary);
+	}
+
+	.hero-visits {
+		margin-top: 1.5rem;
+		font-size: 0.78rem;
+		letter-spacing: 0.02em;
+		color: var(--color-text-muted);
+	}
+
+	.hero-visits span {
+		margin-left: 0.35rem;
+		font-family: var(--font-mono);
+		font-weight: 700;
+		color: var(--color-primary);
+	}
+
+	/* 移动端身份卡（桌面端隐藏，身份信息在左侧栏） */
 	.hero-profile {
 		display: none;
 	}
@@ -199,43 +239,24 @@ const jsonLd = {
 		border-top: 1px solid var(--color-border);
 	}
 
-	.visitor-counter-section {
-		padding: 2rem 0;
-		border-top: 1px solid var(--color-border);
-		text-align: center;
-	}
-
-	.counter-label {
-		color: var(--color-text-muted);
-		font-size: 0.9rem;
-		margin-right: 0.5rem;
-	}
-
-	.counter-number {
-		font-family: var(--font-mono);
-		font-size: 1.25rem;
-		font-weight: 700;
-		color: var(--color-primary);
-	}
-
 	@media (max-width: 1150px) {
 		.hero-profile {
 			display: flex;
 			align-items: center;
 			gap: 1rem;
-			margin-top: 0.5rem;
+			margin-top: 1.5rem;
 			padding-top: 1.5rem;
 			border-top: 1px solid var(--color-border);
 		}
 	}
 
 	@media (max-width: 768px) {
-		.hero-content h1 {
-			font-size: 2rem;
+		.hero-section {
+			padding: 1.5rem 0 1rem;
 		}
 
-		.hero-content .lead {
-			font-size: 1.1rem;
+		.hero-content h1 {
+			font-size: 1.75rem;
 		}
 	}
 </style>

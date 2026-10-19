@@ -271,11 +271,7 @@ const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.da
 		font-weight: 600;
 	}
 
-	/* 卡片内部：标题行 + 箭头 + 摘要 + 元信息行 */
-	.post-card {
-		padding: 1.25rem 1.5rem;
-	}
-
+	/* 卡片内部：标题行 + 箭头 + 摘要 + 元信息行（卡片壳在全局 CSS） */
 	.post-card:hover .post-title {
 		color: var(--color-primary);
 	}

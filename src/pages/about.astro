@@ -1,7 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SocialLinks from '../components/SocialLinks.astro';
-import { SITE } from '../config';
+import { getCollection } from 'astro:content';
+import { LICENSE, SITE } from '../config';
+
+const posts = await getCollection('blog', ({ data }) => data.isPublished);
+const firstPost = posts.sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf())[0];
 ---
 
 <Layout title="About - Rito-492">
@@ -10,18 +14,25 @@ import { SITE } from '../config';
 			<div class="avatar">
 				<img src={SITE.avatar} alt="avatar" width="80" height="80" decoding="async" />
 			</div>
-			<h1>Rito-492</h1>
-			<p class="subtitle">世界很大，开心第一。</p>
+			<h1>{SITE.author}</h1>
+			<p class="subtitle">{SITE.bio}</p>
 		</header>
 
 		<div class="about-content">
 			<div class="card intro">
 				<h2>关于我</h2>
-				<p>你好，我是 Rito-492，目前是吉林大学2023级本科生。</p>
+				<p>你好，我是 Rito-492，吉林大学 2023 级本科生，软件工程专业。</p>
 				<p>
-					我想用这个网站来分享我自己的一些想法、感悟和一些折腾的记录。 网站基于 Astro
-					构建，部署在 GitHub Pages 上。
+					平时主要写 Python 和 C++，折腾深度学习、Linux
+					和各类工具；也会把保研、夏令营这类经历整理成文字。
 				</p>
+				<p>
+					这个博客是代码与思考的自留地——把学过的东西写清楚，把没想明白的事情慢慢想明白。
+				</p>
+				<div class="intro-contact">
+					<span class="contact-label">找到我</span>
+					<SocialLinks variant="row" ids={['github', 'email', 'steam']} />
+				</div>
 			</div>
 
 			<div class="card toolbox">
@@ -71,7 +82,7 @@ import { SITE } from '../config';
 				</div>
 			</div>
 
-			<div class="card connect">
+			<div class="card site-info">
 				<h2>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -84,13 +95,33 @@ import { SITE } from '../config';
 						stroke-linecap="round"
 						stroke-linejoin="round"
 					>
-						<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-						<polyline points="22,6 12,13 2,6" />
+						<rect width="20" height="14" x="2" y="3" rx="2" />
+						<line x1="8" x2="16" y1="21" y2="21" />
+						<line x1="12" x2="12" y1="17" y2="21" />
 					</svg>
-					找到我
+					这个网站
 				</h2>
-				<SocialLinks variant="row" ids={['github', 'email', 'steam']} />
+				<p class="site-desc">
+					用 Astro 构建的静态站点，托管在 GitHub Pages；评论走 Giscus，访问统计用
+					GoatCounter。文章采用
+					{LICENSE.name} 许可，转载请注明出处。
+				</p>
+				<div class="site-links">
+					<a href={SITE.repo} target="_blank" rel="noopener noreferrer">
+						网站源码
+					</a>
+					<a href="/rss.xml">RSS 订阅</a>
+					<a href={LICENSE.deedUrl} target="_blank" rel="noopener noreferrer">
+						{LICENSE.name}
+					</a>
+				</div>
 			</div>
+
+			{firstPost && (
+				<p class="about-cta">
+					<a href={`/blog/${firstPost.id}`}>从第一篇开始读 →</a>
+				</p>
+			)}
 		</div>
 	</section>
 </Layout>
@@ -158,8 +189,23 @@ import { SITE } from '../config';
 		margin: 0 0 1rem;
 	}
 
-	.intro p:last-child {
+	.intro p:last-of-type {
 		margin-bottom: 0;
+	}
+
+	.intro-contact {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 1.25rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--color-border);
+	}
+
+	.contact-label {
+		font-size: 0.8rem;
+		color: var(--color-text-muted);
 	}
 
 	.tools-grid {
@@ -186,6 +232,45 @@ import { SITE } from '../config';
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.4rem;
+	}
+
+	.site-desc {
+		color: var(--color-text-muted);
+		line-height: 1.8;
+		margin: 0 0 1rem;
+	}
+
+	.site-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1.25rem;
+	}
+
+	.site-links a {
+		color: var(--color-primary);
+		font-size: 0.88rem;
+		text-decoration: none;
+	}
+
+	.site-links a:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	.about-cta {
+		text-align: center;
+		margin-top: 0.5rem;
+	}
+
+	.about-cta a {
+		color: var(--color-text-muted);
+		font-size: 0.88rem;
+		text-decoration: none;
+		transition: color var(--transition-fast);
+	}
+
+	.about-cta a:hover {
+		color: var(--color-primary);
 	}
 
 	@media (max-width: 640px) {
