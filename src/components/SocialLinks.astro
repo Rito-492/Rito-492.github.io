@@ -6,9 +6,10 @@ interface Props {
 	variant?: 'stack' | 'row';
 	ids?: readonly SocialId[];
 	center?: boolean;
+	includeRss?: boolean;
 }
 
-const { variant = 'stack', ids, center = false } = Astro.props;
+const { variant = 'stack', ids, center = false, includeRss = false } = Astro.props;
 const links = (ids ?? SOCIALS.map((s) => s.id))
 	.map((id) => SOCIALS.find((s) => s.id === id))
 	.filter((s): s is (typeof SOCIALS)[number] => Boolean(s));
@@ -54,6 +55,12 @@ const isExternal = (href: string) => href.startsWith('http');
 			<span>{s.label}</span>
 		</a>
 	))}
+	{includeRss && (
+		<a href="/rss.xml" class="social-link">
+			<Icon name="rss" size={16} />
+			<span>RSS</span>
+		</a>
+	)}
 </div>
 
 <style>
