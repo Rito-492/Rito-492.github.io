@@ -299,6 +299,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - `.astro/` 和 `dist/` 是生成产物 — 永远不要直接编辑。
 - **View Transitions 已启用**：脚本必须遵守「页面前端」一节的三原则（page-load 重 init / 文档级监听只绑一次 / 主题 after-swap 重放），否则会出现重复绑定、元素引用失效等诡异 bug。
 - **固定定位的全屏遮罩别放页面容器内**：祖先若形成 stacking context，遮罩会被压在顶栏下面——挂到 `<body>` 下 + 全局样式（参考灯箱做法）。
+- **单列媒体查询要重置显式的 `grid-column`**：布局塌成单列后，子元素残留的 `grid-column: 2` 会生成幽灵第二列——若网格带 `column-gap`，内容会被整体推偏（踩过：移动端文章页右偏 40px、两边不对称）。
 
 ## 待办 / TODO
 
