@@ -48,6 +48,38 @@
 	background: transparent;
 }
 
+/* 右侧栏单项文本过长：单行显示，右缘渐隐；悬停时向左滚动露出全文 */
+.side-panel .scroll-text {
+	display: block;
+	max-width: 100%;
+	white-space: nowrap;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scrollbar-width: none;
+	scroll-behavior: smooth;
+	-webkit-overflow-scrolling: touch;
+}
+
+.side-panel .scroll-text::-webkit-scrollbar {
+	display: none;
+}
+
+.side-panel .side-panel-title .scroll-text,
+.side-panel .toc-series .scroll-text {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.side-panel .scroll-text.is-truncated {
+	-webkit-mask-image: linear-gradient(to right, #000 calc(100% - 1.5rem), transparent);
+	mask-image: linear-gradient(to right, #000 calc(100% - 1.5rem), transparent);
+}
+
+.side-panel .scroll-text.is-truncated:hover {
+	-webkit-mask-image: none;
+	mask-image: none;
+}
+
 /* 分区标题：系列 / 标签 / 目录 / 排序 */
 .side-panel-title {
 	display: flex;

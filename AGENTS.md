@@ -220,7 +220,10 @@ src/
     - About：本页目录（About Me / Toolbox / About This Site）
     - Projects：按技术栈筛选
 - 左右栏等宽、无分隔线，靠留白区分；中栏在视觉上保持居中
-- 右栏内容溢出时：底部渐隐提示，悬停时取消渐隐并显示细滚动条（`is-overflowing` 由 Layout 脚本检测）
+- 右栏内容溢出时：
+    - 竖向：底部渐隐提示，悬停时取消渐隐并显示细滚动条（`is-overflowing`）
+    - 横向：单项过长时单行显示 + 右缘渐隐，悬停向左滚到末尾（`scroll-text.is-truncated`；文本本身可横向滑动，触屏也能用）
+- 左栏装饰：头像 1px 主色描边 + 柔光外环；名字下 24px 渐变短线；社交链接为胶囊样式（`SocialLinks pills`）
 - **404** 是错误态，保持单列（`ContentShell fullWidth`），不套三栏
 - 断点 **1320px**：左右栏收起；左栏身份卡变为正文上方的紧凑横条，右栏落到正文下方；文章页目录改用 `MobileToc` 浮钮
 

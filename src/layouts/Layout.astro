@@ -188,7 +188,7 @@ const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 			);
 			document.addEventListener('astro:page-load', syncTocHighlight);
 
-			// 右栏溢出检测：仅真正溢出时启用底部渐隐（悬停显示滚动条）
+			// 右栏溢出检测：竖向溢出时底部渐隐（悬停显示滚动条）
 			const markOverflowingPanels = () => {
 				document.querySelectorAll<HTMLElement>('.side-panel').forEach((panel) => {
 					panel.classList.toggle(
@@ -197,9 +197,56 @@ const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 					);
 				});
 			};
-			document.addEventListener('astro:page-load', markOverflowingPanels);
-			window.addEventListener('resize', markOverflowingPanels, { passive: true });
-			if (document.fonts) document.fonts.ready.then(markOverflowingPanels);
+
+			// 右栏单项横向溢出：单行 + 右缘渐隐，悬停向左滚动
+			const markTruncatedItems = () => {
+				document
+					.querySelectorAll<HTMLElement>(
+						'.side-panel .side-panel-item, .side-panel .toc-item a, .side-panel .toc-series span, .side-panel .side-panel-title span, .side-panel .tag-pill',
+					)
+					.forEach((el) => {
+						el.classList.add('scroll-text');
+						el.classList.toggle(
+							'is-truncated',
+							el.scrollWidth > el.clientWidth + 1,
+						);
+					});
+			};
+
+			document.addEventListener('astro:page-load', () => {
+				markOverflowingPanels();
+				markTruncatedItems();
+			});
+			window.addEventListener(
+				'resize',
+				() => {
+					markOverflowingPanels();
+					markTruncatedItems();
+				},
+				{ passive: true },
+			);
+			if (document.fonts) {
+				document.fonts.ready.then(() => {
+					markOverflowingPanels();
+					markTruncatedItems();
+				});
+			}
+
+			// 悬停：向左滚到末尾；移出：回到开头（文档级委托，只绑一次）
+			document.addEventListener('mouseover', (e) => {
+				const target = e.target instanceof Element ? e.target : null;
+				const el = target?.closest<HTMLElement>('.side-panel .scroll-text.is-truncated');
+				if (!el) return;
+				if (e.relatedTarget instanceof Node && el.contains(e.relatedTarget)) return;
+				el.scrollTo({ left: el.scrollWidth, behavior: 'smooth' });
+			});
+			document.addEventListener('mouseout', (e) => {
+				const target = e.target instanceof Element ? e.target : null;
+				const el = target?.closest<HTMLElement>('.side-panel .scroll-text.is-truncated');
+				if (!el) return;
+				if (e.relatedTarget instanceof Node && el.contains(e.relatedTarget)) return;
+				el.scrollTo({ left: 0, behavior: 'smooth' });
+			});
 
 			// GoatCounter 统计：load 之后动态注入脚本（绝不拖延 load 事件与 astro:page-load），
 			// SPA 模式（no_onload）由本脚本在每次 astro:page-load 手动上报
