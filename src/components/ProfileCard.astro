@@ -10,7 +10,7 @@ import SocialLinks from './SocialLinks.astro';
 	<div class="profile-text">
 		<h2 class="name">{SITE.author}</h2>
 		<p class="bio">{SITE.bio}</p>
-		<SocialLinks variant="stack" center pills />
+		<SocialLinks variant="stack" center />
 	</div>
 </div>
 
@@ -28,10 +28,6 @@ import SocialLinks from './SocialLinks.astro';
 		border-radius: 50%;
 		overflow: hidden;
 		flex-shrink: 0;
-		/* A：1px 主色描边 + 柔和外环，不占布局 */
-		box-shadow:
-			0 0 0 1px rgba(var(--color-primary-rgb), 0.5),
-			0 0 0 7px rgba(var(--color-primary-rgb), 0.06);
 	}
 
 	.avatar img {
@@ -46,17 +42,6 @@ import SocialLinks from './SocialLinks.astro';
 		font-weight: 700;
 		color: var(--color-text);
 		margin-bottom: 0.35rem;
-	}
-
-	/* A：名字下的短渐变线 */
-	.name::after {
-		content: '';
-		display: block;
-		width: 24px;
-		height: 2px;
-		margin: 0.45rem auto 0;
-		border-radius: 2px;
-		background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
 	}
 
 	.bio {
@@ -84,10 +69,6 @@ import SocialLinks from './SocialLinks.astro';
 		.name {
 			font-size: 1.05rem;
 			margin-bottom: 0.15rem;
-		}
-
-		.name::after {
-			margin-left: 0;
 		}
 
 		.bio {
