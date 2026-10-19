@@ -284,7 +284,8 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - **Footer**：© / Powered by Astro · GitHub Pages / RSS 订阅 / 网站源码 / CC 许可；数据都在 `config.ts`
 - 图标：全站统一用 `Icon.astro`（lucide 内联路径），不要再用 emoji
 - 侧栏细滚动条：`components.css`（`.toc-sidebar` / `.blog-sidebar` / `.mobile-toc-panel`）
-- **RSS 全文输出**：`rss.xml.ts` 用 `experimental_AstroContainer` 渲染每篇文章，站内 `src/href` 绝对化后以转义形式放入 `<content:encoded>`；`description` 仍作摘要兜底
+- **RSS 全文输出**：`rss.xml.ts` 用 `experimental_AstroContainer` 渲染每篇文章，站内 `src/href` 绝对化后以 **CDATA** 形式放入 `<content:encoded>`（兼容 WordPress 系阅读器习惯）；`description` 仍作摘要兜底
+- **正文链接行为**：`#` 锚点保持当前页跳转；其余链接（外链 + 站内文章）在 `initPostContent` 里统一加 `target="_blank" rel="noopener noreferrer"`（JS 增强，无 JS 时降级为同页跳转）
 - **统计**：GoatCounter（code 在 `config.ts` 的 `GOATCOUNTER`）。count.js 在 **load 之后动态注入**（绝不拖延 load 事件，避免第三方 CDN 拖慢 astro:page-load 初始化）；SPA 模式（`no_onload`）由 Layout 在 `astro:page-load` 手动上报（未就绪时轮询等待）；首页「总浏览」读 `counter/TOTAL.json`（服务端最长 4h 缓存）
 
 ## 易错点 / CSS Gotchas

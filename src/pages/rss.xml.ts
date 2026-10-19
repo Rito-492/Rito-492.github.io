@@ -19,14 +19,16 @@ export async function GET(context: APIContext) {
 			const html = (await container.renderToString(Content))
 				.replace(/<!--astro:end-->/g, '')
 				.replaceAll('src="/', `src="${site}/`)
-				.replaceAll('href="/', `href="${site}/`);
+				.replaceAll('href="/', `href="${site}/`)
+				.replaceAll(']]>', ']]&gt;');
 
 			return {
 				title: post.data.title,
 				description: post.data.description,
 				pubDate: post.data.pubDate,
 				link: `/blog/${post.id}`,
-				content: html,
+				// CDATA 包裹全文（与 WordPress 等主流生产者一致，阅读器兼容性最好）
+				customData: `<content:encoded><![CDATA[${html}]]></content:encoded>`,
 			};
 		}),
 	);
@@ -35,6 +37,7 @@ export async function GET(context: APIContext) {
 		title: SITE.title,
 		description: SITE.description,
 		site,
+		xmlns: { content: 'http://purl.org/rss/1.0/modules/content/' },
 		items,
 		customData: '<language>zh-CN</language>',
 	});

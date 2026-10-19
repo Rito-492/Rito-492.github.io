@@ -473,6 +473,14 @@ const jsonLd = {
 			});
 			pre.appendChild(btn);
 		});
+
+		// 正文链接：`#` 锚点保持当前页跳转，其余（外链 + 站内文章）一律新标签页打开
+		document.querySelectorAll<HTMLAnchorElement>('.post-content a').forEach((a) => {
+			if (a.target) return; // 防重复处理
+			if ((a.getAttribute('href') ?? '').startsWith('#')) return;
+			a.target = '_blank';
+			a.rel = 'noopener noreferrer';
+		});
 	}
 	document.addEventListener('astro:page-load', initPostContent);
 
