@@ -65,7 +65,8 @@
 
 .post-card:hover {
 	border-color: var(--color-primary);
-	transform: translateX(4px);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
 }
 
 .post-meta {

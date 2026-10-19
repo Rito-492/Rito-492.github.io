@@ -68,6 +68,12 @@
 		padding: 2rem 1rem;
 	}
 
+	/* 单列后重置显式列定位：否则会生成幽灵第二列，叠加 column-gap 会把内容挤偏 */
+	.home-layout .main-content,
+	.post-layout .main-content {
+		grid-column: 1;
+	}
+
 	.full-width {
 		padding: 1rem;
 	}
