@@ -2,12 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import TocSidebar from '../components/TocSidebar.astro';
-import { LICENSE, SITE } from '../config';
+import { LICENSE, SITE, SOCIALS } from '../config';
+
+const email = SOCIALS.find((s) => s.id === 'email')?.href ?? '';
 
 const tocHeadings = [
 	{ depth: 2, text: 'About Me', id: 'about-me' },
 	{ depth: 2, text: 'Toolbox', id: 'toolbox' },
 	{ depth: 2, text: 'About This Site', id: 'site' },
+	{ depth: 2, text: 'Copyright', id: 'copyright' },
+	{ depth: 2, text: 'Privacy', id: 'privacy' },
 ];
 ---
 
@@ -105,6 +109,36 @@ const tocHeadings = [
 					本站基于 Astro 构建，以静态方式部署于 GitHub Pages。评论由 Giscus
 					提供，访问统计使用 GoatCounter，文章内容采用 {LICENSE.name} 许可协议。
 				</p>
+				<p class="site-credits">
+					图标来自{' '}
+					<a
+						class="text-link"
+						href="https://lucide.dev"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Lucide
+					</a>
+					，字体为
+					<a
+						class="text-link"
+						href="https://www.jetbrains.com/lp/mono/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						JetBrains Mono
+					</a>
+					与
+					<a
+						class="text-link"
+						href="https://github.com/lxgw/LxgwWenKai"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						霞鹜文楷
+					</a>
+					。
+				</p>
 				<div class="site-links">
 					<a href={SITE.repo} target="_blank" rel="noopener noreferrer">
 						Source Code
@@ -114,6 +148,54 @@ const tocHeadings = [
 						{LICENSE.name}
 					</a>
 				</div>
+			</div>
+
+			<div class="card copyright">
+				<h2 id="copyright">Copyright</h2>
+				<p>
+					本站原创文字与设计，除特别注明外，均采用
+					<a
+						class="text-link"
+						href={LICENSE.deedUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						{LICENSE.name}
+					</a>
+					国际许可协议授权。
+				</p>
+				<p>您可以自由复制、分享，并基于本站内容进行创作，但须遵守以下条件：</p>
+				<ul class="license-list">
+					<li>
+						<strong>署名</strong>：注明作者 Rito-492 及原文链接；
+					</li>
+					<li>
+						<strong>非商业性使用</strong>：不得将内容用于商业目的；
+					</li>
+					<li>
+						<strong>相同方式共享</strong>：改编作品须以相同协议发布。
+					</li>
+				</ul>
+				<p>
+					站内引用的第三方图片、商标与素材，版权归各自权利人所有；如存在侵权内容，请通过
+					<a class="text-link" href={email}>
+						Email
+					</a>
+					联系删除。商业转载或批量使用请先联系作者。
+				</p>
+			</div>
+
+			<div class="card privacy">
+				<h2 id="privacy">Privacy</h2>
+				<p>
+					本站使用 GoatCounter
+					进行访问统计，仅记录聚合数据（页面路径、来源、浏览器与地区），不设置跟踪
+					Cookie，也不采集个人身份信息。
+				</p>
+				<p>
+					评论区由 Giscus 提供，需要 GitHub 账号登录；评论内容存储在该仓库的 GitHub
+					Discussions 中，并遵循 GitHub 的隐私政策。
+				</p>
 			</div>
 		</div>
 	</section>
@@ -168,14 +250,49 @@ const tocHeadings = [
 		flex-shrink: 0;
 	}
 
-	.intro p {
+	.card p {
 		color: var(--color-text-muted);
 		line-height: 1.8;
 		margin: 0 0 1rem;
 	}
 
-	.intro p:last-of-type {
+	.card p:last-of-type {
 		margin-bottom: 0;
+	}
+
+	.card p + ul,
+	.card p + .site-links {
+		margin-top: 0.25rem;
+	}
+
+	.license-list {
+		margin: 0 0 1rem;
+		padding-left: 1.25rem;
+		color: var(--color-text-muted);
+		line-height: 1.8;
+	}
+
+	.license-list li {
+		margin-bottom: 0.35rem;
+	}
+
+	.license-list li:last-child {
+		margin-bottom: 0;
+	}
+
+	.license-list strong {
+		color: var(--color-text);
+		font-weight: 600;
+	}
+
+	.text-link {
+		color: var(--color-primary);
+		text-decoration: none;
+	}
+
+	.text-link:hover {
+		text-decoration: underline;
+		text-underline-offset: 3px;
 	}
 
 	.intro-contact {
@@ -222,6 +339,13 @@ const tocHeadings = [
 	.site-desc {
 		color: var(--color-text-muted);
 		line-height: 1.8;
+		margin: 0 0 1rem;
+	}
+
+	.site-credits {
+		color: var(--color-text-muted);
+		font-size: 0.85rem;
+		line-height: 1.7;
 		margin: 0 0 1rem;
 	}
 

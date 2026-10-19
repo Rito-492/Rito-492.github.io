@@ -211,7 +211,7 @@ src/
 **所有页面共用同一套 `.page-shell`**（404 除外）：
 
 - 栅格：`minmax(0,1fr) var(--content-width) minmax(0,1fr)` + `column-gap: 2.5rem`
-- **左栏** `.page-left` — 固定为身份与联系（`ProfileCard`），宽度 `--rail-width`（240px），桌面端头像与文字共用一条垂直中心线
+- **左栏** `.page-left` — 固定为身份与联系（`ProfileCard`，含 RSS 入口），宽度 `--rail-width`（240px），桌面端头像与文字共用一条垂直中心线
 - **中栏** `.main-content` — 页面主体，宽度固定 `--content-width`
 - **右栏** `.side-panel` — 页面上下文，同样宽 `--rail-width`，由页面通过 `<Fragment slot="right">` 提供：
     - 首页：系列 / 标签入口 → `/blog?series=`、`/blog?tag=`
@@ -307,6 +307,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 
 - 文章采用 **CC BY-NC-SA 4.0**（2026-10 定）。文章页正文与分页之间一行小字声明（[id].astro）；`<head>` 输出机器可读的 `<link rel="license">`（SeoHead ← Layout `licenseUrl` 透传）；JSON-LD `BlogPosting.license` 同带该 URL。
 - 协议配置在 `src/config.ts` 的 `LICENSE`（显示名 / 法律文本 URL / 中文 deed URL）——换协议只改这里。
+- About 页另有 **Copyright / Privacy** 两个说明区：逐条列出许可条件（署名 / 非商业 / 相同方式共享）、第三方素材归属与删除联系方式；以及 GoatCounter 聚合统计、Giscus 评论数据的说明。
 
 ## 文章插图
 

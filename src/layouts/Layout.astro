@@ -145,7 +145,9 @@ const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 
 			// 博客 / About 目录高亮（文档级滚动监听只绑一次；每次实时查询 DOM）
 			// 取「已滚过顶部 120px 的最后一个标题」为当前项；触底时强制落到最后一项
+			let tocClickLocked = false;
 			const syncTocHighlight = () => {
+				if (tocClickLocked) return;
 				const tocNav = document.getElementById('tocNav');
 				if (!tocNav) return;
 				const headings = Array.from(
@@ -173,6 +175,29 @@ const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 				});
 			};
 
+			// 点击目录项时锁定高亮（短页面滚不到目标位置时也不会被触底逻辑覆盖）
+			document.addEventListener('click', (e) => {
+				const target = e.target instanceof Element ? e.target : null;
+				const link = target?.closest('#tocNav a');
+				if (!link) return;
+				tocClickLocked = true;
+				document
+					.querySelectorAll('#tocNav a')
+					.forEach((a) => a.classList.toggle('active', a === link));
+			});
+			['wheel', 'touchmove', 'mousedown'].forEach((eventName) => {
+				window.addEventListener(
+					eventName,
+					() => {
+						tocClickLocked = false;
+					},
+					{ passive: true },
+				);
+			});
+			document.addEventListener('keydown', () => {
+				tocClickLocked = false;
+			});
+
 			let tocTicking = false;
 			window.addEventListener(
 				'scroll',
@@ -186,7 +211,10 @@ const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 				},
 				{ passive: true },
 			);
-			document.addEventListener('astro:page-load', syncTocHighlight);
+			document.addEventListener('astro:page-load', () => {
+				tocClickLocked = false;
+				syncTocHighlight();
+			});
 
 			// 右栏溢出检测：竖向溢出时底部渐隐（悬停显示滚动条）
 			const markOverflowingPanels = () => {
