@@ -95,6 +95,8 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 		<div id="click-effects"></div>
 
 		<script>
+			import { GOATCOUNTER } from '../config';
+
 			// ── 全局交互（View Transitions 安全：文档级监听只绑一次，元素每次导航后重新查询） ──
 
 			// 滚动进度条 & 返回顶部
@@ -189,6 +191,49 @@ const isBlogListPage = Astro.url.pathname.replace(/\/$/, '') === '/blog';
 					});
 			};
 			document.addEventListener('astro:page-load', initTocHighlight);
+
+			// GoatCounter 统计：load 之后动态注入脚本（绝不拖延 load 事件与 astro:page-load），
+			// SPA 模式（no_onload）由本脚本在每次 astro:page-load 手动上报
+			(window as any).goatcounter = { no_onload: true };
+			const gcInject = () => {
+				if (document.querySelector('script[data-goatcounter]')) return;
+				const script = document.createElement('script');
+				script.async = true;
+				script.src = 'https://gc.zgo.at/count.js';
+				script.setAttribute(
+					'data-goatcounter',
+					`https://${GOATCOUNTER.code}.goatcounter.com/count`,
+				);
+				document.head.appendChild(script);
+			};
+			if (document.readyState === 'complete') {
+				window.setTimeout(gcInject, 0);
+			} else {
+				window.addEventListener('load', () => window.setTimeout(gcInject, 0), { once: true });
+			}
+
+			let gcPendingPath = '';
+			let gcTimer: number | null = null;
+			const gcSend = () => {
+				const gc = (window as any).goatcounter;
+				if (gc && typeof gc.count === 'function') {
+					gc.count({ path: gcPendingPath });
+					return true;
+				}
+				return false;
+			};
+			document.addEventListener('astro:page-load', () => {
+				gcPendingPath = location.pathname + location.search;
+				if (gcSend()) return;
+				if (gcTimer !== null) return; // 已有等待中的上报，最新路径生效
+				let tries = 0;
+				gcTimer = window.setInterval(() => {
+					if (gcSend() || ++tries > 20) {
+						clearInterval(gcTimer as number);
+						gcTimer = null;
+					}
+				}, 500);
+			});
 		</script>
 	</body>
 </html>

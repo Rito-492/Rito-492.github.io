@@ -143,29 +143,29 @@ const jsonLd = {
 		</div>
 	</section>
 
-	<!-- 访客计数器 -->
+	<!-- 站点总浏览量（GoatCounter） -->
 	<section class="visitor-counter-section">
-		<span class="counter-label">访客计数：</span>
+		<span class="counter-label">总浏览：</span>
 		<span class="counter-number" id="visitCount">
 			—
 		</span>
 	</section>
 
 	<script>
-		// 访客计数器（View Transitions 安全：每次进入首页时刷新一次）
+		import { GOATCOUNTER } from '../config';
+
+		// 站点总浏览量（GoatCounter TOTAL；服务端最长缓存 4 小时）
 		function initVisitorCounter() {
 			const visitCountEl = document.getElementById('visitCount');
 			if (!visitCountEl) return;
 
-			fetch('https://api.counterapi.dev/v1/rito-492-github-io/home-visits/up')
-				.then((res) => res.json())
+			fetch(`https://${GOATCOUNTER.code}.goatcounter.com/counter/TOTAL.json`)
+				.then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
 				.then((data) => {
-					if (data.count !== undefined) {
-						visitCountEl.textContent = Number(data.count).toLocaleString();
-					}
+					if (typeof data.count === 'string') visitCountEl.textContent = data.count;
 				})
 				.catch(() => {
-					// 计数器服务不可用时，保持显示 "—"
+					// 统计服务不可用时保持显示 "—"
 				});
 		}
 

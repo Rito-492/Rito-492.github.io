@@ -33,3 +33,8 @@ export const LICENSE = {
 	url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
 	deedUrl: 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-Hans',
 } as const;
+
+// GoatCounter 统计（SPA 模式接入见 SeoHead / Layout；首页显示总浏览数）
+export const GOATCOUNTER = {
+	code: 'rito-492',
+} as const;

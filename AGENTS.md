@@ -131,7 +131,7 @@ steps:
 
 ```
 src/
-├── config.ts                   # 站点级配置：SITE（标题/简介/头像）/ SOCIALS / GISCUS / LICENSE，改配置只动这里
+├── config.ts                   # 站点级配置：SITE（标题/简介/头像）/ SOCIALS / GISCUS / LICENSE / GOATCOUNTER，改配置只动这里
 ├── content.config.ts           # Content collection schemas（日期在此层转成 Date）
 ├── lib/
 │   ├── date.ts                 # parseDate / formatDate —— schema 与页面共用
@@ -285,6 +285,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - 图标：全站统一用 `Icon.astro`（lucide 内联路径），不要再用 emoji
 - 侧栏细滚动条：`components.css`（`.toc-sidebar` / `.blog-sidebar` / `.mobile-toc-panel`）
 - **RSS 全文输出**：`rss.xml.ts` 用 `experimental_AstroContainer` 渲染每篇文章，站内 `src/href` 绝对化后以转义形式放入 `<content:encoded>`；`description` 仍作摘要兜底
+- **统计**：GoatCounter（code 在 `config.ts` 的 `GOATCOUNTER`）。count.js 在 **load 之后动态注入**（绝不拖延 load 事件，避免第三方 CDN 拖慢 astro:page-load 初始化）；SPA 模式（`no_onload`）由 Layout 在 `astro:page-load` 手动上报（未就绪时轮询等待）；首页「总浏览」读 `counter/TOTAL.json`（服务端最长 4h 缓存）
 
 ## 易错点 / CSS Gotchas
 
@@ -302,7 +303,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 ## 待办 / TODO
 
 - **字体自托管**：当前 JetBrains Mono 走 Google Fonts、霞鹜文楷走 jsdelivr（`SeoHead.astro`）——国内访问不稳。方案：自托管 unicode-range 分片子集（如 `lxgw-wenkai-webfont`）+ `@fontsource/jetbrains-mono`，替换 CDN 引用。
-- **UI 待办（C 组·首页，用户暂缓）**：hero 区加行动引导按钮；访客计数换服务或去掉——counterapi.dev 已确认下线（HTTP 410，2026-10 实测）。
+- **UI 待办（C 组·首页，用户暂缓）**：hero 区加行动引导按钮。（访客计数已迁移 GoatCounter，2026-10-19。）
 - **per-post OG 分享卡（D 组唯一遗留）**：satori 按标题生成。先决问题：CJK 字库方案（~10MB 字体入库或构建期下载），待拍板。
 
 ## UI 改动工作流：先截图，再交付
