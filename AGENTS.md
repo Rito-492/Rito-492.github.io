@@ -211,7 +211,7 @@ src/
 **所有页面共用同一套 `.page-shell`**（404 除外）：
 
 - 栅格：`minmax(0,1fr) var(--content-width) minmax(0,1fr)` + `column-gap: 2.5rem`
-- **左栏** `.page-left` — 固定为身份与联系（`ProfileCard`），宽度 `--rail-width`（240px），桌面端头像与文字共用一条垂直中心线；RSS 入口与社交链接同列同样式（`SocialLinks includeRss`）
+- **左栏** `.page-left` — 身份与联系（`ProfileCard`），宽度 `--rail-width`（240px），桌面端头像与文字共用一条垂直中心线；RSS 入口与社交链接同列同样式（`SocialLinks includeRss`）。**仅首页与 About 渲染**（`<Layout showProfile>`，其余页面传 `false`）：列表 / 项目 / 文章页去掉身份卡后中栏位置不变（栅格第一列留空），避免切页时正文横向跳动
 - **中栏** `.main-content` — 页面主体，宽度固定 `--content-width`
 - **右栏** `.side-panel` — 页面上下文，同样宽 `--rail-width`，由页面通过 `<Fragment slot="right">` 提供：
     - 首页：系列 / 标签入口 → `/blog?series=`、`/blog?tag=`
@@ -224,7 +224,7 @@ src/
     - 竖向：底部渐隐提示，悬停时取消渐隐并显示细滚动条（`is-overflowing`）
     - 横向：单项过长时单行显示 + 右缘渐隐，悬停向左滚到末尾（`scroll-text.is-truncated`；文本本身可横向滑动，触屏也能用）
 - **404** 是错误态，保持单列（`ContentShell fullWidth`），不套三栏
-- 断点 **1320px**：左栏身份卡变为正文上方的紧凑横条；**右栏整体不渲染**（`layouts.css` 里 `.page-shell > .side-panel { display: none }`）——它原本会掉到正文末尾、夹在页脚前，没有导航价值还拉长页面；文章页目录改用 `MobileToc` 浮钮（按钮保留，手机端读长文靠它跳章节）
+- 断点 **1320px**：左栏身份卡变为正文上方的紧凑横条；**右栏整体不渲染**（`layouts.css` 里 `.page-shell > .side-panel { display: none }`）——它原本会掉到正文末尾、夹在页脚前，没有导航价值还拉长页面。替代方案：文章页目录改用 `MobileToc` 浮钮；**列表页筛选**改用正文顶部的 chip 行（`.mobile-filters`，见下节）
 
 > 2026-10 统一前：首页 720 / 文章页 680 / 列表页 700 三套中栏宽度，About/Projects 又是 900px 单列，切页时内容列会横向跳约 100px。现在五类页面中栏位置与宽度完全一致。三栏总宽 `700 + 2×240 + 2×40 = 1260px`，断点取 1320px 留出呼吸空间。
 
@@ -236,6 +236,15 @@ Both sidebars share the same visual language，**共用 `styles/sidebar.css` 的
 - `.side-panel-title` — `1rem / font-weight: 600 / color: var(--color-primary)` + 图标
 - `.side-panel-item` — `0.85rem / color: var(--color-text-muted)`，`border-left: 2px solid transparent` → 主色（hover/active）
 - `.tag-pill` — 纯文字（无边框底色），`0.78rem`
+
+### 列表页窄屏筛选（2026-10）：chip 行
+
+右栏在 `<1320px` 不渲染后，列表页的筛选 / 排序改由正文顶部的 `.mobile-filters` 承担（只在窄屏显示）：
+
+- 第一行：系列 chip（`All` + 各系列，单选），末尾用 `.chip-sep` 分隔后接排序 chip（`Newest` / `Oldest`，点一下切换）
+- 第二行：标签 chip（可多选，再点取消）。开启标签筛选时，统计行出现 `Clear`（`.stat-clear`），并隐藏总数，只留 `N posts found`
+- 两套控件（桌面右栏 + 窄屏 chip）**共享同一份状态**：`blog/index.astro` 的脚本用模块级 `listState` + `document` 上的单次 click 委托（选择器 `FILTER_CONTROL` 只匹配控件，不误伤 `.post-card` 自带的 `data-series`/`data-tags`），`syncControls()` 同时刷新两处的高亮与文案
+- chip 行 `flex-wrap: wrap`（不横向滚动），避免内容被藏在屏幕外
 
 ### Blog list timeline
 

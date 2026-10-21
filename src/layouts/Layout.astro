@@ -19,6 +19,7 @@ export interface Props {
 	type?: 'website' | 'article';
 	jsonLd?: Record<string, unknown>;
 	licenseUrl?: string;
+	showProfile?: boolean;
 	showToc?: boolean;
 	tocHeadings?: Array<{ depth: number; text: string; id: string }>;
 }
@@ -30,6 +31,7 @@ const {
 	type = 'website',
 	jsonLd,
 	licenseUrl,
+	showProfile = true,
 	showToc = false,
 	tocHeadings = [],
 } = Astro.props;
@@ -58,9 +60,11 @@ const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 			</ContentShell>
 		) : (
 			<div class="page-shell">
-				<aside class="page-left">
-					<ProfileCard />
-				</aside>
+				{showProfile && (
+					<aside class="page-left">
+						<ProfileCard />
+					</aside>
+				)}
 
 				<ContentShell>
 					<slot />
