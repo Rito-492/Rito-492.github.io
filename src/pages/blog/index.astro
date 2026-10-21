@@ -17,7 +17,7 @@ const allSeries = [
 const allTags = [...new Set(posts.filter((p) => p.data.tags).flatMap((p) => p.data.tags!))].sort();
 ---
 
-<Layout title="Blog - Rito-492" showProfile={false}>
+<Layout title="Blog - Rito-492" hideProfileOnMobile>
 	<!-- 标题行 -->
 	<header class="blog-header">
 		<div class="header-top">

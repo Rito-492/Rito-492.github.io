@@ -211,7 +211,7 @@ src/
 **所有页面共用同一套 `.page-shell`**（404 除外）：
 
 - 栅格：`minmax(0,1fr) var(--content-width) minmax(0,1fr)` + `column-gap: 2.5rem`
-- **左栏** `.page-left` — 身份与联系（`ProfileCard`），宽度 `--rail-width`（240px），桌面端头像与文字共用一条垂直中心线；RSS 入口与社交链接同列同样式（`SocialLinks includeRss`）。**仅首页与 About 渲染**（`<Layout showProfile>`，其余页面传 `false`）：列表 / 项目 / 文章页去掉身份卡后中栏位置不变（栅格第一列留空），避免切页时正文横向跳动
+- **左栏** `.page-left` — 身份与联系（`ProfileCard`），宽度 `--rail-width`（240px），桌面端头像与文字共用一条垂直中心线；RSS 入口与社交链接同列同样式（`SocialLinks includeRss`）。**所有页面在桌面端都渲染**；列表 / 项目 / 文章页传 `hideProfileOnMobile`，窄屏下不显示这条紧凑身份条（首页与 About 窄屏仍保留）
 - **中栏** `.main-content` — 页面主体，宽度固定 `--content-width`
 - **右栏** `.side-panel` — 页面上下文，同样宽 `--rail-width`，由页面通过 `<Fragment slot="right">` 提供：
     - 首页：系列 / 标签入口 → `/blog?series=`、`/blog?tag=`
