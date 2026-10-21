@@ -3,6 +3,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SeoHead from '../components/SeoHead.astro';
 import ProfileCard from '../components/ProfileCard.astro';
+import MobileToc from '../components/MobileToc.astro';
 import ContentShell from '../components/ContentShell.astro';
 import { SITE } from '../config';
 import '../styles/variables.css';
@@ -18,6 +19,8 @@ export interface Props {
 	type?: 'website' | 'article';
 	jsonLd?: Record<string, unknown>;
 	licenseUrl?: string;
+	showToc?: boolean;
+	tocHeadings?: Array<{ depth: number; text: string; id: string }>;
 }
 
 const {
@@ -27,6 +30,8 @@ const {
 	type = 'website',
 	jsonLd,
 	licenseUrl,
+	showToc = false,
+	tocHeadings = [],
 } = Astro.props;
 
 const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
@@ -63,6 +68,8 @@ const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 
 				<!-- 右栏：页面上下文（目录 / 筛选 / 站点信息），由页面按需提供 -->
 				<slot name="right" />
+
+				{showToc && tocHeadings.length > 0 && <MobileToc tocHeadings={tocHeadings} />}
 			</div>
 		)}
 

@@ -55,6 +55,13 @@
 		grid-column: 1;
 	}
 
+	/* 右栏（系列/标签/排序/技术栈筛选）在窄屏直接不渲染：
+	   它落到正文末尾只是把桌面端的上下文块堆在页脚前，既没有导航价值又拉长页面。
+	   文章页与 About 的目录另有 MobileToc 浮钮兜底。 */
+	.page-shell > .side-panel {
+		display: none;
+	}
+
 	.full-width {
 		padding: 1rem;
 	}

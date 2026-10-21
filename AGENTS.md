@@ -165,6 +165,7 @@ src/
 │   ├── TocSidebar.astro        # 文章页右侧：系列/标签/目录
 │   ├── ContentShell.astro      # 内容主栏：滚动进度条 + slot + 返回顶部
 │   ├── ThemeToggle.astro       # 三态主题切换（浅色/深色/跟随系统，localStorage 持久化）
+│   ├── MobileToc.astro         # 移动端目录浮钮 + 上拉面板（<1150px 替代 TocSidebar）
 │   └── GiscusComments.astro    # Giscus comments，滚入视口才加载（省内存）
 └── styles/
     ├── variables.css           # CSS 自定义属性（颜色/字体/圆角/过渡/--content-width + 暗色调色板）
@@ -223,7 +224,7 @@ src/
     - 竖向：底部渐隐提示，悬停时取消渐隐并显示细滚动条（`is-overflowing`）
     - 横向：单项过长时单行显示 + 右缘渐隐，悬停向左滚到末尾（`scroll-text.is-truncated`；文本本身可横向滑动，触屏也能用）
 - **404** 是错误态，保持单列（`ContentShell fullWidth`），不套三栏
-- 断点 **1320px**：左右栏收起；左栏身份卡变为正文上方的紧凑横条，右栏落到正文下方；文章页 `TocSidebar` 在窄屏隐藏——**手机端不提供目录**（2026-10 决定：浮钮常驻遮挡正文、与返回顶部按钮挤在同一角，现有文章长度也用不上）
+- 断点 **1320px**：左栏身份卡变为正文上方的紧凑横条；**右栏整体不渲染**（`layouts.css` 里 `.page-shell > .side-panel { display: none }`）——它原本会掉到正文末尾、夹在页脚前，没有导航价值还拉长页面；文章页目录改用 `MobileToc` 浮钮（按钮保留，手机端读长文靠它跳章节）
 
 > 2026-10 统一前：首页 720 / 文章页 680 / 列表页 700 三套中栏宽度，About/Projects 又是 900px 单列，切页时内容列会横向跳约 100px。现在五类页面中栏位置与宽度完全一致。三栏总宽 `700 + 2×240 + 2×40 = 1260px`，断点取 1320px 留出呼吸空间。
 
@@ -329,7 +330,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - **图片灯箱**：点文章图全屏预览（点击任意处 / Esc 关闭；滚动锁在 after-swap 清理）。遮罩由 JS 动态挂到 `<body>`——放页面容器里会被祖先 stacking context 压到顶栏下面；样式在 `components.css`
 - **Footer**：© / Powered by Astro · GitHub Pages / RSS 订阅 / 网站源码 / CC 许可；数据都在 `config.ts`
 - 图标：全站统一用 `Icon.astro`（lucide 内联路径），不要再用 emoji
-- 侧栏细滚动条：`sidebar.css`（`.side-panel` 溢出时 `is-overflowing` + 悬停显示）；移动端目录浮钮（`MobileToc`）已于 2026-10 移除，`.mobile-toc-panel` 相关样式一并删除
+- 侧栏细滚动条：`components.css`（`.toc-sidebar` / `.blog-sidebar` / `.mobile-toc-panel`）
 - **RSS 全文输出**：`rss.xml.ts` 用 `experimental_AstroContainer` 渲染每篇文章，站内 `src/href` 绝对化后以 **CDATA** 形式放入 `<content:encoded>`（兼容 WordPress 系阅读器习惯）；`description` 仍作摘要兜底
 - **正文链接行为**：`#` 锚点保持当前页跳转；其余链接（外链 + 站内文章）在 `initPostContent` 里统一加 `target="_blank" rel="noopener noreferrer"`（JS 增强，无 JS 时降级为同页跳转）
 - **统计**：GoatCounter（code 在 `config.ts` 的 `GOATCOUNTER`）。count.js 在 **load 之后动态注入**（绝不拖延 load 事件，避免第三方 CDN 拖慢 astro:page-load 初始化）；SPA 模式（`no_onload`）由 Layout 在 `astro:page-load` 手动上报（未就绪时轮询等待）；首页「总浏览」读 `counter/TOTAL.json`（服务端最长 4h 缓存）

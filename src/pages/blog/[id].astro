@@ -42,7 +42,13 @@ const jsonLd = {
 };
 ---
 
-<Layout title={post.data.title} jsonLd={jsonLd} licenseUrl={LICENSE.url}>
+<Layout
+	title={post.data.title}
+	showToc={true}
+	tocHeadings={tocHeadings}
+	jsonLd={jsonLd}
+	licenseUrl={LICENSE.url}
+>
 	<div class="post-page">
 		<article class="post">
 			<nav class="breadcrumb" aria-label="面包屑">
