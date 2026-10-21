@@ -178,29 +178,7 @@
 	}
 }
 
-/* ===== 细滚动条（移动目录面板；右侧栏的按需滚动条见 sidebar.css） ===== */
-.mobile-toc-panel {
-	scrollbar-width: thin; /* Firefox */
-	scrollbar-color: var(--color-border) transparent;
-}
-
-.mobile-toc-panel::-webkit-scrollbar {
-	width: 6px;
-	height: 6px;
-}
-
-.mobile-toc-panel::-webkit-scrollbar-thumb {
-	background: var(--color-border);
-	border-radius: 999px;
-}
-
-.mobile-toc-panel::-webkit-scrollbar-thumb:hover {
-	background: var(--color-text-muted);
-}
-
-.mobile-toc-panel::-webkit-scrollbar-track {
-	background: transparent;
-}
+/* ===== 细滚动条（右侧栏与目录的按需滚动条见 sidebar.css） ===== */
 
 /* ===== 图片灯箱（文章页；JS 动态挂到 <body>，避免层叠上下文限制） ===== */
 .img-lightbox {
