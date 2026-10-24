@@ -148,7 +148,7 @@ src/
 │   └── Layout.astro            # 组装层：按页面形态分发到下述组件 + 全局交互脚本（滚动进度/返回顶部/点击特效/TOC高亮）
 ├── pages/
 │   ├── index.astro             # Home page — hero + latest 3 posts
-│   ├── about.astro             # About page — 八章节文章式排版 + 站点数据/Colophon/FAQ（见「版权声明」节）
+│   ├── about.astro             # About page — 七章节文章式排版 + 站点数据/Colophon 图标卡（见「版权声明」节）
 │   ├── projects.astro          # Project showcase grid
 │   ├── 404.astro               # Custom 404 page
 │   ├── rss.xml.ts              # RSS feed（只含 isPublished: true）
@@ -217,7 +217,7 @@ src/
     - 首页：系列 / 标签入口 → `/blog?series=`、`/blog?tag=`
     - 文章页：`TocSidebar`（系列 / 标签 / 目录）
     - 列表页：系列 / 标签 / 排序筛选
-    - About：本页目录（八章节，见「版权声明」节）
+    - About：本页目录（七章节，见「版权声明」节）
     - Projects：按技术栈筛选
 - 左右栏等宽、无分隔线，靠留白区分；中栏在视觉上保持居中
 - 右栏内容溢出时：
@@ -316,7 +316,8 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 
 - 文章采用 **CC BY-NC-SA 4.0**（2026-10 定）。文章页正文与分页之间一行小字声明（[id].astro）；`<head>` 输出机器可读的 `<link rel="license">`（SeoHead ← Layout `licenseUrl` 透传）；JSON-LD `BlogPosting.license` 同带该 URL。
 - 协议配置在 `src/config.ts` 的 `LICENSE`（显示名 / 法律文本 URL / 中文 deed URL）——换协议只改这里。
-- About 页采用**文章式排版为底 + 轻量结构化组件穿插**（2026-10 改版，非卡片堆叠），八个章节：About Me / What I Write / Site Stats / Toolbox / About This Site / FAQ / Copyright / Privacy，右栏目录定位。个人信息只保留 About Me 三段（不扩充）；**What I Write** 是内容导览（图标清单 + RSS 订阅引导）；**Site Stats** 大数字行（文章数 / 运行天数构建时算出，总浏览量由页内脚本查 `counter/TOTAL.json` 填入 `[data-stat-views]`，`dataset.done` 防重复）；**About This Site** 是 Colophon 定义表（`dl.colophon`，框架/托管/评论/统计/字体/图标/许可/源码逐行可点）；**FAQ** 为 Q 标记问答（`.faq-q::before`）；**Copyright** 逐条列出许可条件（署名 / 非商业 / 相同方式共享）、第三方素材归属与删除联系方式；**Privacy** 说明 GoatCounter 聚合统计与 Giscus 评论数据。
+- About 页采用**文章式排版为底 + 轻量结构化组件穿插**（2026-10 改版，非卡片堆叠），七个章节：About Me / What I Write / Site Stats / Toolbox / About This Site / Copyright / Privacy，右栏目录定位。个人信息只保留 About Me 三段（不扩充）；**What I Write** 是内容导览（图标清单：技术笔记 / 经验分享 / 折腾记录）；**Site Stats** 大数字行（文章数 / 运行天数构建时算出，总浏览量由页内脚本查 `counter/TOTAL.json` 填入 `[data-stat-views]`，`dataset.done` 防重复）；**About This Site** 是 Colophon 图标卡面板（`.site-cards` 外框 + 双列 `.site-card`：图标牌 + 名称 + small-caps 角色行，悬停淡底 + 显现边框；数据在 frontmatter 的 `siteStack` 数组，移动端塌成单列）；**Copyright** 逐条列出许可条件（署名 / 非商业 / 相同方式共享）、第三方素材归属与删除联系方式；**Privacy** 说明 GoatCounter 聚合统计与 Giscus 评论数据。
+- **图标来源约定（2026-10 定）**：普通图标一律取 [lucide](https://lucide.dev) 路径，品牌图标一律取 [simple-icons](https://simpleicons.org) 路径（GitHub / Steam / Astro / JetBrains / CC 等）；simple-icons 没有的品牌（如 Giscus、GoatCounter）回退用 lucide 通用图标。全部内联 SVG，不走外部请求。
 
 ## 文章插图
 
@@ -338,7 +339,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
     - 主题：`<html>` 属性在导航后可能被重置，ThemeToggle 在 `astro:after-swap` 从 localStorage 重放
 - **图片灯箱**：点文章图全屏预览（点击任意处 / Esc 关闭；滚动锁在 after-swap 清理）。遮罩由 JS 动态挂到 `<body>`——放页面容器里会被祖先 stacking context 压到顶栏下面；样式在 `components.css`
 - **Footer**：© / Powered by Astro · GitHub Pages / RSS 订阅 / 网站源码 / CC 许可；数据都在 `config.ts`
-- 图标：全站统一用 `Icon.astro`（lucide 内联路径），不要再用 emoji
+- 图标：全站统一内联 SVG（`Icon.astro` 或页面级 `siteStack` 数组）；普通图标用 lucide、品牌图标用 simple-icons（约定见「版权声明」节），不要再用 emoji
 - 侧栏细滚动条：`components.css`（`.toc-sidebar` / `.blog-sidebar` / `.mobile-toc-panel`）
 - **RSS 全文输出**：`rss.xml.ts` 用 `experimental_AstroContainer` 渲染每篇文章，站内 `src/href` 绝对化后以 **CDATA** 形式放入 `<content:encoded>`（兼容 WordPress 系阅读器习惯）；`description` 仍作摘要兜底
 - **正文链接行为**：`#` 锚点保持当前页跳转；其余链接（外链 + 站内文章）在 `initPostContent` 里统一加 `target="_blank" rel="noopener noreferrer"`（JS 增强，无 JS 时降级为同页跳转）
