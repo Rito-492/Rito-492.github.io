@@ -497,13 +497,41 @@ const jsonLd = {
 		return el;
 	}
 
+	function lightboxSrcSetCandidate(source: HTMLImageElement) {
+		const candidates = source.srcset
+			.split(',')
+			.map((candidate) => {
+				const [url, descriptor] = candidate.trim().split(/\s+/);
+				return { url, width: Number.parseInt(descriptor ?? '', 10) };
+			})
+			.filter((candidate) => candidate.url && Number.isFinite(candidate.width))
+			.sort((a, b) => a.width - b.width);
+
+		if (candidates.length === 0) return source.currentSrc || source.src;
+
+		// 只取足以填满灯箱的候选：手机不必为 350 CSS px 的显示解码 2500px 大图。
+		const ratio = source.naturalWidth / source.naturalHeight || 1;
+		const padding = Math.min(window.innerWidth, window.innerHeight) * 0.04;
+		const displayWidth = Math.min(
+			window.innerWidth - padding * 2,
+			window.innerHeight * 0.84 * ratio,
+		);
+		const neededWidth = Math.ceil(displayWidth * (window.devicePixelRatio || 1));
+		return (
+			candidates.find((candidate) => candidate.width >= neededWidth)?.url ??
+			candidates.at(-1)?.url ??
+			(source.currentSrc || source.src)
+		);
+	}
+
 	function openLightbox(source: HTMLImageElement) {
 		const lightbox = getLightbox();
 		const lightboxImg = lightbox.querySelector('img');
 		const caption = lightbox.querySelector('figcaption');
 		if (!lightboxImg) return;
 
-		lightboxImg.src = source.currentSrc || source.src;
+		// 正文使用按视口选择的图片；灯箱只请求足以满足当前显示尺寸的候选。
+		lightboxImg.src = lightboxSrcSetCandidate(source);
 		lightboxImg.alt = source.alt;
 		if (caption) {
 			caption.textContent = source.alt;
