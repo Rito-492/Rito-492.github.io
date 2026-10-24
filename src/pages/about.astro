@@ -1,26 +1,35 @@
 ---
+import { getCollection } from 'astro:content';
+import Icon from '../components/Icon.astro';
 import Layout from '../layouts/Layout.astro';
-import SocialLinks from '../components/SocialLinks.astro';
 import TocSidebar from '../components/TocSidebar.astro';
 import { LICENSE, SITE, SOCIALS } from '../config';
 
 const email = SOCIALS.find((s) => s.id === 'email')?.href ?? '';
 
+const posts = await getCollection('blog', ({ data }) => data.isPublished);
+const postCount = posts.length;
+const firstPostTime = Math.min(...posts.map((p) => p.data.pubDate.getTime()));
+const daysRunning = Math.max(1, Math.floor((Date.now() - firstPostTime) / 86400000) + 1);
+
 const tocHeadings = [
 	{ depth: 2, text: 'About Me', id: 'about-me' },
+	{ depth: 2, text: 'What I Write', id: 'writing' },
+	{ depth: 2, text: 'Site Stats', id: 'stats' },
 	{ depth: 2, text: 'Toolbox', id: 'toolbox' },
 	{ depth: 2, text: 'About This Site', id: 'site' },
+	{ depth: 2, text: 'FAQ', id: 'faq' },
 	{ depth: 2, text: 'Copyright', id: 'copyright' },
 	{ depth: 2, text: 'Privacy', id: 'privacy' },
 ];
 ---
 
 <Layout title="About - Rito-492">
-	<!-- 文章式排版：与博客正文一致，右栏目录定位 -->
+	<!-- 文章式排版为底，结构化内容（统计/清单/FAQ）做成轻组件穿插其中 -->
 	<article class="about-content">
 		<header class="about-header">
 			<h1>About</h1>
-			<p class="subtitle">A bit about me, this site, and how to reach me.</p>
+			<p class="subtitle">A bit about me, this site, and how things work here.</p>
 		</header>
 
 		<section class="about-section">
@@ -31,10 +40,66 @@ const tocHeadings = [
 				和各类工具；也会把保研、夏令营这类经历整理成文字。
 			</p>
 			<p>这个博客是代码与思考的自留地——把学过的东西写清楚，把没想明白的事情慢慢想明白。</p>
-			<div class="about-contact">
-				<span class="contact-label">Contact</span>
-				<SocialLinks variant="row" ids={['github', 'email', 'steam']} />
+		</section>
+
+		<section class="about-section">
+			<h2 id="writing">What I Write</h2>
+			<p>这里的内容大致三类：</p>
+			<ul class="topic-list">
+				<li>
+					<Icon name="code" size={15} />
+					<span>
+						<strong>技术笔记</strong>——深度学习、Python / C++、Linux 工具链的学与用；
+					</span>
+				</li>
+				<li>
+					<Icon name="sprout" size={15} />
+					<span>
+						<strong>经验分享</strong>——保研、夏令营这类过程的复盘与记录；
+					</span>
+				</li>
+				<li>
+					<Icon name="wrench" size={15} />
+					<span>
+						<strong>折腾记录</strong>——建站、工具配置与效率流的实践。
+					</span>
+				</li>
+			</ul>
+			<p>
+				更新不定期，写完即发。想第一时间看到新文章，可以订阅
+				<a class="text-link" href="/rss.xml">
+					RSS
+				</a>
+				（把链接添加到 Feedly、Inoreader、Follow 等阅读器即可），也可以到
+				<a class="text-link" href="/blog">
+					Blog
+				</a>
+				页按系列与标签浏览全部文章。
+			</p>
+		</section>
+
+		<section class="about-section">
+			<h2 id="stats">Site Stats</h2>
+			<div class="stats-row">
+				<div class="stat">
+					<span class="stat-num">{postCount}</span>
+					<span class="stat-label">Articles</span>
+				</div>
+				<div class="stat">
+					<span class="stat-num">{daysRunning}</span>
+					<span class="stat-label">Days Running</span>
+				</div>
+				<div class="stat">
+					<span class="stat-num" data-stat-views>
+						—
+					</span>
+					<span class="stat-label">Total Views</span>
+				</div>
 			</div>
+			<p class="stats-note">
+				文章数为已发布篇数；运行天数自首篇文章起算；总浏览量由 GoatCounter
+				按全站页面浏览聚合统计。
+			</p>
 		</section>
 
 		<section class="about-section">
@@ -71,48 +136,143 @@ const tocHeadings = [
 
 		<section class="about-section">
 			<h2 id="site">About This Site</h2>
-			<p>
-				本站基于 Astro 构建，以静态方式部署于 GitHub Pages。评论由 Giscus 提供，访问统计使用
-				GoatCounter，文章内容采用 {LICENSE.name} 许可协议。
-			</p>
-			<p class="site-credits">
-				图标来自{' '}
-				<a
-					class="text-link"
-					href="https://lucide.dev"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Lucide
-				</a>
-				，字体为
-				<a
-					class="text-link"
-					href="https://www.jetbrains.com/lp/mono/"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					JetBrains Mono
-				</a>
-				与
-				<a
-					class="text-link"
-					href="https://github.com/lxgw/LxgwWenKai"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					霞鹜文楷
-				</a>
-				。
-			</p>
-			<div class="site-links">
-				<a href={SITE.repo} target="_blank" rel="noopener noreferrer">
-					Source Code
-				</a>
-				<a href="/rss.xml">RSS</a>
-				<a href={LICENSE.deedUrl} target="_blank" rel="noopener noreferrer">
-					{LICENSE.name}
-				</a>
+			<p>本站是一个纯静态网站，设计与源码全部开源。技术选型与素材来源如下，均可点击查看：</p>
+			<dl class="colophon">
+				<div class="colophon-row">
+					<dt>Framework</dt>
+					<dd>
+						<a href="https://astro.build" target="_blank" rel="noopener noreferrer">
+							Astro
+						</a>
+					</dd>
+				</div>
+				<div class="colophon-row">
+					<dt>Hosting</dt>
+					<dd>
+						<a
+							href="https://pages.github.com"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							GitHub Pages
+						</a>
+					</dd>
+				</div>
+				<div class="colophon-row">
+					<dt>Comments</dt>
+					<dd>
+						<a href="https://giscus.app" target="_blank" rel="noopener noreferrer">
+							Giscus
+						</a>
+					</dd>
+				</div>
+				<div class="colophon-row">
+					<dt>Analytics</dt>
+					<dd>
+						<a
+							href="https://www.goatcounter.com"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							GoatCounter
+						</a>
+					</dd>
+				</div>
+				<div class="colophon-row">
+					<dt>Fonts</dt>
+					<dd>
+						<a
+							href="https://www.jetbrains.com/lp/mono/"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							JetBrains Mono
+						</a>
+						&
+						<a
+							href="https://github.com/lxgw/LxgwWenKai"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							霞鹜文楷
+						</a>
+					</dd>
+				</div>
+				<div class="colophon-row">
+					<dt>Icons</dt>
+					<dd>
+						<a href="https://lucide.dev" target="_blank" rel="noopener noreferrer">
+							Lucide
+						</a>
+					</dd>
+				</div>
+				<div class="colophon-row">
+					<dt>License</dt>
+					<dd>
+						<a href={LICENSE.deedUrl} target="_blank" rel="noopener noreferrer">
+							{LICENSE.name}
+						</a>
+					</dd>
+				</div>
+				<div class="colophon-row">
+					<dt>Source Code</dt>
+					<dd>
+						<a href={SITE.repo} target="_blank" rel="noopener noreferrer">
+							GitHub
+						</a>
+						（欢迎 star，欢迎提 issue）
+					</dd>
+				</div>
+			</dl>
+		</section>
+
+		<section class="about-section">
+			<h2 id="faq">FAQ</h2>
+			<div class="faq-item">
+				<p class="faq-q">如何订阅本站更新？</p>
+				<p class="faq-a">
+					将{' '}
+					<a class="text-link" href="/rss.xml">
+						RSS 地址
+					</a>
+					添加到你的阅读器（Feedly、Inoreader、Follow
+					等）即可，新文章发布时会自动推送到订阅列表。
+				</p>
+			</div>
+			<div class="faq-item">
+				<p class="faq-q">如何参与评论？</p>
+				<p class="faq-a">
+					每篇文章末尾都有评论区，由 Giscus 提供，使用 GitHub 账号登录即可留言。
+				</p>
+			</div>
+			<div class="faq-item">
+				<p class="faq-q">发现文章有错误怎么办？</p>
+				<p class="faq-a">
+					欢迎通过
+					<a class="text-link" href={email}>
+						Email
+					</a>
+					告知，或在
+					<a class="text-link" href={SITE.repo} target="_blank" rel="noopener noreferrer">
+						源码仓库
+					</a>
+					提 issue，我会尽快修正。
+				</p>
+			</div>
+			<div class="faq-item">
+				<p class="faq-q">内容可以转载或引用吗？</p>
+				<p class="faq-a">
+					可以。原创内容采用
+					<a
+						class="text-link"
+						href={LICENSE.deedUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						{LICENSE.name}
+					</a>
+					协议，署名、非商业、相同方式共享即可，详见下方 Copyright。
+				</p>
 			</div>
 		</section>
 
@@ -171,6 +331,27 @@ const tocHeadings = [
 	</Fragment>
 </Layout>
 
+<script>
+	import { GOATCOUNTER } from '../config';
+
+	// 站点总浏览量（GoatCounter TOTAL；服务端最长缓存 4 小时，失败保持占位 "—"）
+	function initStatViews() {
+		const el = document.querySelector<HTMLElement>('[data-stat-views]');
+		if (!el || el.dataset.done === '1') return;
+		el.dataset.done = '1';
+		fetch(`https://${GOATCOUNTER.code}.goatcounter.com/counter/TOTAL.json`)
+			.then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+			.then((data) => {
+				if (typeof data.count === 'string') el.textContent = data.count;
+			})
+			.catch(() => {
+				// 统计服务不可用时保持显示 "—"
+			});
+	}
+
+	document.addEventListener('astro:page-load', initStatViews);
+</script>
+
 <style>
 	/* About 采用文章式排版：无卡片边框，靠标题层级与段间距组织内容 */
 	.about-header {
@@ -212,15 +393,69 @@ const tocHeadings = [
 		margin-bottom: 0;
 	}
 
-	.about-contact {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 0.75rem;
-		margin-top: 1.5rem;
+	/* 内容导览：图标 + 短句的主题清单 */
+	.topic-list {
+		list-style: none;
+		margin: 0 0 1rem;
+		padding: 0;
 	}
 
-	.contact-label {
+	.topic-list li {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.55rem;
+		margin-bottom: 0.5rem;
+		line-height: 1.85;
+	}
+
+	.topic-list li:last-child {
+		margin-bottom: 0;
+	}
+
+	.topic-list svg {
+		flex-shrink: 0;
+		margin-top: 0.42rem;
+		color: var(--color-primary);
+	}
+
+	.topic-list strong {
+		font-weight: 600;
+	}
+
+	/* 站点数据：大数字行，上下细线区隔，保持文章式的呼吸感 */
+	.stats-row {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1rem;
+		margin: 1.25rem 0 1rem;
+		padding: 1.5rem 0;
+		border-top: 1px solid var(--color-border);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	.stat {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+	}
+
+	.stat-num {
+		font-family: var(--font-mono);
+		font-size: 1.75rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		line-height: 1.1;
+		color: var(--color-text);
+	}
+
+	.stat-label {
+		font-size: 0.72rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+	}
+
+	.stats-note {
 		font-size: 0.8rem;
 		color: var(--color-text-muted);
 	}
@@ -251,27 +486,69 @@ const tocHeadings = [
 		gap: 0.4rem;
 	}
 
-	.site-credits {
-		color: var(--color-text-muted);
-		font-size: 0.9rem;
+	/* Colophon：dt/dd 定义表，行间距细线，mono 标签与站点气质一致 */
+	.colophon {
+		margin: 1rem 0 0;
 	}
 
-	.site-links {
+	.colophon-row {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 1.25rem;
-		margin-top: 1.25rem;
+		gap: 1rem;
+		padding: 0.55rem 0;
+		border-bottom: 1px solid var(--color-border);
 	}
 
-	.site-links a {
+	.colophon-row:last-child {
+		border-bottom: none;
+	}
+
+	.colophon dt {
+		flex-shrink: 0;
+		width: 130px;
+		padding-top: 0.12rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--color-text-muted);
+	}
+
+	.colophon dd {
+		margin: 0;
+		font-size: 0.92rem;
+		line-height: 1.7;
+	}
+
+	.colophon dd a {
 		color: var(--color-primary);
-		font-size: 0.88rem;
 		text-decoration: none;
 	}
 
-	.site-links a:hover {
+	.colophon dd a:hover {
 		text-decoration: underline;
 		text-underline-offset: 3px;
+	}
+
+	/* FAQ：Q 标记 + 短回答，避免与正文段落混成一片 */
+	.faq-item + .faq-item {
+		margin-top: 1.4rem;
+	}
+
+	.faq-q {
+		font-weight: 600;
+		margin: 0 0 0.35rem;
+	}
+
+	.faq-q::before {
+		content: 'Q';
+		display: inline-block;
+		margin-right: 0.6rem;
+		font-family: var(--font-mono);
+		font-weight: 700;
+		color: var(--color-primary);
+	}
+
+	.faq-a {
+		margin: 0;
+		padding-left: 1.5rem;
 	}
 
 	.license-list {
@@ -308,6 +585,14 @@ const tocHeadings = [
 			font-size: 1.75rem;
 		}
 
+		.stat-num {
+			font-size: 1.4rem;
+		}
+
+		.stat-label {
+			font-size: 0.66rem;
+		}
+
 		.tool-group {
 			flex-direction: column;
 			gap: 0.4rem;
@@ -315,6 +600,10 @@ const tocHeadings = [
 
 		.tool-label {
 			min-width: 0;
+		}
+
+		.colophon dt {
+			width: 96px;
 		}
 	}
 </style>

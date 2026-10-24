@@ -148,7 +148,7 @@ src/
 │   └── Layout.astro            # 组装层：按页面形态分发到下述组件 + 全局交互脚本（滚动进度/返回顶部/点击特效/TOC高亮）
 ├── pages/
 │   ├── index.astro             # Home page — hero + latest 3 posts
-│   ├── about.astro             # About page — avatar, intro, toolbox, social links
+│   ├── about.astro             # About page — 八章节文章式排版 + 站点数据/Colophon/FAQ（见「版权声明」节）
 │   ├── projects.astro          # Project showcase grid
 │   ├── 404.astro               # Custom 404 page
 │   ├── rss.xml.ts              # RSS feed（只含 isPublished: true）
@@ -217,7 +217,7 @@ src/
     - 首页：系列 / 标签入口 → `/blog?series=`、`/blog?tag=`
     - 文章页：`TocSidebar`（系列 / 标签 / 目录）
     - 列表页：系列 / 标签 / 排序筛选
-    - About：本页目录（About Me / Toolbox / About This Site）
+    - About：本页目录（八章节，见「版权声明」节）
     - Projects：按技术栈筛选
 - 左右栏等宽、无分隔线，靠留白区分；中栏在视觉上保持居中
 - 右栏内容溢出时：
@@ -316,7 +316,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 
 - 文章采用 **CC BY-NC-SA 4.0**（2026-10 定）。文章页正文与分页之间一行小字声明（[id].astro）；`<head>` 输出机器可读的 `<link rel="license">`（SeoHead ← Layout `licenseUrl` 透传）；JSON-LD `BlogPosting.license` 同带该 URL。
 - 协议配置在 `src/config.ts` 的 `LICENSE`（显示名 / 法律文本 URL / 中文 deed URL）——换协议只改这里。
-- About 页采用**文章式排版**（非卡片堆叠，与博客正文一致），包含 About Me / Toolbox / About This Site / Copyright / Privacy 五个章节，右栏目录定位。**Copyright** 逐条列出许可条件（署名 / 非商业 / 相同方式共享）、第三方素材归属与删除联系方式；**Privacy** 说明 GoatCounter 聚合统计与 Giscus 评论数据。
+- About 页采用**文章式排版为底 + 轻量结构化组件穿插**（2026-10 改版，非卡片堆叠），八个章节：About Me / What I Write / Site Stats / Toolbox / About This Site / FAQ / Copyright / Privacy，右栏目录定位。个人信息只保留 About Me 三段（不扩充）；**What I Write** 是内容导览（图标清单 + RSS 订阅引导）；**Site Stats** 大数字行（文章数 / 运行天数构建时算出，总浏览量由页内脚本查 `counter/TOTAL.json` 填入 `[data-stat-views]`，`dataset.done` 防重复）；**About This Site** 是 Colophon 定义表（`dl.colophon`，框架/托管/评论/统计/字体/图标/许可/源码逐行可点）；**FAQ** 为 Q 标记问答（`.faq-q::before`）；**Copyright** 逐条列出许可条件（署名 / 非商业 / 相同方式共享）、第三方素材归属与删除联系方式；**Privacy** 说明 GoatCounter 聚合统计与 Giscus 评论数据。
 
 ## 文章插图
 
