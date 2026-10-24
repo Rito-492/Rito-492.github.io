@@ -10,7 +10,8 @@ interface Props {
 		| 'copyright'
 		| 'github'
 		| 'arrow-right'
-		| 'arrow-up-down';
+		| 'arrow-up-down'
+		| 'eye';
 	size?: number;
 	strokeWidth?: number;
 }
@@ -29,6 +30,7 @@ const ICONS = {
 	'arrow-right': '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
 	'arrow-up-down':
 		'<path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/>',
+	eye: '<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>',
 } as const;
 
 const { name, size = 16, strokeWidth = 2 } = Astro.props;

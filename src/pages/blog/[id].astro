@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import GiscusComments from '../../components/GiscusComments.astro';
+import Icon from '../../components/Icon.astro';
 import TocSidebar from '../../components/TocSidebar.astro';
 import { formatDate } from '../../lib/date';
 import { GISCUS, LICENSE, SITE } from '../../config';
@@ -74,6 +75,13 @@ const jsonLd = {
 							</span>
 						</>
 					)}
+					<span class="meta-sep" aria-hidden="true">
+						·
+					</span>
+					<span class="post-views" title="浏览次数由 GoatCounter 统计">
+						<Icon name="eye" size={13} />
+						<span data-post-views>—</span>
+					</span>
 				</div>
 			</header>
 			<div class="post-content">
@@ -192,6 +200,12 @@ const jsonLd = {
 	.meta-sep {
 		opacity: 0.7;
 		margin: 0 -0.55rem;
+	}
+
+	.post-views {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
 	}
 
 	.post-content {

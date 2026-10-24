@@ -320,6 +320,31 @@ const is404Page = Astro.url.pathname.replace(/\/$/, '').endsWith('/404');
 					}
 				}, 500);
 			});
+			// 文章页浏览数：向 GoatCounter 查询当前路径的计数（与上面的上报同源）。
+			// 服务端最长缓存 4 小时；404 = 尚无记录按 0 显示；请求失败保持占位 "—"。
+			function loadPostViews() {
+				const el = document.querySelector<HTMLElement>('[data-post-views]');
+				if (!el || el.dataset.done === '1') return;
+				el.dataset.done = '1';
+				const path = encodeURIComponent(location.pathname + location.search);
+				fetch(`https://${GOATCOUNTER.code}.goatcounter.com/counter/${path}.json`)
+					.then((res) =>
+						res.status === 404
+							? { count: '0', count_unique: '0' }
+							: res.ok
+								? res.json()
+								: Promise.reject(new Error(String(res.status))),
+					)
+					.then((data) => {
+						const views = Number(data.count) || 0;
+						const visitors = Number(data.count_unique) || 0;
+						el.textContent = `${views} 次浏览 · ${visitors} 人访问`;
+					})
+					.catch(() => {
+						// 统计服务不可用时保持 "—"
+					});
+			}
+			document.addEventListener('astro:page-load', loadPostViews);
 		</script>
 	</body>
 </html>

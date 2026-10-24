@@ -342,7 +342,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 - 侧栏细滚动条：`components.css`（`.toc-sidebar` / `.blog-sidebar` / `.mobile-toc-panel`）
 - **RSS 全文输出**：`rss.xml.ts` 用 `experimental_AstroContainer` 渲染每篇文章，站内 `src/href` 绝对化后以 **CDATA** 形式放入 `<content:encoded>`（兼容 WordPress 系阅读器习惯）；`description` 仍作摘要兜底
 - **正文链接行为**：`#` 锚点保持当前页跳转；其余链接（外链 + 站内文章）在 `initPostContent` 里统一加 `target="_blank" rel="noopener noreferrer"`（JS 增强，无 JS 时降级为同页跳转）
-- **统计**：GoatCounter（code 在 `config.ts` 的 `GOATCOUNTER`）。count.js 在 **load 之后动态注入**（绝不拖延 load 事件，避免第三方 CDN 拖慢 astro:page-load 初始化）；SPA 模式（`no_onload`）由 Layout 在 `astro:page-load` 手动上报（未就绪时轮询等待）；首页「总浏览」读 `counter/TOTAL.json`（服务端最长 4h 缓存）
+- **统计**：GoatCounter（code 在 `config.ts` 的 `GOATCOUNTER`）。count.js 在 **load 之后动态注入**（绝不拖延 load 事件，避免第三方 CDN 拖慢 astro:page-load 初始化）；SPA 模式（`no_onload`）由 Layout 在 `astro:page-load` 手动上报（未就绪时轮询等待）；首页「总浏览」读 `counter/TOTAL.json`（服务端最长 4h 缓存）；**文章页浏览数**（2026-10）：Layout 的 `loadPostViews` 在 `astro:page-load` 查 `counter/{encodeURIComponent(location.pathname + location.search)}.json`（路径编码语义与上报的 `p` 参数一致，实测 `/about/` 可命中；CORS 开放），填进 `[id].astro` meta 行的 `[data-post-views]`，显示「N 次浏览 · M 人访问」（count / count_unique）；**404 按 0 显示**，请求失败保持占位 `—`；每页一个请求、`dataset.done` 防重复
 
 ## 易错点 / CSS Gotchas
 
