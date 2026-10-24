@@ -148,7 +148,7 @@ src/
 │   └── Layout.astro            # 组装层：按页面形态分发到下述组件 + 全局交互脚本（滚动进度/返回顶部/点击特效/TOC高亮）
 ├── pages/
 │   ├── index.astro             # Home page — hero + latest 3 posts
-│   ├── about.astro             # About page — 七章节文章式排版 + 站点数据/Colophon 图标卡（见「版权声明」节）
+│   ├── about.astro             # About page — 七章节文章式排版 + 站点数据/Toolbox/Colophon 图标卡（见「版权声明」节）
 │   ├── projects.astro          # Project showcase grid
 │   ├── 404.astro               # Custom 404 page
 │   ├── rss.xml.ts              # RSS feed（只含 isPublished: true）
@@ -316,7 +316,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 
 - 文章采用 **CC BY-NC-SA 4.0**（2026-10 定）。文章页正文与分页之间一行小字声明（[id].astro）；`<head>` 输出机器可读的 `<link rel="license">`（SeoHead ← Layout `licenseUrl` 透传）；JSON-LD `BlogPosting.license` 同带该 URL。
 - 协议配置在 `src/config.ts` 的 `LICENSE`（显示名 / 法律文本 URL / 中文 deed URL）——换协议只改这里。
-- About 页采用**文章式排版为底 + 轻量结构化组件穿插**（2026-10 改版，非卡片堆叠），七个章节：About Me / What I Write / Site Stats / Toolbox / About This Site / Copyright / Privacy，右栏目录定位。个人信息只保留 About Me 三段（不扩充）；**What I Write** 是内容导览（图标清单：技术笔记 / 经验分享 / 折腾记录）；**Site Stats** 大数字行（文章数 / 运行天数构建时算出，总浏览量由页内脚本查 `counter/TOTAL.json` 填入 `[data-stat-views]`，`dataset.done` 防重复）；**About This Site** 是 Colophon 图标卡面板（`.site-cards` 外框 + 双列 `.site-card`：图标牌 + 名称 + small-caps 角色行，悬停淡底 + 显现边框；数据在 frontmatter 的 `siteStack` 数组，移动端塌成单列）；**Copyright** 逐条列出许可条件（署名 / 非商业 / 相同方式共享）、第三方素材归属与删除联系方式；**Privacy** 说明 GoatCounter 聚合统计与 Giscus 评论数据。
+- About 页采用**文章式排版为底 + 轻量结构化组件穿插**（2026-10 改版，非卡片堆叠），七个章节：About Me / What I Write / Site Stats / Toolbox / About This Site / Copyright / Privacy，右栏目录定位。个人信息只保留 About Me 三段（不扩充）；**What I Write** 是内容导览（图标清单：技术笔记 / 经验分享 / 折腾记录）；**Site Stats** 大数字行（文章数 / 运行天数构建时算出，总浏览量由页内脚本查 `counter/TOTAL.json` 填入 `[data-stat-views]`，`dataset.done` 防重复）；**Toolbox** 是日常工具图标卡（`.tool-panel` 分组外框 + mono 分类标题 + `.icon-cards.flat` 网格，数据在 frontmatter 的 `toolGroups`，分组 System / Development / AI Agents / Apps，caption 中文）；**About This Site** 是 Colophon 图标卡面板（`.icon-cards` 外框 + 双列 `.icon-card`：图标牌 + 名称 + small-caps 角色行，悬停淡底 + 显现边框；数据在 frontmatter 的 `siteStack` 数组，移动端塌成单列；与 Toolbox 共用同一套 `.icon-card` 类，CSS 只在页面 `<style>` 定义一次）；**Copyright** 逐条列出许可条件（署名 / 非商业 / 相同方式共享）、第三方素材归属与删除联系方式；**Privacy** 说明 GoatCounter 聚合统计与 Giscus 评论数据。
 - **图标来源约定（2026-10 定）**：普通图标一律取 [lucide](https://lucide.dev) 路径，品牌图标一律取 [simple-icons](https://simpleicons.org) 路径（GitHub / Steam / Astro / JetBrains / CC 等）；simple-icons 没有的品牌（如 Giscus、GoatCounter）回退用 lucide 通用图标。全部内联 SVG，不走外部请求。
 
 ## 文章插图
