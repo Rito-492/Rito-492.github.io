@@ -1,6 +1,6 @@
 # Rito-492.github.io
 
-个人博客站点，基于 [Astro](https://astro.build) 6 构建，部署到 GitHub Pages。
+个人博客站点，基于 [Astro](https://astro.build) 7.4 构建，部署到 GitHub Pages。
 
 > 工程细节、架构决策、踩坑记录见 **[AGENTS.md](./AGENTS.md)**（开发时的权威参考）。
 > 本文档面向「我想改点东西」的场景，只讲怎么改。
@@ -10,7 +10,7 @@
 ## 快速开始
 
 ```bash
-npm install      # 安装依赖（Node >= 22.12）
+npm install      # 安装依赖（Node >= 22.23.4，推荐 24）
 npm run dev      # 开发服务器 http://localhost:4321
 npm run build    # 构建到 ./dist
 npm run preview  # 预览生产构建
@@ -172,13 +172,15 @@ import Layout from '../layouts/Layout.astro';
 推送 `main` → GitHub Actions 构建 → GitHub Pages。
 
 构建时从私有 vault 仓库拉取 `20_blog/`（sparse-checkout），需要 `BLOG_REPO_TOKEN`。
-另有每 2 小时定时重建，用于把 vault 的新文章带上线。
+另有每 2 小时定时重建，用于把 vault 的新文章带上线。CI 用 Node 24（`deploy.yml` 的 `setup-node`），与本地推荐版本一致。
 
 ---
 
 ## 技术栈
 
-- **框架**：Astro 6（静态输出）
+- **框架**：Astro 7.4（静态输出）
+- **Markdown**：统一走 `unified` 处理器（remark/rehype 管线，`@astrojs/markdown-remark`），由 `remark-obsidian-images` 处理 Obsidian 插图；未用 Astro 7 默认的 Sätteri 管线
+- **HTML 压缩**：`astro.config.mjs` 显式 `compressHTML: true`，沿用 Astro 6 的无损空白压缩（Astro 7 默认 `'jsx'`）
 - **样式**：原生 CSS + 自定义属性（无预处理器）
 - **字体**：JetBrains Mono + 霞鹜文楷（当前走 CDN，自托管在待办中）
 - **评论**：Giscus（GitHub Discussions）

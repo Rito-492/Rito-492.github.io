@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Astro 6 静态站点（个人博客，部署到 GitHub Pages；单包仓库，非 monorepo）。内容 = Markdown 集合；样式 = 组件内 scoped CSS + CSS 自定义属性。网页设计开源，博客文章存放在私有 Obsidian vault 仓库的 `blog/` 子目录，构建时拉取。
+Astro 7.4 静态站点（个人博客，部署到 GitHub Pages；单包仓库，非 monorepo）。内容 = Markdown 集合；样式 = 组件内 scoped CSS + CSS 自定义属性。网页设计开源，博客文章存放在私有 Obsidian vault 仓库的 `20_blog/` 子目录，构建时拉取。
 
 ## 命令
 
@@ -11,11 +11,13 @@ Astro 6 静态站点（个人博客，部署到 GitHub Pages；单包仓库，�
 | `npm run preview` | 本地预览生产构建                         |
 | `npm run format`  | Prettier 格式化全部代码                  |
 
-- **格式化用 Prettier**（`.prettierrc.json`：tab 缩进 / 单引号 / `embeddedLanguageFormatting: off`，配合 `.editorconfig`）；**无 typecheck / lint / test 工具**。验证手段是 `npm run build` + `npm run format` 后 `prettier --check .` 干净。Node 要求 `>=22.12`（engines 字段；CI 用 22）。
+- **格式化用 Prettier**（`.prettierrc.json`：tab 缩进 / 单引号 / `embeddedLanguageFormatting: off`，配合 `.editorconfig`）；**无 typecheck / lint / test 工具**。验证手段是 `npm run build` + `npm run format` 后 `prettier --check .` 干净。Node 要求 `>=22.23.4`（engines 字段）；CI 用 24，本地推荐 24。
 
 ## 架构
 
-- **框架**：Astro 6.x（TypeScript）
+- **框架**：Astro 7.4.x（TypeScript）
+- **Markdown**：显式使用 `unified` 处理器（`@astrojs/markdown-remark` 的 `unified()`，该包因此是直接依赖）——Astro 7 默认改用 Sätteri，这里保留 remark/rehype 管线，因为 `remarkObsidianImages` 插件基于 remark AST 改写图片节点（见「文章插图」）
+- **HTML 压缩**：`compressHTML: true` 显式声明，沿用 Astro 6 的无损空白压缩（保留渲染所需空白）；Astro 7 默认是 `'jsx'`（React 式空白规则），跨行内联元素间的空格可能被裁掉
 - **输出**：静态站点，GitHub Actions 部署到 GitHub Pages（`.github/workflows/deploy.yml`）
 - **内容**：Astro Content Collections，`glob` loader
 - **样式**：`.astro` 内 scoped CSS + 全局样式表（CSS 自定义属性）
@@ -72,10 +74,10 @@ git -C ~/workspace/40_garden pull https://github.com/Rito-492/garden.git main
 ```yaml
 steps:
     - name: Checkout site
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Checkout blog content (private vault)
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
           repository: Rito-492/garden
           path: _garden
@@ -86,9 +88,9 @@ steps:
       run: mv _garden/20_blog src/content/blog
 
     - name: Setup Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
-          node-version: '22'
+          node-version: '24'
 
     - name: Install dependencies
       run: npm ci
@@ -322,7 +324,7 @@ CSS 自定义属性定义在 `src/styles/variables.css`：
 ## 文章插图
 
 - 图片放 `20_blog/assets/` 内（可平铺、可 `assets/<文章名>/` 子目录，插件按文件名递归查找）；Obsidian 附件设置建议「当前文件夹下子文件夹 → assets」
-- `src/lib/remark-obsidian-images.js`（挂在 `astro.config.mjs` 的 `markdown.remarkPlugins`）构建时统一三种写法后交给 Astro 图片管线（sharp 自动优化：压缩/哈希/懒加载/写死宽高防抖动）：
+- `src/lib/remark-obsidian-images.js`（挂在 `astro.config.mjs` 的 `markdown.processor`，即 `unified({ remarkPlugins })` 里）构建时统一三种写法后交给 Astro 图片管线（sharp 自动优化：压缩/哈希/懒加载/写死宽高防抖动）：
     - `![[图.jpg]]` → 按文件名在内容目录内递归查找（忽略大小写）
     - `![](20_blog/assets/…)` → 去掉 vault 根前缀、换算成相对文章的路径
     - 标准相对路径 `![](assets/…)` → 原样放行
